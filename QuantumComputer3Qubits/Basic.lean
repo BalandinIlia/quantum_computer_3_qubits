@@ -1,1 +1,30 @@
+import Mathlib.Data.Int.Basic
+import Mathlib.Algebra.Ring.Basic
+import Mathlib.LinearAlgebra.Basis.Basic
+import Mathlib.Algebra.Module.Defs
+import Mathlib.Data.Fin.Basic
+import Mathlib.LinearAlgebra.TensorPower.Basic
+import Mathlib.Algebra.Field.Basic
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.Basis.Submodule
+import Mathlib.LinearAlgebra.DirectSum.Basis
+import Mathlib.LinearAlgebra.Matrix.Basis
+import Mathlib.LinearAlgebra.TensorProduct.Basic
+import Mathlib.Algebra.Module.Submodule.Basic
+import Mathlib.Algebra.Module.Submodule.Bilinear
+import Mathlib.LinearAlgebra.BilinearForm.Basic
+import Mathlib.Data.Matrix.Kronecker
+import Mathlib.Data.Rat.Defs
+import Mathlib.Data.Rat.Lemmas
+import Mathlib.Tactic.Linarith.Frontend
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Control.Monad.Basic
+import Mathlib.Control.Applicative
+import Mathlib.Data.Set.Basic
+import Mathlib.LinearAlgebra.TensorProduct.Basis
+import Mathlib.Data.Nat.Basic
+import Mathlib.LinearAlgebra.TensorProduct.Submodule
+import Mathlib.LinearAlgebra.TensorProduct.Subalgebra
+
 def hello := "world"
