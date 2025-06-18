@@ -1,0 +1,10 @@
+name = "quantum_computer_3_qubits"
+version = "0.1.0"
+defaultTargets = ["quantum_computer_3_qubits"]
+
+[[lean_lib]]
+name = "QuantumComputer3Qubits"
+
+[[lean_exe]]
+name = "quantum_computer_3_qubits"
+root = "Main"
