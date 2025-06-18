@@ -2,6 +2,10 @@ name = "quantum_computer_3_qubits"
 version = "0.1.0"
 defaultTargets = ["quantum_computer_3_qubits"]
 
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+
 [[lean_lib]]
 name = "QuantumComputer3Qubits"
 
