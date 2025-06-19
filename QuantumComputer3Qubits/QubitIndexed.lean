@@ -61,6 +61,12 @@ def isoQubitIndQubitBase(i: Fin 3): ((QubitInd i) ≃ QubitState) :=
 }
 
 @[reducible]
-instance QubitIndMonoid(i:Fin 3):AddCommMonoid (QubitInd i) := Equiv.addCommMonoid (isoQubitIndQubitBase i)
+instance QubitIndMonoid(i:Fin 3):AddCommMonoid (QubitInd i) := match i with
+| 0 => inferInstance
+| 1 => inferInstance
+| 2 => inferInstance
 @[reducible]
-instance QubitIndModule(i:Fin 3):Module ℂ (QubitInd i) := Equiv.module ℂ (isoQubitIndQubitBase i)
+instance QubitIndModule(i:Fin 3):Module ℂ (QubitInd i) := match i with
+| 0 => inferInstance
+| 1 => inferInstance
+| 2 => inferInstance
