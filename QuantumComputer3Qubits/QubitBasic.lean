@@ -2,6 +2,7 @@ import Mathlib.Data.Int.Basic
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.LinearAlgebra.Basis.Basic
 import Mathlib.Algebra.Module.Defs
+import Mathlib.Algebra.Module.Basic
 import Mathlib.Data.Fin.Basic
 import Mathlib.LinearAlgebra.TensorPower.Basic
 import Mathlib.Algebra.Field.Basic
@@ -26,5 +27,28 @@ import Mathlib.LinearAlgebra.TensorProduct.Basis
 import Mathlib.Data.Nat.Basic
 import Mathlib.LinearAlgebra.TensorProduct.Submodule
 import Mathlib.LinearAlgebra.TensorProduct.Subalgebra
+import Mathlib.Data.Complex.Basic
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+import Mathlib.LinearAlgebra.Finsupp.Pi
+import Mathlib.LinearAlgebra.Finsupp.VectorSpace
+import Mathlib.LinearAlgebra.FiniteSpan
 
-def hello := "world"
+@[reducible]
+def QubitState:Type := Fin 2 → ℂ
+#synth Module ℂ QubitState
+
+noncomputable
+def QubitBasis:Basis (Fin 2) ℂ QubitState := Pi.basisFun ℂ (Fin 2)
+
+def QZero:QubitState := fun x:Fin 2 => match x with
+                                       | 0 => 1
+                                       | 1 => 0
+
+def QOne:QubitState := fun x:Fin 2 => match x with
+                                      | 0 => 0
+                                      | 1 => 1
+
+instance QubitStateInhab: Inhabited QubitState :=
+{
+  default := QZero
+}
