@@ -17,9 +17,7 @@ def QubitSet1(i1: Fin 3):Type := QubitInd i1
 def QubitSet2(i1 i2: Fin 3)(neq: (i1 < i2)):Type := (QubitInd i1) ⊗[ℂ] (QubitInd i2)
 
 @[reducible]
-def QubitSet3Impl(t: Fin 3):Type := (QubitSet2 0 1 (by simp)) ⊗[ℂ] (QubitInd t)
-@[reducible]
-def QubitSet3:Type := QubitSet3Impl 2
+def QubitSet3:Type := (QubitSet2 0 1 (by simp)) ⊗[ℂ] (QubitInd 2)
 
 lemma eq1(i1 i2: Fin 3)(neq: (i1 < i2)): (QubitSet1 i1) ⊗[ℂ] (QubitSet1 i2) = QubitSet2 i1 i2 neq := by
   simp
