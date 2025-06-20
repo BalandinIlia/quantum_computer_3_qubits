@@ -28,6 +28,10 @@ import Mathlib.Data.Nat.Basic
 import Mathlib.LinearAlgebra.TensorProduct.Submodule
 import Mathlib.LinearAlgebra.TensorProduct.Subalgebra
 import Mathlib.Data.Complex.Basic
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.Subspace
+import Mathlib.Analysis.InnerProductSpace.Trace
+import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.LinearAlgebra.Finsupp.Pi
 import Mathlib.LinearAlgebra.Finsupp.VectorSpace
@@ -52,3 +56,11 @@ instance QubitStateInhab: Inhabited QubitState :=
 {
   default := QZero
 }
+
+--#check trace_eq_sum_inner
+
+open scoped WithLp
+open scoped InnerProductSpace
+
+#check InnerProductSpace
+#synth InnerProductSpace ℂ (WithLp 2 (ℂ × ℂ))
