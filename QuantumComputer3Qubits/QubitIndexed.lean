@@ -18,7 +18,18 @@ def QubitInd(n: Fin 3):Type := match n with
 | 1 => X2 → ℂ
 | 2 => X3 → ℂ
 
-def isoQubitIndQubitBase(i: Fin 3): ((QubitInd i) ≃ QubitState) :=
+@[reducible]
+instance QubitIndMonoid(i:Fin 3):AddCommMonoid (QubitInd i) := match i with
+| 0 => inferInstance
+| 1 => inferInstance
+| 2 => inferInstance
+@[reducible]
+instance QubitIndModule(i:Fin 3):Module ℂ (QubitInd i) := match i with
+| 0 => inferInstance
+| 1 => inferInstance
+| 2 => inferInstance
+
+def isoQubitIndQubitBase(i: Fin 3): ((QubitInd i) ≃ₗ[ℂ] QubitState) :=
 {
   toFun := fun (q:QubitInd i) =>
     match i with
@@ -58,15 +69,18 @@ def isoQubitIndQubitBase(i: Fin 3): ((QubitInd i) ≃ QubitState) :=
     all_goals ext y
     all_goals fin_cases y
     all_goals simp
+  map_add' := by
+    fin_cases i
+    all_goals simp
+    all_goals intro x y
+    all_goals ext g
+    all_goals fin_cases g
+    all_goals simp [QubitInd]
+  map_smul' := by
+    fin_cases i
+    all_goals simp
+    all_goals intro m x
+    all_goals ext g
+    all_goals fin_cases g
+    all_goals simp [QubitInd]
 }
-
-@[reducible]
-instance QubitIndMonoid(i:Fin 3):AddCommMonoid (QubitInd i) := match i with
-| 0 => inferInstance
-| 1 => inferInstance
-| 2 => inferInstance
-@[reducible]
-instance QubitIndModule(i:Fin 3):Module ℂ (QubitInd i) := match i with
-| 0 => inferInstance
-| 1 => inferInstance
-| 2 => inferInstance
