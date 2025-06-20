@@ -3,3 +3,4 @@
 import QuantumComputer3Qubits.QubitBasic
 import QuantumComputer3Qubits.QubitIndexed
 import QuantumComputer3Qubits.QubitSet
+import QuantumComputer3Qubits.TensorProduct
