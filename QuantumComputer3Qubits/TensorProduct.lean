@@ -59,6 +59,7 @@ def opContext2(i1 i2: Fin 3)(neq: (i1 < i2)):Type := (QubitSet2 i1 i2 neq) →�
 @[reducible]
 def opContext1(i1: Fin 3):Type := (QubitSet1 i1) →ₗ[ℂ] (QubitSet1 i1)
 
+noncomputable
 def opContext1Id(i1: Fin 3): opContext1 i1 :=
 {
   toFun(q: (QubitSet1 i1)) := q
@@ -103,6 +104,7 @@ def TP(i1 i2: Fin 3)
     simp [(iso2 i1 i2 neq i3 neq2 neq3).symm.map_smul]
 }
 
+noncomputable
 def mul:opPure1:=
 {
   toFun(s: QubitState) := 2•s
