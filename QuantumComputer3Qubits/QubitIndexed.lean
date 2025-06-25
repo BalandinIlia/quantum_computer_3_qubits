@@ -19,16 +19,19 @@ def QubitInd(n: Fin 3):Type := match n with
 | 2 => X3 → ℂ
 
 @[reducible]
+noncomputable
 instance QubitIndMonoid(i:Fin 3):AddCommMonoid (QubitInd i) := match i with
 | 0 => inferInstance
 | 1 => inferInstance
 | 2 => inferInstance
 @[reducible]
+noncomputable
 instance QubitIndModule(i:Fin 3):Module ℂ (QubitInd i) := match i with
 | 0 => inferInstance
 | 1 => inferInstance
 | 2 => inferInstance
 
+noncomputable
 def isoQubitIndQubitBase(i: Fin 3): ((QubitInd i) ≃ₗ[ℂ] QubitState) :=
 {
   toFun := fun (q:QubitInd i) =>
