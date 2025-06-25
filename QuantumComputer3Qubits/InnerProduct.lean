@@ -4,6 +4,7 @@ import Mathlib.Algebra.Module.Basic
 import Mathlib.LinearAlgebra.TensorProduct.Basis
 import QuantumComputer3Qubits.Complex
 
+-- IP is an abbreviation of "Inner Product"
 class IP(M: Type)[AddCommMonoid M][mod: Module ℂ M] where
   f: M → M → ℂ
   comm: ∀v w: M, (f v w) = star (f w v)
@@ -32,18 +33,20 @@ lemma smulLeft{M: Type}[AddCommMonoid M][Module ℂ M][IP M]
 
 open scoped TensorProduct
 
-def mult1(M N: Type)
+-- The double linear map given by this function takes two variables:
+-- x and y and produces (⟨m|⊗⟨n|)•(|x⟩⊗|y⟩) where • stays for inner product
+def IPRight{M N: Type}
   [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
   [AddCommMonoid N][modN: Module ℂ N][ipN: IP N]
   (m: M)(n: N): M →ₗ[ℂ] (N →ₗ[ℂ] ℂ) :=
 {
   toFun := by
-    intro m₂
+    intro x
     exact
     {
       toFun := by
-        intro n₂
-        exact (ipM.f m m₂)*(ipN.f n n₂)
+        intro y
+        exact (ipM.f m x)*(ipN.f n y)
       map_add' := by
         intro x y
         rw [IP.distrRight]
@@ -68,29 +71,32 @@ def mult1(M N: Type)
     ring
 }
 
+-- The double linear map given by this function takes two variables:
+-- x and y and produces star (⟨x|⊗⟨y|)•(|mn⟩) where • stays for inner product
+-- We produce star (⟨x|⊗⟨y|)•(|mn⟩) and not just (⟨x|⊗⟨y|)•(|mn⟩) to keep maps linear
 noncomputable
-def mult2(M N: Type)
+def IPLeft{M N: Type}
   [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
   [AddCommMonoid N][modN: Module ℂ N][ipN: IP N]
   (mn: M ⊗[ℂ] N): M →ₗ[ℂ] (N →ₗ[ℂ] ℂ) :=
 {
   toFun := by
-    intro m
+    intro x
     exact
     {
       toFun := by
-        intro n
-        exact  star (TensorProduct.lift (mult1 M N m n) mn)
+        intro y
+        exact  star (TensorProduct.lift (IPRight x y) mn)
       map_add' := by
-        intro x y
+        intro a b
         rw [ComplexUtil.DistrInvSumStar]
         apply ComplexUtil.EqStar
         apply TensorProduct.induction_on
-            (motive := fun z: M ⊗[ℂ] N => (TensorProduct.lift (mult1 M N m (x + y))) z =
-            (TensorProduct.lift (mult1 M N m x)) z + (TensorProduct.lift (mult1 M N m y)) z)
+            (motive := fun z: M ⊗[ℂ] N => (TensorProduct.lift (IPRight x (a + b))) z =
+            (TensorProduct.lift (IPRight x a)) z + (TensorProduct.lift (IPRight x b)) z)
         aesop
         {
-          simp [mult1, distrLeft]
+          simp [IPRight, distrLeft]
           ring_nf
           aesop
         }
@@ -102,14 +108,14 @@ def mult2(M N: Type)
           ring
         }
       map_smul' := by
-        intro x n
+        intro m a
         apply TensorProduct.induction_on
             (motive := fun z: M ⊗[ℂ] N =>
-            star ((TensorProduct.lift (mult1 M N m (x • n))) z) =
-            (RingHom.id ℂ) x • star ((TensorProduct.lift (mult1 M N m n)) z))
+            star ((TensorProduct.lift (IPRight x (m • a))) z) =
+            (RingHom.id ℂ) m • star ((TensorProduct.lift (IPRight x a)) z))
         aesop
         {
-          simp [mult1, smulLeft]
+          simp [IPRight, smulLeft]
           ring_nf
           aesop
         }
@@ -135,11 +141,11 @@ def mult2(M N: Type)
     apply ComplexUtil.EqStar
     apply TensorProduct.induction_on
         (motive := fun z: M ⊗[ℂ] N =>
-        (TensorProduct.lift (mult1 M N (x + y) g)) z =
-        (TensorProduct.lift (mult1 M N x g)) z + (TensorProduct.lift (mult1 M N y g)) z)
+        (TensorProduct.lift (IPRight (x + y) g)) z =
+        (TensorProduct.lift (IPRight x g)) z + (TensorProduct.lift (IPRight y g)) z)
     aesop
     {
-      simp [mult1, distrLeft]
+      simp [IPRight, distrLeft]
       ring_nf
       aesop
     }
@@ -158,11 +164,11 @@ def mult2(M N: Type)
     rw [ComplexUtil.Aux]
     apply TensorProduct.induction_on
         (motive := fun z: M ⊗[ℂ] N =>
-        star ((TensorProduct.lift (mult1 M N (m • x) g)) z) =
-        m * star ((TensorProduct.lift (mult1 M N x g)) z))
+        star ((TensorProduct.lift (IPRight (m • x) g)) z) =
+        m * star ((TensorProduct.lift (IPRight x g)) z))
     aesop
     {
-      simp [mult1]
+      simp [IPRight]
       intro x₁ y
       rw [smulLeft]
       rw [ComplexUtil.Aux]
@@ -184,15 +190,23 @@ def mult2(M N: Type)
     }
 }
 
-lemma mult2Lin(M N: Type)
+lemma IPLeftLin(M N: Type)
   [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
   [AddCommMonoid N][modN: Module ℂ N][ipN: IP N]
-  (x y: M ⊗[ℂ] N): mult2 M N (x+y) = mult2 M N x + mult2 M N y := by
-  simp [mult2]
+  (x y: M ⊗[ℂ] N): IPLeft (x+y) = IPLeft x + IPLeft y := by
+  simp [IPLeft]
   ext a b
   simp
 
-lemma fgh{M : Type}
+lemma IPLeftLin2(M N: Type)
+  [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
+  [AddCommMonoid N][modN: Module ℂ N][ipN: IP N]
+  (x: M ⊗[ℂ] N)(c: ℂ): IPLeft (c•x) = (star c)•IPLeft x := by
+  ext g t
+  simp [IPLeft]
+
+-- TPAux is "Tensor Product Auxiliary"
+lemma TPAux{M : Type}
          {N : Type}
          {P : Type}
          [inst_1 : AddCommMonoid M]
@@ -207,6 +221,21 @@ lemma fgh{M : Type}
   TensorProduct.lift m1 + TensorProduct.lift m2 := by
   aesop
 
+lemma TPAux2{M : Type}
+         {N : Type}
+         {P : Type}
+         [inst_1 : AddCommMonoid M]
+         [inst_2 : AddCommMonoid N]
+         [inst_3 : AddCommMonoid P]
+         [inst_4 : Module ℂ M]
+         [inst_5 : Module ℂ N]
+         [inst_6 : Module ℂ P]
+         (m1: M →ₗ[ℂ] N →ₗ[ℂ] P)
+         (c: ℂ):
+  TensorProduct.lift (c•m1) =
+  c•TensorProduct.lift m1 := by
+  aesop
+
 noncomputable
 instance tensorProductIP(T₁ T₂: Type)
   [AddCommMonoid T₁][modM: Module ℂ T₁][ipM: IP T₁]
@@ -216,20 +245,20 @@ instance tensorProductIP(T₁ T₂: Type)
   f := by
     intro inp1
     intro inp2
-    exact (TensorProduct.lift (mult2 T₁ T₂ inp1) inp2)
+    exact star (TensorProduct.lift (IPLeft inp2) inp1)
   comm := by
     intro v w
-    --rw [ComplexUtil.DoubleStar]
-    --apply Eq.symm
+    rw [ComplexUtil.DoubleStar]
+    apply Eq.symm
     let pr(x y: T₁ ⊗[ℂ] T₂):Prop:=
-        (TensorProduct.lift (mult2 T₁ T₂ x)) y = star ((TensorProduct.lift (mult2 T₁ T₂ y)) x)
+        (TensorProduct.lift (IPLeft x)) y = star ((TensorProduct.lift (IPLeft y)) x)
     have lem(x y: T₁ ⊗[ℂ] T₂): pr x y ↔ pr y x := by
       aesop
     have lem2(x y z: T₁ ⊗[ℂ] T₂): (pr x y ∧ pr x z) → pr x (y+z)  := by
-      simp [pr, mult2Lin]
-      rw [fgh]
+      simp [pr, IPLeftLin]
+      rw [TPAux]
       aesop
-    have fol: pr v w → (TensorProduct.lift (mult2 T₁ T₂ v)) w = star ((TensorProduct.lift (mult2 T₁ T₂ w)) v) := by
+    have fol: pr v w → (TensorProduct.lift (IPLeft v)) w = star ((TensorProduct.lift (IPLeft w)) v) := by
       aesop
     apply fol
     clear fol
@@ -238,13 +267,13 @@ instance tensorProductIP(T₁ T₂: Type)
     apply TensorProduct.induction_on
         (motive := fun y:T₁ ⊗[ℂ] T₂ => pr 0 y)
     aesop
-    simp [pr, mult2]
+    simp [pr, IPLeft]
     aesop
     apply TensorProduct.induction_on
         (motive := fun z:T₁ ⊗[ℂ] T₂ => ∀ (x : T₁) (y : T₂), pr (x ⊗ₜ[ℂ] y) z)
-    simp [pr, mult2]
+    simp [pr, IPLeft]
     {
-      simp [pr, mult2, mult1]
+      simp [pr, IPLeft, IPRight]
       intro x y x₁ y₁
       rw [IP.comm]
       rw [IP.comm y y₁]
@@ -252,7 +281,7 @@ instance tensorProductIP(T₁ T₂: Type)
     }
     {
       simp [pr]
-      simp [mult2Lin]
+      simp [IPLeftLin]
       aesop
     }
 
@@ -270,12 +299,11 @@ instance tensorProductIP(T₁ T₂: Type)
         (motive := fun z:T₁ ⊗[ℂ] T₂ => ∀ (x y : T₁ ⊗[ℂ] T₂), pr z x → pr z y → pr z (x + y))
     aesop
     {
-      simp [pr, mult2Lin]
+      simp [pr, IPLeftLin]
       aesop
     }
     {
       intro x y
-      --simp [pr]
       intro h₁ h₂
       intro x₁ y₁
       intro h₃ h₄
@@ -284,45 +312,14 @@ instance tensorProductIP(T₁ T₂: Type)
     }
   distrRight := by
     intro v w₁ w₂
-    --rw [ComplexUtil.StarDistr2 ((TensorProduct.lift (mult2 T₁ T₂ v)) w₁) ((TensorProduct.lift (mult2 T₁ T₂ v)) w₂)]
-    --apply ComplexUtil.RemStar
-    simp [LinearMap.map_add]
+    rw [ComplexUtil.DistrInvSumStar]
+    rw [ComplexUtil.EqStar]
+    rw [IPLeftLin]
+    rw [TPAux]
+    aesop
   smulRight := by
     intro v w m
-    apply TensorProduct.induction_on (motive :=
-        fun x:T₁ ⊗[ℂ] T₂ =>
-        ((TensorProduct.lift (mult2 T₁ T₂ v)) (m • x)) =
-        m * ((TensorProduct.lift (mult2 T₁ T₂ v)) x)
-    )
-    aesop
+    rw [IPLeftLin2]
+    rw [TPAux2]
     simp
-    simp [LinearMap.map_add]
-    ring_nf
-    aesop
-  /-self2 := by
-    intro v
-    apply Iff.intro
-    apply TensorProduct.induction_on (motive :=
-        fun x: T₁ ⊗[ℂ] T₂ =>
-        (TensorProduct.lift (mult2 T₁ T₂ x)) x = 0 → x = 0
-    )
-    aesop
-    {
-      simp [mult2, mult1]
-      intro x y h
-      have folX: IP.f x x = 0 → x=0 := by
-        rw [IP.self2]
-        aesop
-      have folY: IP.f y y = 0 → y=0 := by
-        rw [IP.self2]
-        aesop
-      have eq: x = 0 ∨ y = 0 := by
-        aesop
-      aesop
-    }
-    {
-      simp [LinearMap.map_add]
-      simp [mult2Lin]
-      simp [fgh]
-    }-/
 }
