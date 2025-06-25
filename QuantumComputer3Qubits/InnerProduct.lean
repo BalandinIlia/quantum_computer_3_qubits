@@ -330,6 +330,8 @@ instance tensorProductIP(T₁ T₂: Type)
     simp
 }
 
+-- This class is necessary to transfer IP from one type to another
+-- If this class is instantiated for types T₁ T₂, IP is automatically defined for T₂ as IP for T₁
 class Transfer(T₁ T₂: Type)
               [AddCommMonoid T₁][Module ℂ T₁][ip: IP T₁]
               [AddCommMonoid T₂][Module ℂ T₂]
