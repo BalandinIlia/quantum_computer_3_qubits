@@ -17,7 +17,7 @@ lemma distrLeft {M: Type}[AddCommMonoid M][Module ℂ M][IP M]
   (IP.f (v₁ + v₂) w) = (IP.f v₁ w) + (IP.f v₂ w) := by
   rw [IP.comm]
   rw [IP.distrRight]
-  rw [ComplexDistrSumStar]
+  rw [ComplexUtil.DistrSumStar]
   rw [IP.comm w v₁]
   rw [IP.comm w v₂]
   simp
@@ -83,8 +83,8 @@ def mult2(M N: Type)
         exact  star (TensorProduct.lift (mult1 M N m n) mn)
       map_add' := by
         intro x y
-        rw [ComplexDistrInvSumStar]
-        apply ComplexEqStar
+        rw [ComplexUtil.DistrInvSumStar]
+        apply ComplexUtil.EqStar
         apply TensorProduct.induction_on
             (motive := fun z: M ⊗[ℂ] N => (TensorProduct.lift (mult1 M N m (x + y))) z =
             (TensorProduct.lift (mult1 M N m x)) z + (TensorProduct.lift (mult1 M N m y)) z)
@@ -119,8 +119,8 @@ def mult2(M N: Type)
           rw [LinearMap.map_add]
           rw [LinearMap.map_add]
           simp [h₁, h₂]
-          rw [ComplexAux]
-          rw [ComplexAux]
+          rw [ComplexUtil.Aux]
+          rw [ComplexUtil.Aux]
           ring
         }
     }
@@ -128,11 +128,11 @@ def mult2(M N: Type)
     intro x y
     ext g
     simp
-    rw [ComplexAux]
-    rw [ComplexAux]
-    rw [ComplexAux]
-    rw [ComplexDistrInvSumStar]
-    apply ComplexEqStar
+    rw [ComplexUtil.Aux]
+    rw [ComplexUtil.Aux]
+    rw [ComplexUtil.Aux]
+    rw [ComplexUtil.DistrInvSumStar]
+    apply ComplexUtil.EqStar
     apply TensorProduct.induction_on
         (motive := fun z: M ⊗[ℂ] N =>
         (TensorProduct.lift (mult1 M N (x + y) g)) z =
@@ -154,8 +154,8 @@ def mult2(M N: Type)
     intro m x
     ext g
     simp
-    rw [ComplexAux]
-    rw [ComplexAux]
+    rw [ComplexUtil.Aux]
+    rw [ComplexUtil.Aux]
     apply TensorProduct.induction_on
         (motive := fun z: M ⊗[ℂ] N =>
         star ((TensorProduct.lift (mult1 M N (m • x) g)) z) =
@@ -165,10 +165,10 @@ def mult2(M N: Type)
       simp [mult1]
       intro x₁ y
       rw [smulLeft]
-      rw [ComplexAux]
-      rw [ComplexAux]
-      rw [ComplexAux]
-      rw [ComplexDistrMultStar]
+      rw [ComplexUtil.Aux]
+      rw [ComplexUtil.Aux]
+      rw [ComplexUtil.Aux]
+      rw [ComplexUtil.DistrMultStar]
       simp
       ring
     }
@@ -178,8 +178,8 @@ def mult2(M N: Type)
       rw [LinearMap.map_add]
       rw [LinearMap.map_add]
       simp [h₁, h₂]
-      rw [ComplexAux]
-      rw [ComplexAux]
+      rw [ComplexUtil.Aux]
+      rw [ComplexUtil.Aux]
       ring
     }
 }
@@ -219,7 +219,7 @@ instance tensorProductIP(T₁ T₂: Type)
     exact (TensorProduct.lift (mult2 T₁ T₂ inp1) inp2)
   comm := by
     intro v w
-    --rw [ComplexDoubleStar]
+    --rw [ComplexUtil.DoubleStar]
     --apply Eq.symm
     let pr(x y: T₁ ⊗[ℂ] T₂):Prop:=
         (TensorProduct.lift (mult2 T₁ T₂ x)) y = star ((TensorProduct.lift (mult2 T₁ T₂ y)) x)
@@ -284,8 +284,8 @@ instance tensorProductIP(T₁ T₂: Type)
     }
   distrRight := by
     intro v w₁ w₂
-    --rw [ComplexStarDistr2 ((TensorProduct.lift (mult2 T₁ T₂ v)) w₁) ((TensorProduct.lift (mult2 T₁ T₂ v)) w₂)]
-    --apply ComplexRemStar
+    --rw [ComplexUtil.StarDistr2 ((TensorProduct.lift (mult2 T₁ T₂ v)) w₁) ((TensorProduct.lift (mult2 T₁ T₂ v)) w₂)]
+    --apply ComplexUtil.RemStar
     simp [LinearMap.map_add]
   smulRight := by
     intro v w m
