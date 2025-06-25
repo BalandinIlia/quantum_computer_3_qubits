@@ -190,7 +190,7 @@ def IPLeft{M N: Type}
     }
 }
 
-lemma IPLeftLin(M N: Type)
+private lemma IPLeftLin(M N: Type)
   [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
   [AddCommMonoid N][modN: Module ℂ N][ipN: IP N]
   (x y: M ⊗[ℂ] N): IPLeft (x+y) = IPLeft x + IPLeft y := by
@@ -198,7 +198,7 @@ lemma IPLeftLin(M N: Type)
   ext a b
   simp
 
-lemma IPLeftLin2(M N: Type)
+private lemma IPLeftLin2(M N: Type)
   [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
   [AddCommMonoid N][modN: Module ℂ N][ipN: IP N]
   (x: M ⊗[ℂ] N)(c: ℂ): IPLeft (c•x) = (star c)•IPLeft x := by
@@ -206,7 +206,7 @@ lemma IPLeftLin2(M N: Type)
   simp [IPLeft]
 
 -- TPAux is "Tensor Product Auxiliary"
-lemma TPAux{M : Type}
+private lemma TPAux{M : Type}
          {N : Type}
          {P : Type}
          [inst_1 : AddCommMonoid M]
@@ -221,7 +221,7 @@ lemma TPAux{M : Type}
   TensorProduct.lift m1 + TensorProduct.lift m2 := by
   aesop
 
-lemma TPAux2{M : Type}
+private lemma TPAux2{M : Type}
          {N : Type}
          {P : Type}
          [inst_1 : AddCommMonoid M]
@@ -328,4 +328,34 @@ instance tensorProductIP(T₁ T₂: Type)
     rw [IPLeftLin2]
     rw [TPAux2]
     simp
+}
+
+class Transfer(T₁ T₂: Type)
+              [AddCommMonoid T₁][Module ℂ T₁][ip: IP T₁]
+              [AddCommMonoid T₂][Module ℂ T₂]
+  where
+  tr: T₁ ≃ₗ[ℂ] T₂
+
+private class IPAux(T₁ T₂: Type)
+           [AddCommMonoid T₁][Module ℂ T₁]
+           [AddCommMonoid T₂][Module ℂ T₂]
+  extends IP T₂
+
+noncomputable
+instance transferIP(T₁ T₂: Type)
+         [AddCommMonoid T₁][Module ℂ T₁][IP T₁]
+         [AddCommMonoid T₂][Module ℂ T₂]
+         [tr: Transfer T₁ T₂]:
+         IPAux T₁ T₂ :=
+{
+  f := by
+    intro a b
+    exact IP.f ((LinearEquiv.symm tr.tr) a) ((LinearEquiv.symm tr.tr) b)
+  comm := by
+    intro v w
+    apply IP.comm
+  distrRight := by
+    simp [IP.distrRight]
+  smulRight := by
+    simp [IP.smulRight]
 }
