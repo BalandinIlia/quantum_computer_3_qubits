@@ -9,15 +9,15 @@ class IP(M: Type)[AddCommMonoid M][mod: Module ℂ M] where
   comm: ∀v w: M, (f v w) = star (f w v)
   distrRight: ∀v w₁ w₂: M, (f v (w₁ + w₂)) = (f v w₁) + (f v w₂)
   smulRight: ∀v w: M, ∀m: ℂ, (f v (m • w)) = m * (f v w)
-  /-self1: ∀v: M, (f v v).im=0 ∧ (f v v).re≥0
-  self2: ∀v: M, (f v v)=0 ↔ v=0-/
+
+namespace IP
 
 lemma distrLeft {M: Type}[AddCommMonoid M][Module ℂ M][IP M]
                 (v₁ v₂ w: M):
   (IP.f (v₁ + v₂) w) = (IP.f v₁ w) + (IP.f v₂ w) := by
   rw [IP.comm]
   rw [IP.distrRight]
-  rw [ComplexStarDistr]
+  rw [ComplexDistrSumStar]
   rw [IP.comm w v₁]
   rw [IP.comm w v₂]
   simp
@@ -83,8 +83,8 @@ def mult2(M N: Type)
         exact  star (TensorProduct.lift (mult1 M N m n) mn)
       map_add' := by
         intro x y
-        rw [ComplexStarDistr2]
-        apply ComplexRemStar
+        rw [ComplexDistrInvSumStar]
+        apply ComplexEqStar
         apply TensorProduct.induction_on
             (motive := fun z: M ⊗[ℂ] N => (TensorProduct.lift (mult1 M N m (x + y))) z =
             (TensorProduct.lift (mult1 M N m x)) z + (TensorProduct.lift (mult1 M N m y)) z)
@@ -119,8 +119,8 @@ def mult2(M N: Type)
           rw [LinearMap.map_add]
           rw [LinearMap.map_add]
           simp [h₁, h₂]
-          rw [ComplexTransToStar]
-          rw [ComplexTransToStar]
+          rw [ComplexAux]
+          rw [ComplexAux]
           ring
         }
     }
@@ -128,11 +128,11 @@ def mult2(M N: Type)
     intro x y
     ext g
     simp
-    rw [ComplexTransToStar]
-    rw [ComplexTransToStar]
-    rw [ComplexTransToStar]
-    rw [ComplexStarDistr2]
-    apply ComplexRemStar
+    rw [ComplexAux]
+    rw [ComplexAux]
+    rw [ComplexAux]
+    rw [ComplexDistrInvSumStar]
+    apply ComplexEqStar
     apply TensorProduct.induction_on
         (motive := fun z: M ⊗[ℂ] N =>
         (TensorProduct.lift (mult1 M N (x + y) g)) z =
@@ -154,8 +154,8 @@ def mult2(M N: Type)
     intro m x
     ext g
     simp
-    rw [ComplexTransToStar]
-    rw [ComplexTransToStar]
+    rw [ComplexAux]
+    rw [ComplexAux]
     apply TensorProduct.induction_on
         (motive := fun z: M ⊗[ℂ] N =>
         star ((TensorProduct.lift (mult1 M N (m • x) g)) z) =
@@ -165,10 +165,10 @@ def mult2(M N: Type)
       simp [mult1]
       intro x₁ y
       rw [smulLeft]
-      rw [ComplexTransToStar]
-      rw [ComplexTransToStar]
-      rw [ComplexTransToStar]
-      rw [ComplexStarDistrMult]
+      rw [ComplexAux]
+      rw [ComplexAux]
+      rw [ComplexAux]
+      rw [ComplexDistrMultStar]
       simp
       ring
     }
@@ -178,8 +178,8 @@ def mult2(M N: Type)
       rw [LinearMap.map_add]
       rw [LinearMap.map_add]
       simp [h₁, h₂]
-      rw [ComplexTransToStar]
-      rw [ComplexTransToStar]
+      rw [ComplexAux]
+      rw [ComplexAux]
       ring
     }
 }
