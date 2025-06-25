@@ -338,6 +338,7 @@ class Transfer(T₁ T₂: Type)
   where
   tr: T₁ ≃ₗ[ℂ] T₂
 
+-- This class is just a coding trick to make transferIP work
 private class IPAux(T₁ T₂: Type)
            [AddCommMonoid T₁][Module ℂ T₁]
            [AddCommMonoid T₂][Module ℂ T₂]
