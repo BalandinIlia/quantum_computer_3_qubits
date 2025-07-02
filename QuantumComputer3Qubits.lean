@@ -4,7 +4,7 @@ import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.QubitSet
 import QuantumComputer3Qubits.Formalization.TensorProduct
-import QuantumComputer3Qubits.Formalization.Complex
+import QuantumComputer3Qubits.Formalization.ComplexUtil
 import QuantumComputer3Qubits.Formalization.InnerProduct
 
 #check Basis.equivFun
