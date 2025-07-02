@@ -3,7 +3,6 @@ import QuantumComputer3Qubits.Formalization.InnerProduct
 
 @[reducible]
 def QubitState:Type := Fin 2 → ℂ
-#synth Module ℂ QubitState
 
 noncomputable
 def QubitBasis:Basis (Fin 2) ℂ QubitState := Pi.basisFun ℂ (Fin 2)

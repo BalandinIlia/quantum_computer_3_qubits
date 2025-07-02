@@ -2,6 +2,8 @@ import QuantumComputer3Qubits.Formalization.QubitBasic
 
 namespace Test
 
+#synth Module ℂ QubitState
+
 theorem test1: IP.f QZero QZero = 1 := by
   simp [IP.f, QubitStateInnerProduct, QZero]
 
