@@ -1,41 +1,5 @@
-import Mathlib.Data.Int.Basic
-import Mathlib.Algebra.Ring.Basic
-import Mathlib.LinearAlgebra.Basis.Basic
-import Mathlib.Algebra.Module.Defs
-import Mathlib.Algebra.Module.Basic
-import Mathlib.Data.Fin.Basic
-import Mathlib.LinearAlgebra.TensorPower.Basic
-import Mathlib.Algebra.Field.Basic
-import Mathlib.LinearAlgebra.Basis.VectorSpace
-import Mathlib.LinearAlgebra.Basis.Submodule
-import Mathlib.LinearAlgebra.DirectSum.Basis
-import Mathlib.LinearAlgebra.Matrix.Basis
-import Mathlib.LinearAlgebra.TensorProduct.Basic
-import Mathlib.Algebra.Module.Submodule.Basic
-import Mathlib.Algebra.Module.Submodule.Bilinear
-import Mathlib.LinearAlgebra.BilinearForm.Basic
-import Mathlib.Data.Matrix.Kronecker
-import Mathlib.Data.Rat.Defs
-import Mathlib.Data.Rat.Lemmas
-import Mathlib.Tactic.Linarith.Frontend
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
-import Mathlib.Control.Monad.Basic
-import Mathlib.Control.Applicative
-import Mathlib.Data.Set.Basic
-import Mathlib.LinearAlgebra.TensorProduct.Basis
-import Mathlib.Data.Nat.Basic
-import Mathlib.LinearAlgebra.TensorProduct.Submodule
-import Mathlib.LinearAlgebra.TensorProduct.Subalgebra
-import Mathlib.Data.Complex.Basic
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.Subspace
-import Mathlib.Analysis.InnerProductSpace.Trace
-import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
-import Mathlib.LinearAlgebra.Finsupp.Pi
-import Mathlib.LinearAlgebra.Finsupp.VectorSpace
-import Mathlib.LinearAlgebra.FiniteSpan
+import QuantumComputer3Qubits.Formalization.InnerProduct
 
 @[reducible]
 def QubitState:Type := Fin 2 → ℂ
@@ -52,15 +16,34 @@ def QOne:QubitState := fun x:Fin 2 => match x with
                                       | 0 => 0
                                       | 1 => 1
 
-instance QubitStateInhab: Inhabited QubitState :=
+instance QubitStateInnerProduct: IP QubitState :=
 {
-  default := QZero
+  f(s1 s2: QubitState) := (star (s1 0)) * (s2 0) + (star (s1 1)) * (s2 1)
+  comm := by
+    intro v w
+    generalize rv0: v 0 = v0
+    generalize rv1: v 1 = v1
+    generalize rw0: w 0 = w0
+    generalize rw1: w 1 = w1
+    clear rv0 rv1 rw0 rw1 v w
+    rw [ComplexUtil.DistrSumStar]
+    rw [ComplexUtil.DistrMultStar]
+    rw [ComplexUtil.DistrMultStar]
+    rw [ComplexUtil.DoubleStar]
+    rw [ComplexUtil.DoubleStar]
+    ring
+  distrRight := by
+    intro v w₁ w₂
+    have eq:∀i: Fin 2, (w₁ + w₂) i = w₁ i + w₂ i := by
+      aesop
+    rw [eq]
+    rw [eq]
+    ring
+  smulRight := by
+    intro v w m
+    have eq:∀i: Fin 2, (m • w) i = m * (w i) := by
+      aesop
+    rw [eq]
+    rw [eq]
+    ring
 }
-
---#check trace_eq_sum_inner
-
-open scoped WithLp
-open scoped InnerProductSpace
-
-#check InnerProductSpace
-#synth InnerProductSpace ℂ (WithLp 2 (ℂ × ℂ))
