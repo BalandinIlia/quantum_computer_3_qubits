@@ -87,3 +87,10 @@ def isoQubitIndQubitBase(i: Fin 3): ((QubitInd i) ≃ₗ[ℂ] QubitState) :=
     all_goals fin_cases g
     all_goals simp [QubitInd]
 }
+
+noncomputable
+instance transferIPFromQubitBasicToQubitIndexed (i: Fin 3):
+  IP.Transfer QubitState (QubitInd i) :=
+{
+  tr := LinearEquiv.symm (isoQubitIndQubitBase i)
+}
