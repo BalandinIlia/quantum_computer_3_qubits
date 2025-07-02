@@ -1,4 +1,4 @@
-import QuantumComputer3Qubits.QubitBasic
+import QuantumComputer3Qubits.Formalization.QubitBasic
 
 inductive X1
 | a: X1

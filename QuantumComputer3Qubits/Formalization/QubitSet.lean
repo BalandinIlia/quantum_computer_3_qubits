@@ -4,8 +4,8 @@ import Mathlib.LinearAlgebra.Basis.Basic
 import Mathlib.Algebra.Module.Defs
 import Mathlib.Data.Fin.Basic
 import Mathlib.LinearAlgebra.TensorPower.Basic
-import QuantumComputer3Qubits.QubitBasic
-import QuantumComputer3Qubits.QubitIndexed
+import QuantumComputer3Qubits.Formalization.QubitBasic
+import QuantumComputer3Qubits.Formalization.QubitIndexed
 
 open scoped TensorProduct
 

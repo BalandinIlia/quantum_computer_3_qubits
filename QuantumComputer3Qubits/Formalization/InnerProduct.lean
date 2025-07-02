@@ -2,7 +2,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Algebra.Module.Defs
 import Mathlib.Algebra.Module.Basic
 import Mathlib.LinearAlgebra.TensorProduct.Basis
-import QuantumComputer3Qubits.Complex
+import QuantumComputer3Qubits.Formalization.ComplexUtil
 
 -- IP is an abbreviation of "Inner Product"
 class IP(M: Type)[AddCommMonoid M][mod: Module ℂ M] where
