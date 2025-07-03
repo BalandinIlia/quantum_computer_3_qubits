@@ -8,6 +8,7 @@ import QuantumComputer3Qubits.Formalization.ComplexUtil
 import QuantumComputer3Qubits.Formalization.InnerProduct
 
 import QuantumComputer3Qubits.Tests.QubitBasic
+import QuantumComputer3Qubits.Tests.QubitIndexed
 
 #check Basis.equivFun
 #check Basis.tensorProduct
