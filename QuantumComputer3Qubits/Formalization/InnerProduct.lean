@@ -331,34 +331,39 @@ instance tensorProductIP(T₁ T₂: Type)
 }
 
 -- This class is necessary to transfer IP from one type to another
--- If this class is instantiated for types T₁ T₂, IP is automatically defined for T₂ as IP for T₁
-class Transfer(T₁ T₂: Type)
-              [AddCommMonoid T₁][Module ℂ T₁][ip: IP T₁]
-              [AddCommMonoid T₂][Module ℂ T₂]
+class Transfer(T: Type)
+              [AddCommMonoid T][Module ℂ T]
   where
-  tr: T₁ ≃ₗ[ℂ] T₂
-
--- This class is just a coding trick to make transferIP work
-private class IPAux(T₁ T₂: Type)
-           [AddCommMonoid T₁][Module ℂ T₁]
-           [AddCommMonoid T₂][Module ℂ T₂]
-  extends IP T₂
+  TB : Type
+  instMon: AddCommMonoid TB
+  instMod: Module ℂ TB
+  instIP: IP TB
+  lE: T ≃ₗ[ℂ] TB
 
 noncomputable
-instance transferIP(T₁ T₂: Type)
-         [AddCommMonoid T₁][Module ℂ T₁][IP T₁]
-         [AddCommMonoid T₂][Module ℂ T₂]
-         [tr: Transfer T₁ T₂]:
-         IPAux T₁ T₂ :=
+instance transferIP(T: Type)
+         [AddCommMonoid T][Module ℂ T]
+         [tr: Transfer T]:
+         IP T :=
 {
   f := by
     intro a b
-    exact IP.f ((LinearEquiv.symm tr.tr) a) ((LinearEquiv.symm tr.tr) b)
+    let IPpure := @IP.f tr.TB tr.instMon tr.instMod tr.instIP
+    exact IPpure (tr.lE a) (tr.lE b)
   comm := by
     intro v w
-    apply IP.comm
+    simp
+    generalize r1: Transfer.lE v = v₁
+    generalize rw: Transfer.lE w = w₁
+    apply @IP.comm tr.TB tr.instMon tr.instMod tr.instIP v₁ w₁
   distrRight := by
-    simp [IP.distrRight]
+    intro v w₁ w₂
+    simp
+    rw [@LinearEquiv.map_add ℂ ℂ T tr.TB _ _ _ tr.instMon _ tr.instMod _ _ _ _ tr.lE w₁ w₂]
+    rw [@IP.distrRight tr.TB tr.instMon tr.instMod tr.instIP (tr.lE v) (tr.lE w₁) (tr.lE w₂)]
   smulRight := by
-    simp [IP.smulRight]
+    intro v w m
+    simp
+    rw [@LinearEquiv.map_smul ℂ T tr.TB _ _ tr.instMon _ tr.instMod tr.lE m w]
+    rw [@IP.smulRight tr.TB tr.instMon tr.instMod tr.instIP (tr.lE v) (tr.lE w) m]
 }
