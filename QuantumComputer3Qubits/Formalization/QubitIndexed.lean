@@ -1,3 +1,4 @@
+import QuantumComputer3Qubits.Formalization.InnerProduct
 import QuantumComputer3Qubits.Formalization.QubitBasic
 
 inductive X1
@@ -89,8 +90,34 @@ def isoQubitIndQubitBase(i: Fin 3): ((QubitInd i) ≃ₗ[ℂ] QubitState) :=
 }
 
 noncomputable
-instance transferIPFromQubitBasicToQubitIndexed (i: Fin 3):
-  IP.Transfer QubitState (QubitInd i) :=
+instance transferIPFromQubitBasicToQubit0:
+  IP.Transfer (QubitInd 0) :=
 {
-  tr := LinearEquiv.symm (isoQubitIndQubitBase i)
+  TB := QubitState
+  instMon := inferInstance
+  instMod := inferInstance
+  instIP := inferInstance
+  lE := isoQubitIndQubitBase 0
+}
+
+noncomputable
+instance transferIPFromQubitBasicToQubit1:
+  IP.Transfer (QubitInd 1) :=
+{
+  TB := QubitState
+  instMon := inferInstance
+  instMod := inferInstance
+  instIP := inferInstance
+  lE := isoQubitIndQubitBase 1
+}
+
+noncomputable
+instance transferIPFromQubitBasicToQubit2:
+  IP.Transfer (QubitInd 2) :=
+{
+  TB := QubitState
+  instMon := inferInstance
+  instMod := inferInstance
+  instIP := inferInstance
+  lE := isoQubitIndQubitBase 2
 }
