@@ -47,8 +47,8 @@ open scoped TensorProduct
 
 noncomputable
 def isoQubitPair(i1 i2: Fin 3)(neq: (i1 < i2)):
-  (QubitSet2 i1 i2 neq) ≃ₗ[ℂ] (TensorProduct ℂ QubitState QubitState) := by
-  simp [QubitSet2]
+  (StateReg2Ind i1 i2 neq) ≃ₗ[ℂ] (TensorProduct ℂ QubitState QubitState) := by
+  simp [StateReg2Ind]
   exact TensorProduct.congr (isoQubitIndQubitBase i1) (isoQubitIndQubitBase i2)
 
 @[reducible]
@@ -56,24 +56,24 @@ def opPure1:Type := QubitState →ₗ[ℂ] QubitState
 @[reducible]
 def opPure2:Type := (TensorProduct ℂ QubitState QubitState) →ₗ[ℂ] (TensorProduct ℂ QubitState QubitState)
 @[reducible]
-def opContext2(i1 i2: Fin 3)(neq: (i1 < i2)):Type := (QubitSet2 i1 i2 neq) →ₗ[ℂ] (QubitSet2 i1 i2 neq)
+def opContext2(i1 i2: Fin 3)(neq: (i1 < i2)):Type := (StateReg2Ind i1 i2 neq) →ₗ[ℂ] (StateReg2Ind i1 i2 neq)
 @[reducible]
-def opContext1(i1: Fin 3):Type := (QubitSet1 i1) →ₗ[ℂ] (QubitSet1 i1)
+def opContext1(i1: Fin 3):Type := (StateReg1Ind i1) →ₗ[ℂ] (StateReg1Ind i1)
 
 noncomputable
 def opContext1Id(i1: Fin 3): opContext1 i1 :=
 {
-  toFun(q: (QubitSet1 i1)) := q
+  toFun(q: (StateReg1Ind i1)) := q
   map_add' := by aesop
   map_smul' := by aesop
 }
 
-def opFull:Type := QubitSet3 →ₗ[ℂ] QubitSet3
+def opFull:Type := StateReg3 →ₗ[ℂ] StateReg3
 
 noncomputable
 def liftt(i1 i2: Fin 3)(neq: (i1 < i2))(op: opPure2): opContext2 i1 i2 neq :=
 {
-  toFun(st: (QubitSet2 i1 i2 neq)) := by
+  toFun(st: (StateReg2Ind i1 i2 neq)) := by
     let stP:(TensorProduct ℂ QubitState QubitState) := (isoQubitPair i1 i2 neq) st
     let ftP:(TensorProduct ℂ QubitState QubitState) := op stP
     exact ((isoQubitPair i1 i2 neq).symm ftP)
@@ -91,11 +91,11 @@ def TP(i1 i2: Fin 3)
       (neq2: ¬(i3=i1))
       (neq3: ¬(i3=i2))
       (o1: opContext1 i3)
-      (o2: opContext2 i1 i2 neq): QubitSet3 →ₗ[ℂ] QubitSet3 :=
+      (o2: opContext2 i1 i2 neq): StateReg3 →ₗ[ℂ] StateReg3 :=
 {
-  toFun(s:QubitSet3):QubitSet3 := by
-    let stP:(QubitSet2 i1 i2 neq) ⊗[ℂ] (QubitSet1 i3) := (iso2 i1 i2 neq i3 neq2 neq3).symm s
-    let ftP:(QubitSet2 i1 i2 neq) ⊗[ℂ] (QubitSet1 i3) := (TensorProduct.map o2 o1) stP
+  toFun(s:StateReg3):StateReg3 := by
+    let stP:(StateReg2Ind i1 i2 neq) ⊗[ℂ] (StateReg1Ind i3) := (iso2 i1 i2 neq i3 neq2 neq3).symm s
+    let ftP:(StateReg2Ind i1 i2 neq) ⊗[ℂ] (StateReg1Ind i3) := (TensorProduct.map o2 o1) stP
     exact (iso2 i1 i2 neq i3 neq2 neq3) ftP
   map_add' := by
     intro x y

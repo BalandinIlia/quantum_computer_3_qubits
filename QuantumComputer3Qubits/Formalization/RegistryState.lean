@@ -10,11 +10,16 @@ import QuantumComputer3Qubits.Formalization.QubitIndexed
 open scoped TensorProduct
 
 @[reducible]
-def QubitSet1(i1: Fin 3):Type := QubitInd i1
-#synth Module ℂ (QubitSet1 1)
+def StateReg1: Type := QubitState
 
 @[reducible]
-def QubitSet2(i1 i2: Fin 3)(neq: (i1 < i2)):Type := (QubitInd i1) ⊗[ℂ] (QubitInd i2)
+def StateReg2: Type := QubitState ⊗[ℂ] QubitState
 
 @[reducible]
-def QubitSet3:Type := (QubitSet2 0 1 (by simp)) ⊗[ℂ] (QubitInd 2)
+def StateReg1Ind(i1: Fin 3):Type := QubitInd i1
+
+@[reducible]
+def StateReg2Ind(i1 i2: Fin 3)(_: (i1 < i2)):Type := (QubitInd i1) ⊗[ℂ] (QubitInd i2)
+
+@[reducible]
+def StateReg3:Type := (StateReg2Ind 0 1 (by simp)) ⊗[ℂ] (QubitInd 2)

@@ -10,17 +10,17 @@ import QuantumComputer3Qubits.Formalization.RegistryState
 
 open scoped TensorProduct
 
-lemma eq1(i1 i2: Fin 3)(neq: (i1 < i2)): (QubitSet1 i1) ⊗[ℂ] (QubitSet1 i2) = QubitSet2 i1 i2 neq := by
+lemma eq1(i1 i2: Fin 3)(neq: (i1 < i2)): (StateReg1Ind i1) ⊗[ℂ] (StateReg1Ind i2) = StateReg2Ind i1 i2 neq := by
   simp
 
 noncomputable
-def isoImpl1(i1 i2: Fin 3):QubitSet1 i1 ⊗[ℂ] QubitSet1 i2 ≃ QubitSet1 i2 ⊗[ℂ] QubitSet1 i1 := TensorProduct.comm ℂ (QubitSet1 i1) (QubitSet1 i2)
+def isoImpl1(i1 i2: Fin 3):StateReg1Ind i1 ⊗[ℂ] StateReg1Ind i2 ≃ StateReg1Ind i2 ⊗[ℂ] StateReg1Ind i1 := TensorProduct.comm ℂ (StateReg1Ind i1) (StateReg1Ind i2)
 noncomputable
-def iso1(i1 i2: Fin 3)(neq: (i1 > i2)):(QubitSet2 i2 i1 (by aesop))≃(QubitSet1 i1 ⊗[ℂ] QubitSet1 i2):=isoImpl1 i2 i1
+def iso1(i1 i2: Fin 3)(neq: (i1 > i2)):(StateReg2Ind i2 i1 (by aesop))≃(StateReg1Ind i1 ⊗[ℂ] StateReg1Ind i2):=isoImpl1 i2 i1
 
 noncomputable
 def iso2(i1 i2: Fin 3)(neq: (i1 < i2))(i3: Fin 3)(neq2: ¬(i3=i1))(neq3: ¬(i3=i2)):
-  (QubitSet2 i1 i2 neq) ⊗[ℂ] (QubitSet1 i3) ≃ₗ[ℂ] QubitSet3 :=
+  (StateReg2Ind i1 i2 neq) ⊗[ℂ] (StateReg1Ind i3) ≃ₗ[ℂ] StateReg3 :=
   match i1, i2, i3 with
   | 0, 0, 0 => by aesop
   | 0, 0, 1 => by
@@ -38,7 +38,7 @@ def iso2(i1 i2: Fin 3)(neq: (i1 < i2))(i3: Fin 3)(neq2: ¬(i3=i1))(neq3: ¬(i3=i
   | 0, 2, 1 => by
     clear i1 i2 i3
     clear neq2 neq3
-    simp [QubitSet2, QubitSet1, QubitSet3]
+    simp [StateReg1Ind, StateReg2Ind, StateReg3]
     clear neq
     simp [QubitIndMonoid, QubitIndModule, inferInstance]
 
@@ -81,7 +81,7 @@ def iso2(i1 i2: Fin 3)(neq: (i1 < i2))(i3: Fin 3)(neq2: ¬(i3=i1))(neq3: ¬(i3=i
     aesop
   | 1, 2, 0 => by
     clear i1 i2 i3 neq2 neq3
-    simp [QubitSet2, QubitSet1, QubitSet3]
+    simp [StateReg1Ind, StateReg2Ind, StateReg3]
     clear neq
     simp [QubitIndMonoid, QubitIndModule, inferInstance]
 
