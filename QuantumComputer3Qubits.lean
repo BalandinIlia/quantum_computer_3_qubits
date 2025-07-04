@@ -6,7 +6,7 @@ import QuantumComputer3Qubits.Formalization.RegistryState
 import QuantumComputer3Qubits.Formalization.TensorProduct
 import QuantumComputer3Qubits.Formalization.ComplexUtil
 import QuantumComputer3Qubits.Formalization.InnerProduct
-import QuantumComputer3Qubits.Formalization.LinIsoQubitSet
+import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 
 import QuantumComputer3Qubits.Tests.QubitBasic
 import QuantumComputer3Qubits.Tests.QubitIndexed
