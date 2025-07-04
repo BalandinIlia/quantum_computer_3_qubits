@@ -43,6 +43,8 @@ import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.RegistryState
 import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 
+/-
+
 open scoped TensorProduct
 
 noncomputable
@@ -162,3 +164,4 @@ theorem th:
     aesop
   rw [eq]
   aesop
+-/
