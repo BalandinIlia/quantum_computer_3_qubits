@@ -40,7 +40,7 @@ import Mathlib.Data.Fin.Basic
 import Mathlib.LinearAlgebra.TensorPower.Basic
 import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
-import QuantumComputer3Qubits.Formalization.QubitSet
+import QuantumComputer3Qubits.Formalization.RegistryState
 import QuantumComputer3Qubits.Formalization.LinIsoQubitSet
 
 open scoped TensorProduct
