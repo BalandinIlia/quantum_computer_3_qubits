@@ -121,3 +121,11 @@ instance transferIPFromQubitBasicToQubit2:
   instIP := inferInstance
   lE := isoQubitIndQubitBase 2
 }
+
+noncomputable
+instance transferIPFromQubitBasicToQubitInd (i: Fin 3):
+  IP.Transfer (QubitInd i) :=
+match i with
+| 0 => inferInstance
+| 1 => inferInstance
+| 2 => inferInstance
