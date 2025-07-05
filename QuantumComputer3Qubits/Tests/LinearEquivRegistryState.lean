@@ -2,6 +2,8 @@ import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 import QuantumComputer3Qubits.Formalization.RegistryState
 import QuantumComputer3Qubits.Tests.StateExamples
 
+namespace Test_LinearEquivRegistryState
+
 theorem test1:
 (LER.reg2_reg1reg1 SE.s00 = TensorProduct.tmul ℂ SE.s0 SE.s0) ∧
 (LER.reg2_reg1reg1 SE.s01 = TensorProduct.tmul ℂ SE.s0 SE.s1) ∧

@@ -1,6 +1,6 @@
 import QuantumComputer3Qubits.Formalization.QubitBasic
 
-namespace Test
+namespace Test_QubiBasic
 
 #synth Module ℂ QubitState
 

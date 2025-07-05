@@ -1,7 +1,7 @@
 import QuantumComputer3Qubits.Formalization.InnerProduct
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 
-namespace Test
+namespace Test_QubitIndexed
 
 -- check that module can be synthesized for each indexed qubit
 #synth Module ℂ (QubitInd 0)

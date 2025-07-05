@@ -1,6 +1,8 @@
 import QuantumComputer3Qubits.Formalization.RegistryState
 import QuantumComputer3Qubits.Tests.StateExamples
 
+namespace Test_RegistryState
+
 -- check that modules are defined for all registry states
 #synth Module ℂ StateReg1
 #synth Module ℂ StateReg2
