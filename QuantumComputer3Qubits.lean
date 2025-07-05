@@ -3,7 +3,7 @@
 import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.RegistryState
-import QuantumComputer3Qubits.Formalization.TensorProduct
+import QuantumComputer3Qubits.Formalization.Operators
 import QuantumComputer3Qubits.Formalization.ComplexUtil
 import QuantumComputer3Qubits.Formalization.InnerProduct
 import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
