@@ -63,8 +63,6 @@ theorem test1:
   all_goals try apply And.intro
   all_goals try apply And.intro
   all_goals simp [IP.f, IP.IPLeft, IP.IPRight]
-  all_goals try po
-  all_goals simp [IP.f, QZero, QOne]
 
 theorem test2:
   (IP.f SE.s00 SE.s00 = 1) ∧
@@ -75,4 +73,3 @@ theorem test2:
   all_goals try apply And.intro
   all_goals try apply And.intro
   all_goals simp [IP.f, IP.IPLeft, IP.IPRight]
-  all_goals simp [QZero, QOne]
