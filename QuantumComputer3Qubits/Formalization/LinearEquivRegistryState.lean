@@ -104,6 +104,7 @@ def reg2i_reg1ireg1i(i1 i2: Fin 3)(ord: i1 < i2):
   map_smul' := by aesop
 }
 
+-- prove case by that that conditions on qubit numbers are not met
 macro "prove_not_met" : tactic =>
 `(tactic|{
   apply False.elim;
