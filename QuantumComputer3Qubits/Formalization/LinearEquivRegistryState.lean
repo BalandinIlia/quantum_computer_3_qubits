@@ -112,11 +112,11 @@ macro "prove_not_met" : tactic =>
 })
 
 noncomputable
-def iso2(i1 i2: Fin 3)
-        (ord: (i1 < i2))
-        (i3: Fin 3)
-        (neq1: ¬(i3=i1))
-        (neq2: ¬(i3=i2)):
+def reg2ireg1i_reg3(i1 i2: Fin 3)
+                   (ord: (i1 < i2))
+                   (i3: Fin 3)
+                   (neq1: ¬(i3=i1))
+                   (neq2: ¬(i3=i2)):
   (StateReg2Ind i1 i2 ord) ⊗[ℂ] (StateReg1Ind i3) ≃ₗ[ℂ] StateReg3 :=
   match i1, i2, i3 with
   | 0, 0, 0 => by prove_not_met
