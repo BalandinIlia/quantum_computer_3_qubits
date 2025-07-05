@@ -16,7 +16,7 @@ import QuantumComputer3Qubits.Tests.RegistryState
 import QuantumComputer3Qubits.Tests.LinearEquivRegistryState
 import QuantumComputer3Qubits.Tests.StateExamples
 import QuantumComputer3Qubits.Tests.TransformOperators
-
+import QuantumComputer3Qubits.Tests.OuterProduct
 
 #check Basis.equivFun
 #check Basis.tensorProduct
