@@ -11,6 +11,7 @@ import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 import QuantumComputer3Qubits.Tests.QubitBasic
 import QuantumComputer3Qubits.Tests.QubitIndexed
 import QuantumComputer3Qubits.Tests.RegistryState
+import QuantumComputer3Qubits.Tests.LinearEquivRegistryState
 
 #check Basis.equivFun
 #check Basis.tensorProduct
