@@ -1,9 +1,3 @@
-import Mathlib.Data.Int.Basic
-import Mathlib.Algebra.Ring.Basic
-import Mathlib.LinearAlgebra.Basis.Basic
-import Mathlib.Algebra.Module.Defs
-import Mathlib.Data.Fin.Basic
-import Mathlib.LinearAlgebra.TensorPower.Basic
 import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.RegistryState
