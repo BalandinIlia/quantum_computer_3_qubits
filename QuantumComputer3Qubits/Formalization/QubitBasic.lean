@@ -1,11 +1,9 @@
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import QuantumComputer3Qubits.Formalization.InnerProduct
+import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 
 @[reducible]
 def QubitState:Type := Fin 2 → ℂ
-
-noncomputable
-def QubitBasis:Basis (Fin 2) ℂ QubitState := Pi.basisFun ℂ (Fin 2)
 
 def QZero:QubitState := fun x:Fin 2 => match x with
                                        | 0 => 1
@@ -45,4 +43,15 @@ instance QubitStateInnerProduct: IP QubitState :=
     rw [eq]
     rw [eq]
     ring
+}
+
+noncomputable
+instance QubitStateOrthonormalBasis: OrthonormalBasis QubitState 2 :=
+{
+  basis := Pi.basisFun ℂ (Fin 2)
+  prop := by
+    intro i j
+    fin_cases i
+    all_goals fin_cases j
+    all_goals simp [IP.f]
 }
