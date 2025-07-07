@@ -14,16 +14,16 @@ class OrthonormalBasis (T: Type)(N: ℕ) [AddCommMonoid T]
 namespace OB
 
 noncomputable
-instance transferOrt(T: Type)(N: ℕ)
-                    [mon: AddCommMonoid T]
-                    [mod: Module ℂ T]
-                    [tr: IP.Transfer T]
-                    (ob: @OrthonormalBasis
-                            tr.TB
-                            N
-                            tr.instMon
-                            tr.instMod
-                            tr.instIP):
+def transferOrt(T: Type)(N: ℕ)
+               {mon: AddCommMonoid T}
+               {mod: Module ℂ T}
+               {tr: IP.Transfer T}
+               (ob: @OrthonormalBasis
+                    tr.TB
+                    N
+                    tr.instMon
+                    tr.instMod
+                    tr.instIP):
 OrthonormalBasis T N :=
 {
   basis := @Basis.map (Fin N) ℂ tr.TB T _ tr.instMon tr.instMod _ _ ob.basis
