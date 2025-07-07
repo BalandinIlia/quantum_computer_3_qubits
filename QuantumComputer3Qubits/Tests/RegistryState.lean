@@ -1,4 +1,5 @@
 import QuantumComputer3Qubits.Formalization.RegistryState
+import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Tests.StateExamples
 
 namespace Test_RegistryState
@@ -6,8 +7,12 @@ namespace Test_RegistryState
 -- check that modules are defined for all registry states
 #synth Module ℂ StateReg1
 #synth Module ℂ StateReg2
+#synth Module ℂ (StateReg1Ind 0)
 #synth Module ℂ (StateReg1Ind 1)
+#synth Module ℂ (StateReg1Ind 2)
+#synth Module ℂ (StateReg2Ind 0 1 (by simp))
 #synth Module ℂ (StateReg2Ind 0 2 (by simp))
+#synth Module ℂ (StateReg2Ind 1 2 (by simp))
 #synth Module ℂ StateReg3
 
 -- check that inner product is defined for all registry states
@@ -73,3 +78,13 @@ theorem test2:
   all_goals try apply And.intro
   all_goals try apply And.intro
   all_goals simp [IP.f, IP.IPLeft, IP.IPRight]
+
+#synth OrthonormalBasis StateReg1 2
+#synth OrthonormalBasis StateReg2 4
+#synth OrthonormalBasis (StateReg1Ind 0) 2
+#synth OrthonormalBasis (StateReg1Ind 1) 2
+#synth OrthonormalBasis (StateReg1Ind 2) 2
+#synth OrthonormalBasis (StateReg2Ind 0 1 (by simp)) 4
+#synth OrthonormalBasis (StateReg2Ind 0 2 (by simp)) 4
+#synth OrthonormalBasis (StateReg2Ind 1 2 (by simp)) 4
+#synth OrthonormalBasis StateReg3 8
