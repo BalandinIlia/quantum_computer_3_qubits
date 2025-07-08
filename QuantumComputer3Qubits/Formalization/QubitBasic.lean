@@ -46,7 +46,7 @@ instance QubitStateInnerProduct: IP QubitState :=
 }
 
 noncomputable
-instance QubitStateOrthonormalBasis: OrthonormalBasis QubitState 2 :=
+instance QubitStateOrthonormalBasis: OB.OrthonormalBasisImpl QubitState 2 :=
 {
   basis := Pi.basisFun ℂ (Fin 2)
   prop := by
@@ -54,4 +54,9 @@ instance QubitStateOrthonormalBasis: OrthonormalBasis QubitState 2 :=
     fin_cases i
     all_goals fin_cases j
     all_goals simp [IP.f]
+}
+
+instance QubitStateDimensional: OB.Dimensional QubitState :=
+{
+  dim := 2
 }

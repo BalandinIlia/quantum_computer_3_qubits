@@ -79,12 +79,12 @@ theorem test2:
   all_goals try apply And.intro
   all_goals simp [IP.f, IP.IPLeft, IP.IPRight]
 
-#synth OrthonormalBasis StateReg1 2
-#synth OrthonormalBasis StateReg2 4
-#synth OrthonormalBasis (StateReg1Ind 0) 2
-#synth OrthonormalBasis (StateReg1Ind 1) 2
-#synth OrthonormalBasis (StateReg1Ind 2) 2
-#synth OrthonormalBasis (StateReg2Ind 0 1 (by simp)) 4
-#synth OrthonormalBasis (StateReg2Ind 0 2 (by simp)) 4
-#synth OrthonormalBasis (StateReg2Ind 1 2 (by simp)) 4
-#synth OrthonormalBasis StateReg3 8
+#synth OrthonormalBasis StateReg1
+#synth OrthonormalBasis StateReg2
+#synth OrthonormalBasis (StateReg1Ind 0)
+#synth OrthonormalBasis (StateReg1Ind 1)
+#synth OrthonormalBasis (StateReg1Ind 2)
+#synth OrthonormalBasis (StateReg2Ind 0 1 (by simp))
+#synth OrthonormalBasis (StateReg2Ind 0 2 (by simp))
+#synth OrthonormalBasis (StateReg2Ind 1 2 (by simp))
+#synth OrthonormalBasis StateReg3

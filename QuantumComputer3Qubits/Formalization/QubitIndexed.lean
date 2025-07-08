@@ -101,7 +101,7 @@ instance transferIPFromQubitBasicToQubit0:
 }
 noncomputable
 instance transferOBFromQubitBasicToQubit0:
-    OrthonormalBasis (QubitInd 0) 2 :=
+    OB.OrthonormalBasisImpl (QubitInd 0) 2 :=
     OB.transferOrt (QubitInd 0) 2 QubitStateOrthonormalBasis
 
 noncomputable
@@ -116,7 +116,7 @@ instance transferIPFromQubitBasicToQubit1:
 }
 noncomputable
 instance transferOBFromQubitBasicToQubit1:
-    OrthonormalBasis (QubitInd 1) 2 :=
+    OB.OrthonormalBasisImpl (QubitInd 1) 2 :=
     OB.transferOrt (QubitInd 1) 2 QubitStateOrthonormalBasis
 
 noncomputable
@@ -131,7 +131,7 @@ instance transferIPFromQubitBasicToQubit2:
 }
 noncomputable
 instance transferOBFromQubitBasicToQubit2:
-    OrthonormalBasis (QubitInd 2) 2 :=
+    OB.OrthonormalBasisImpl (QubitInd 2) 2 :=
     OB.transferOrt (QubitInd 2) 2 QubitStateOrthonormalBasis
 
 noncomputable
