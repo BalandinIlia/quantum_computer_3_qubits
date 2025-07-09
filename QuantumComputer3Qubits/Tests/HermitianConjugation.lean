@@ -21,7 +21,7 @@ theorem test1{T: Type}
              [IP T]
              [ob: OrthonormalBasis T]
              (A: T →ₗ[ℂ] T):
-∀i: Fin ob.N, isAdj (operCompConj A i) (operComp A i) := by
+∀i: Fin ob.N, isAdj (operCompAdj A i) (operComp A i) := by
   intro i
   simp [isAdj, operComp, operCompAdj, OP]
   intro x y
