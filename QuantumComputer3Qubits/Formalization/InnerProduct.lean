@@ -3,6 +3,8 @@ import Mathlib.Algebra.Module.Defs
 import Mathlib.Algebra.Module.Basic
 import Mathlib.LinearAlgebra.TensorProduct.Basis
 import QuantumComputer3Qubits.Formalization.ComplexUtil
+-- This file formalizes inner product for arbitrary
+-- linear space over the field of complex numbers.
 
 -- IP is an abbreviation of "Inner Product"
 class IP(M: Type)[AddCommMonoid M][mod: Module ℂ M] where
@@ -33,8 +35,10 @@ lemma smulLeft{M: Type}[AddCommMonoid M][Module ℂ M][IP M]
 
 open scoped TensorProduct
 
--- The double linear map given by this function takes two variables:
--- x and y and produces (⟨m|⊗⟨n|)•(|x⟩⊗|y⟩) where • stays for inner product
+-- This function formalizes a double linear map.
+-- The map takes two arguments: x and y and produces
+-- (⟨m|⊗⟨n|)•(|x⟩⊗|y⟩) value where • stays for inner product.
+-- (Here ⟨...| and |...⟩ mean Dirac notation)
 def IPRight{M N: Type}
   [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
   [AddCommMonoid N][modN: Module ℂ N][ipN: IP N]
@@ -71,9 +75,11 @@ def IPRight{M N: Type}
     ring
 }
 
--- The double linear map given by this function takes two variables:
--- x and y and produces star (⟨x|⊗⟨y|)•(|mn⟩) where • stays for inner product
--- We produce star (⟨x|⊗⟨y|)•(|mn⟩) and not just (⟨x|⊗⟨y|)•(|mn⟩) to keep maps linear
+-- This function formalizes double linear map.
+-- The map takes x and y as arguments and produces
+-- star (⟨x|⊗⟨y|)•(|mn⟩) where • stays for inner product
+-- We produce star (⟨x|⊗⟨y|)•(|mn⟩) and not just
+-- (⟨x|⊗⟨y|)•(|mn⟩) to keep the map linear by x and y.
 noncomputable
 def IPLeft{M N: Type}
   [AddCommMonoid M][modM: Module ℂ M][ipM: IP M]
@@ -236,16 +242,22 @@ private lemma TPAux2{M : Type}
   c•TensorProduct.lift m1 := by
   aesop
 
+-- This instance is inner product of tensor product of 2
+-- linear spaces with inner product.
+-- The idea behind this instance is the following:
+-- With this instance we have only to define inner product
+-- for basic types. Inner product for their tensor product
+-- (and tensor product of tensor product and so on) is defined
+-- automatically.
 noncomputable
 instance tensorProductIP(T₁ T₂: Type)
   [AddCommMonoid T₁][modM: Module ℂ T₁][ipM: IP T₁]
   [AddCommMonoid T₂][modN: Module ℂ T₂][ipN: IP T₂]:
   IP (T₁ ⊗[ℂ] T₂) :=
 {
-  f := by
-    intro inp1
-    intro inp2
-    exact star (TensorProduct.lift (IPLeft inp2) inp1)
+  -- inp mean "input"
+  f(inp1 inp2: (T₁ ⊗[ℂ] T₂)) :=
+    star (TensorProduct.lift (IPLeft inp2) inp1)
   comm := by
     intro v w
     rw [ComplexUtil.DoubleStar]
@@ -330,7 +342,11 @@ instance tensorProductIP(T₁ T₂: Type)
     simp
 }
 
--- This class is necessary to transfer IP from one type to another
+-- This class implements the following idea:
+-- If we have two linearly isomorphic types and one of them
+-- has inner product, we can "transfer" inner product from one
+-- type to the other. However, the user can control this
+-- trasferral by instantiating (or not instantiating) this class.
 class Transfer(T: Type)
               [AddCommMonoid T][Module ℂ T]
   where
@@ -346,10 +362,8 @@ instance transferIP(T: Type)
          [tr: Transfer T]:
          IP T :=
 {
-  f := by
-    intro a b
-    let IPpure := @IP.f tr.TB tr.instMon tr.instMod tr.instIP
-    exact IPpure (tr.lE a) (tr.lE b)
+  f(a b: T) :=
+    @IP.f tr.TB tr.instMon tr.instMod tr.instIP (tr.lE a) (tr.lE b)
   comm := by
     intro v w
     simp
@@ -358,12 +372,10 @@ instance transferIP(T: Type)
     apply @IP.comm tr.TB tr.instMon tr.instMod tr.instIP v₁ w₁
   distrRight := by
     intro v w₁ w₂
-    simp
     rw [@LinearEquiv.map_add ℂ ℂ T tr.TB _ _ _ tr.instMon _ tr.instMod _ _ _ _ tr.lE w₁ w₂]
     rw [@IP.distrRight tr.TB tr.instMon tr.instMod tr.instIP (tr.lE v) (tr.lE w₁) (tr.lE w₂)]
   smulRight := by
     intro v w m
-    simp
     rw [@LinearEquiv.map_smul ℂ T tr.TB _ _ tr.instMon _ tr.instMod tr.lE m w]
     rw [@IP.smulRight tr.TB tr.instMon tr.instMod tr.instIP (tr.lE v) (tr.lE w) m]
 }
