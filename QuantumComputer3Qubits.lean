@@ -20,6 +20,3 @@ import QuantumComputer3Qubits.Tests.StateExamples
 import QuantumComputer3Qubits.Tests.TransformOperators
 import QuantumComputer3Qubits.Tests.OuterProduct
 import QuantumComputer3Qubits.Tests.HermitianConjugation
-
-#check Basis.equivFun
-#check Basis.tensorProduct
