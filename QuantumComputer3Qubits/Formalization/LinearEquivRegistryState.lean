@@ -3,15 +3,29 @@ import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.RegistryState
 -- This file defines isomorphisms between different
 -- linear space types representing the same physical system.
+--
+-- More formally every isomorphism in this file follows the
+-- schema:
+-- 1. There is Type1 representing state of a physical system:
+--    quantum registry or quantum subregistry.
+-- 2. There is Type2 representing state of a physical system:
+--    quantum registry or quantum subregistry.
+-- 3. Type1 and Type2 are formally different in Lean (or the
+--    same type with different names, no matter), but
+--    represent states of identical physical systems.
+-- 4. Then we define linear isomorphism between Type1 and Type2
+--    with the following requirement: any transistion
+--    Type1→Type2 or Type2→Type1 must generate state physically
+--    identical to the input state.
 
 -- LER means "Linear Equivalence Registry"
 namespace LER
 
 open scoped TensorProduct
 
--- Registry of 1 qubit is physically one qubit. So here is
--- natural isomorphism between qubit state and 1-qubit registry
--- state.
+-- Type1: state of 1-qubit registry
+-- Type2: state of qubit
+-- Physical system: 1 qubit
 noncomputable
 def reg1_st: StateReg1 ≃ₗ[ℂ] QubitState :=
 {
@@ -21,10 +35,13 @@ def reg1_st: StateReg1 ≃ₗ[ℂ] QubitState :=
   map_smul' := by aesop
 }
 
--- Combination of 2 1-qubit registries is physically 2-qubit
--- registry. So here is natural isomporphism between state
--- of 2-qubit registry (StateReg2) and state of composite
--- system of 2 1-qubit registries (StateReg1 ⊗[ℂ] StateReg1).
+-- Type1: state of 2-qubit registry
+-- Type2: tensor product of types of states of 1-qubit registry
+-- Physical system represented by Type1:
+--      2 qubit registry
+-- Physical system represented by Type2:
+--      composite system of 2 1-qubit registries
+-- In fact these 2 systems are physically identical
 noncomputable
 def reg2_reg1reg1: StateReg2 ≃ₗ[ℂ] (StateReg1 ⊗[ℂ] StateReg1) :=
 {
@@ -34,9 +51,13 @@ def reg2_reg1reg1: StateReg2 ≃ₗ[ℂ] (StateReg1 ⊗[ℂ] StateReg1) :=
   map_smul' := by aesop
 }
 
--- 1-qubit registry and 1-qubit subregistry is in fact the
--- same physical system, - 1 qubit. So here is natural
--- isomorphism between their states.
+-- Type1: state of 1-qubit subregistry
+-- Type2: state of 1-qubit registry
+-- Physical system represented by Type1:
+--      1 qubit within 3-qubit registry
+-- Physical system represented by Type2:
+--      1 qubit
+-- In fact these 2 systems are physically identical
 noncomputable
 def reg1i_reg1(i: Fin 3): (StateReg1Ind i) ≃ₗ[ℂ] StateReg1 :=
 match i with
@@ -95,15 +116,28 @@ match i with
     aesop
   }
 
--- Natural isomorphism between types representing the same
--- physical system.
+-- Type1: state of 2-qubit subregistry
+-- Type2: state of 2-qubit registry
+-- Physical system represented by Type1:
+--      2 qubits within 3-qubit registry
+-- Physical system represented by Type2:
+--      2 qubits
+-- In fact these 2 systems are physically identical
 noncomputable
 def reg2i_reg2(i1 i2: Fin 3)(ord: i1 < i2):
   (StateReg2Ind i1 i2 ord) ≃ₗ[ℂ] StateReg2 :=
     TensorProduct.congr (reg1i_reg1 i1) (reg1i_reg1 i2)
 
--- Natural isomorphism between types representing the same
--- physical system.
+-- Type1: state of 2-qubit subregistry
+-- Type2: state of a composite system of two disjoint
+--      1-qubit subregistries. Disjointness is granted by
+--      condition i1 < i2
+-- Physical system represented by Type1:
+--      2 qubits within 3-qubit registry
+-- Physical system represented by Type2:
+--      Composite system of two different qubits in 3-qubit
+--      registry
+-- In fact these 2 systems are physically identical
 noncomputable
 def reg2i_reg1ireg1i(i1 i2: Fin 3)(ord: i1 < i2):
   (StateReg2Ind i1 i2 ord) ≃ₗ[ℂ] (StateReg1Ind i1) ⊗[ℂ] (StateReg1Ind i2) :=
@@ -122,13 +156,16 @@ macro "prove_not_met" : tactic =>
   aesop
 })
 
--- Natural isomorphism between types representing the same
--- physical system:
--- First type: type of composite system of disjoint 2-qubit
---             subregistry and 1-qubit subregistry (neq1 and neq2)
---             guarantee that subregistries are disjoint.
---             This composite system is, in fact 3-qubit registry.
--- Second type: state of 3-qubit registry
+-- Type1: state of a composite system of disjoint 2-qubit
+--      subregistry and 1-qubit subregistry. Disjointness is
+--      granted by conditions ¬(i3=i1) and ¬(i3=i2).
+-- Type2: state of 3-qubit registry
+-- Physical system represented by Type1:
+--      a composite system of disjoint 2-qubit
+--      subregistry and 1-qubit subregistry
+-- Physical system represented by Type2:
+--      3-qubit registry
+-- In fact these 2 systems are physically identical
 noncomputable
 def reg2ireg1i_reg3(i1 i2: Fin 3)
                    (ord: (i1 < i2))
