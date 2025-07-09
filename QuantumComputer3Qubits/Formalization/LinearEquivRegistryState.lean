@@ -114,7 +114,8 @@ def reg2i_reg1ireg1i(i1 i2: Fin 3)(ord: i1 < i2):
   map_smul' := by aesop
 }
 
--- prove case by that that conditions on qubit numbers are not met
+-- prove case by that that conditions on qubit indexes are
+-- not met
 macro "prove_not_met" : tactic =>
 `(tactic|{
   apply False.elim;
@@ -154,8 +155,14 @@ def reg2ireg1i_reg3(i1 i2: Fin 3)
     simp [StateReg1Ind, StateReg2Ind, StateReg3]
     clear ord
 
+    -- Ts and Tf mean "Type start" and "Type finish".
+    -- We need to define a linear isomorphism between Ts and Tf
     let Ts:Type := (QubitInd 0 ⊗[ℂ] QubitInd 2) ⊗[ℂ] QubitInd 1
     let Tf:Type := (QubitInd 0 ⊗[ℂ] QubitInd 1) ⊗[ℂ] QubitInd 2
+    -- We use T1 and T2 as "intermediate points" on our way
+    -- from Ts to Tf.
+    -- More formally we define the following linear isomorphisms:
+    -- Ts≃ₗT1, T1≃ₗT2, T2≃ₗTf and combine them into Ts≃ₗTf.
     let T1:Type := QubitInd 0 ⊗[ℂ] (QubitInd 2 ⊗[ℂ] QubitInd 1)
     let T2:Type := QubitInd 0 ⊗[ℂ] (QubitInd 1 ⊗[ℂ] QubitInd 2)
 
