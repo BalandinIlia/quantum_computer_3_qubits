@@ -4,7 +4,7 @@ import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
 
 namespace Test_HermitianConjugation
-open HJ
+open HC
 
 -- proposition that B is conjugate of A
 def isConj{T: Type}
