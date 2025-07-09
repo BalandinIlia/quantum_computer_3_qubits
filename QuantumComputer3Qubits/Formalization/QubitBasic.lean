@@ -5,14 +5,22 @@ import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 @[reducible]
 def QubitState:Type := Fin 2 → ℂ
 
+-- Quantum analog of a qubit containing 0
 def QZero:QubitState := fun x:Fin 2 => match x with
                                        | 0 => 1
                                        | 1 => 0
 
+-- Quantum analog of a qubit containing 1
 def QOne:QubitState := fun x:Fin 2 => match x with
                                       | 0 => 0
                                       | 1 => 1
 
+-- Inner product explicitly defined for qubit state type.
+-- Qubit state is the only type we explicitly define inner
+-- product for.
+-- Inner product for all other types is automatically derived
+-- from this inner product through mechanisms for linearly
+-- isomorphic types and for tensor products of types.
 instance QubitStateInnerProduct: IP QubitState :=
 {
   f(s1 s2: QubitState) := (star (s1 0)) * (s2 0) + (star (s1 1)) * (s2 1)
@@ -45,6 +53,12 @@ instance QubitStateInnerProduct: IP QubitState :=
     ring
 }
 
+-- Orthonormal basis explicitly defined for qubit state.
+-- Qubit state is the only type we explicitly define
+-- orthonormal basis for.
+-- Orthonormal basis for all other types is (semi-)automatically
+-- derived from this orhtonormal basis through mechanisms
+-- for linearly isomorphic types and for tensor products of types.
 noncomputable
 instance QubitStateOrthonormalBasis: OB.OrthonormalBasisImpl QubitState 2 :=
 {
@@ -54,9 +68,4 @@ instance QubitStateOrthonormalBasis: OB.OrthonormalBasisImpl QubitState 2 :=
     fin_cases i
     all_goals fin_cases j
     all_goals simp [IP.f]
-}
-
-instance QubitStateDimensional: OB.Dimensional QubitState :=
-{
-  dim := 2
 }
