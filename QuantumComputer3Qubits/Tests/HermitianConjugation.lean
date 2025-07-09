@@ -1,6 +1,3 @@
-import Mathlib.LinearAlgebra.FiniteDimensional.Basic
-import Mathlib.LinearAlgebra.FiniteDimensional.Defs
-import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import QuantumComputer3Qubits.Formalization.InnerProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Formalization.OuterProduct
@@ -104,8 +101,12 @@ private axiom ax5(T: Type)
 finsum (fun i: Fin N => finsum (fun j: Fin N => if(i=j) then S j i else 0)) =
 finsum (fun i: Fin N => S i i)
 
-private axiom ax6(T: Type)[AddCommMonoid T](N: ℕ)(f: Fin N → T)(s: Finset (Fin N)):
-(Function.support f) ⊆ s
+private axiom ax6(T: Type)
+                 [AddCommMonoid T]
+                 [Module ℂ T]
+                 (N: ℕ)
+                 (bas: Basis (Fin N) ℂ T):
+∀x: T, x = finsum (fun i: Fin N => (Basis.repr bas x i) • (bas i))
 
 -- check that conjugate is really conjugate
 private theorem test3{T: Type}
@@ -133,13 +134,7 @@ private theorem test3{T: Type}
   simp [Eq.symm pr1]
   clear pr1 eq
   have eq: finsum (fun i : Fin ob.N => (OP (A (OrthonormalBasis.basis i)) (OrthonormalBasis.basis i)) y) = A y := by
-    have yRep: y = finsum (fun j: Fin ob.N => (Basis.repr ob.basis y j) • (ob.basis j)) := by
-      let pr := @Basis.sum_repr (Fin ob.N) ℂ T _ _ _ _ ob.basis y
-      let pr_ := Eq.symm pr
-      rw [finsum_eq_finset_sum_of_support_subset]
-      apply pr_
-      apply ax6
-    rw [yRep]
+    rw [ax6 T ob.N ob.basis y]
     simp [ax4]
     simp [OP]
     simp [ob.prop]
