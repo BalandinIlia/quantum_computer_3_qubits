@@ -1,8 +1,11 @@
 import QuantumComputer3Qubits.Formalization.RegistryState
+-- This file defines types of linear operators in different
+-- (sub)registry linear spaces.
 
 -- OP means "operator"
 namespace OP
 
+-- o means "operator"
 @[reducible]
 def o1: Type := StateReg1 →ₗ[ℂ] StateReg1
 
@@ -12,6 +15,7 @@ def o2: Type := StateReg2 →ₗ[ℂ] StateReg2
 @[reducible]
 def o3: Type := StateReg3 →ₗ[ℂ] StateReg3
 
+-- oi means "operator indexed"
 @[reducible]
 def oi1(i1: Fin 3):Type :=
   (StateReg1Ind i1) →ₗ[ℂ] (StateReg1Ind i1)
