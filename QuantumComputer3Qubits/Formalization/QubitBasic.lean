@@ -1,6 +1,7 @@
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import QuantumComputer3Qubits.Formalization.InnerProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
+-- This file formlizes single qubit state and its attributes.
 
 @[reducible]
 def QubitState:Type := Fin 2 → ℂ
