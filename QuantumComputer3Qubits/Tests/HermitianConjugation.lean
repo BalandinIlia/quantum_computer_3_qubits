@@ -6,24 +6,24 @@ import QuantumComputer3Qubits.Formalization.HermitianConjugation
 namespace Test_HermitianConjugation
 open HC
 
--- proposition that B is conjugate of A
-def isConj{T: Type}
-          [AddCommMonoid T]
-          [Module ℂ T]
-          [IP T]
-          (A B: T →ₗ[ℂ] T): Prop :=
-          ∀x y: T, IP.f (B x) y = IP.f x (A y)
+-- proposition that B is adjoint of A
+def isAdj{T: Type}
+         [AddCommMonoid T]
+         [Module ℂ T]
+         [IP T]
+         (A B: T →ₗ[ℂ] T): Prop :=
+         ∀x y: T, IP.f (B x) y = IP.f x (A y)
 
--- check that conjugate operator component is really conjugate
+-- check that adjoint operator component is really adjoint
 theorem test1{T: Type}
              [AddCommMonoid T]
              [Module ℂ T]
              [IP T]
              [ob: OrthonormalBasis T]
              (A: T →ₗ[ℂ] T):
-∀i: Fin ob.N, isConj (operCompConj A i) (operComp A i) := by
+∀i: Fin ob.N, isAdj (operCompConj A i) (operComp A i) := by
   intro i
-  simp [isConj, operComp, operCompConj, OP]
+  simp [isAdj, operComp, operCompAdj, OP]
   intro x y
   simp [IP.smulLeft, IP.smulRight]
   simp [IP.comm x]
@@ -33,18 +33,18 @@ theorem test1{T: Type}
   clear A i x y
   ring
 
--- Check that conj is distributive
+-- Check that adj is distributive
 theorem test2(T: Type)
              [AddCommMonoid T]
              [Module ℂ T]
              [IP T]
              [ob: OrthonormalBasis T]
              (A B: T →ₗ[ℂ] T):
-conj (A+B) = (conj A) + (conj B) := by
-  simp [conj]
-  have eq: ∀i: Fin ob.N, operCompConj (A + B) i = (operCompConj A i) + (operCompConj B i) := by
+adj (A+B) = (adj A) + (adj B) := by
+  simp [adj]
+  have eq: ∀i: Fin ob.N, operCompAdj (A + B) i = (operCompAdj A i) + (operCompAdj B i) := by
     intro i
-    simp [operCompConj]
+    simp [operCompAdj]
     ext x
     simp [OP]
     simp [IP.distrLeft]
@@ -52,8 +52,8 @@ conj (A+B) = (conj A) + (conj B) := by
     generalize r2: IP.f (B (OrthonormalBasis.basis i)) x = c2
     module
   simp [eq]
-  generalize rA: operCompConj A = AA
-  generalize rB: operCompConj B = BB
+  generalize rA: operCompAdj A = AA
+  generalize rB: operCompAdj B = BB
   apply @finsum_add_distrib (Fin ob.N) (T →ₗ[ℂ] T) _ AA BB
   apply Set.toFinite (Function.support AA)
   apply Set.toFinite (Function.support BB)
@@ -114,8 +114,8 @@ private theorem test3{T: Type}
              [Module ℂ T]
              [IP T]
              [ob: OrthonormalBasis T]
-             (A: T →ₗ[ℂ] T): isConj A (conj A) := by
-  simp [isConj, conj, operCompConj, OP]
+             (A: T →ₗ[ℂ] T): isAdj A (adj A) := by
+  simp [isAdj, adj, operCompAdj, OP]
   intro x y
   simp [ax1]
   rw [ax2 T ob.N (IP.f) IP.distrLeft IP.distrRight (fun i:Fin ob.N => IP.f (A (OrthonormalBasis.basis i)) x • OrthonormalBasis.basis i) y]
