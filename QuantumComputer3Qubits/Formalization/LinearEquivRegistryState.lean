@@ -1,8 +1,8 @@
 import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.RegistryState
--- This file defines isomorphisms between (sub)registry types
--- formalizing the same quantum system.
+-- This file defines isomorphisms between different
+-- linear space types representing the same physical system.
 
 -- LER means "Linear Equivalence Registry"
 namespace LER

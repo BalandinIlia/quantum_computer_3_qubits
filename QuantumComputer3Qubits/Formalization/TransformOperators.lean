@@ -1,9 +1,17 @@
 import QuantumComputer3Qubits.Formalization.Operators
 import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
+-- This file formalizes tranformations between operators
+-- acting on different linear spaces types representing the
+-- same physical system.
 
 -- TO means "Transform Operators"
 namespace TO
 
+-- Type 1: quantum registry of 1 qubit
+-- Type 2: quantum subregistry (in 3-qubit registry) of 1 qubit
+-- If fact these type represent the same physical system, so
+-- operator acting on one type can be naturally transformed
+-- into an operator acting on the other type and vise versa.
 noncomputable
 def o1_oi1(i: Fin 3) : OP.o1 ≃ₗ[ℂ] (OP.oi1 i) :=
 {
@@ -35,6 +43,8 @@ def o1_oi1(i: Fin 3) : OP.o1 ≃ₗ[ℂ] (OP.oi1 i) :=
     simp
 }
 
+-- Type 1: quantum registry of 2 qubits
+-- Type 2: quantum subregistry (in 3-qubit registry) of 2 qubits
 noncomputable
 def o2_oi2(i1 i2: Fin 3)(ord: i1 < i2) : OP.o2 ≃ₗ[ℂ] (OP.oi2 i1 i2 ord) :=
 {
@@ -66,6 +76,22 @@ def o2_oi2(i1 i2: Fin 3)(ord: i1 < i2) : OP.o2 ≃ₗ[ℂ] (OP.oi2 i1 i2 ord) :=
     simp
 }
 
+-- Transformation of tensor product of 2 operators in 1 qubit
+-- registry linear space into an operator in 2 qubit registry
+-- linear space.
+--
+-- More formally we have:
+-- Type1 representing state of 1 qubit registry
+-- Type2 representing state of 2 qubit registry
+-- two linear operators Type1 → Type1
+-- Tensor product of these linear operators: Type1⊗Type1 → Type1⊗Type1
+-- Type1⊗Type1 physically represents a state of a composite
+-- system of 2 1-qubit registries. Physically it is a 2-qubit
+-- registry which state is represented by Type2. So it natural
+-- to transform operator Type1⊗Type1 → Type1⊗Type1 into
+-- operator Type2 → Type2.
+--
+-- tp means "tensor product"
 noncomputable
 def tpo1o1: OP.o1 →ₗ[ℂ] OP.o1 →ₗ[ℂ] OP.o2 :=
 LinearMap.mk₂ ℂ
