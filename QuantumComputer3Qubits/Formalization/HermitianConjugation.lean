@@ -1,8 +1,8 @@
 import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 
--- HJ means "Hermitian Conjugation"
-namespace HJ
+-- HC means "Hermitian Conjugation"
+namespace HC
 
 -- This is kind of operator component associated with the i-th
 -- vector of orthonormal basis.
