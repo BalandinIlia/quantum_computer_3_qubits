@@ -14,26 +14,26 @@ def operComp{T: Type}
             [IP T]
             [ob: OrthonormalBasis T]
             (A: T →ₗ[ℂ] T)
-            (i: Fin ob.N): T →ₗ[ℂ] T := 
+            (i: Fin ob.N): T →ₗ[ℂ] T :=
             OP (A (ob.basis i)) (ob.basis i)
 
--- This is a conjugate component.
+-- This is an adjoint component.
 noncomputable
-def operCompConj{T: Type}
-                [AddCommMonoid T]
-                [Module ℂ T]
-                [IP T]
-                [ob: OrthonormalBasis T]
-                (A: T →ₗ[ℂ] T)
-                (i: Fin ob.N): T →ₗ[ℂ] T := 
-                OP (ob.basis i) (A (ob.basis i))
+def operCompAdj{T: Type}
+               [AddCommMonoid T]
+               [Module ℂ T]
+               [IP T]
+               [ob: OrthonormalBasis T]
+               (A: T →ₗ[ℂ] T)
+               (i: Fin ob.N): T →ₗ[ℂ] T :=
+               OP (ob.basis i) (A (ob.basis i))
 
--- This is a conjugate operator formulated as a sum of conjugate components.
+-- This is an adjoint operator formulated as a sum of adjoint components.
 noncomputable
-def conj{T: Type}
-        [AddCommMonoid T]
-        [Module ℂ T]
-        [IP T]
-        [ob: OrthonormalBasis T]
-        (A: T →ₗ[ℂ] T): T →ₗ[ℂ] T :=
-        finsum (fun i: Fin ob.N => operCompConj A i)
+def adj{T: Type}
+       [AddCommMonoid T]
+       [Module ℂ T]
+       [IP T]
+       [ob: OrthonormalBasis T]
+       (A: T →ₗ[ℂ] T): T →ₗ[ℂ] T :=
+       finsum (fun i: Fin ob.N => operCompAdj A i)
