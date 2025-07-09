@@ -1,17 +1,36 @@
 import QuantumComputer3Qubits.Formalization.Operators
 import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
--- This file formalizes tranformations between operators
+-- This file formalizes transformations between operators
 -- acting on different linear spaces types representing the
 -- same physical system.
+--
+-- More formally all transformations follow the pattern:
+-- 1. There is Type1 representing state of a physical system:
+--    quantum registry or quantum subregistry.
+-- 2. There is Type2 representing state of a physical system:
+--    quantum registry or quantum subregistry.
+-- 3. Type1 and Type2 are formally different in Lean (or the
+--    same type with different names, no matter), but
+--    represent states of identical physical systems.
+-- 4. Then we define a transformation tr between operator
+--    Type1 → Type1 and operator Type2 → Type2 with the
+--    following requirement:
+--    ∀ss1:Type1, ∀ss2: Type2, ∀o1:Type1 →ₗ Type1,
+--    (ident ss1 ss2) → (ident (o1 ss1) ((tr o1) ss1))
+--    where ident means that states are physically identical
+--    Informally this can be said as "operators transform
+--    physically identical states in physically identical
+--    states"
 
 -- TO means "Transform Operators"
 namespace TO
 
--- Type 1: quantum registry of 1 qubit
--- Type 2: quantum subregistry (in 3-qubit registry) of 1 qubit
--- If fact these type represent the same physical system, so
--- operator acting on one type can be naturally transformed
--- into an operator acting on the other type and vise versa.
+-- Type 1: state of quantum registry of 1 qubit
+-- Type 2: state of quantum subregistry (in 3-qubit registry)
+-- of 1 qubit
+-- Physical system 1: quantum registry of 1 qubit
+-- Physical system 2: quantum subregistry (in 3-qubit registry)
+-- of 1 qubit
 noncomputable
 def o1_oi1(i: Fin 3) : OP.o1 ≃ₗ[ℂ] (OP.oi1 i) :=
 {
@@ -43,8 +62,12 @@ def o1_oi1(i: Fin 3) : OP.o1 ≃ₗ[ℂ] (OP.oi1 i) :=
     simp
 }
 
--- Type 1: quantum registry of 2 qubits
--- Type 2: quantum subregistry (in 3-qubit registry) of 2 qubits
+-- Type 1: state of quantum registry of 2 qubits
+-- Type 2: state of quantum subregistry (in 3-qubit registry)
+-- of 2 qubits
+-- Physical system 1: quantum registry of 2 qubits
+-- Physical system 2: quantum subregistry (in 3-qubit registry)
+-- of 2 qubits
 noncomputable
 def o2_oi2(i1 i2: Fin 3)(ord: i1 < i2) : OP.o2 ≃ₗ[ℂ] (OP.oi2 i1 i2 ord) :=
 {
@@ -76,23 +99,16 @@ def o2_oi2(i1 i2: Fin 3)(ord: i1 < i2) : OP.o2 ≃ₗ[ℂ] (OP.oi2 i1 i2 ord) :=
     simp
 }
 
--- Transformation of tensor product of 2 operators in 1 qubit
--- registry linear space into an operator in 2 qubit registry
--- linear space.
---
--- More formally we have:
--- Type1 representing state of 1 qubit registry
--- Type2 representing state of 2 qubit registry
--- two linear operators Type1 → Type1
--- Tensor product of these linear operators: Type1⊗Type1 → Type1⊗Type1
--- Type1⊗Type1 physically represents a state of a composite
--- system of 2 1-qubit registries. Physically it is a 2-qubit
--- registry which state is represented by Type2. So it natural
--- to transform operator Type1⊗Type1 → Type1⊗Type1 into
--- operator Type2 → Type2.
+-- Type 1: state of a composite system of 2 quantum
+--      registries of 1 qubit. Formally we take two o1
+--      operators as input, but conceptually we transform
+--      one operator, - their tensor product.
+-- Type 2: state of quantum registry of 2 qubits
+-- Physical system 1: composite system of 2 quantum
+--      registries of 1 qubit
+-- Physical system 2: quantum registry of 2 qubits
 --
 -- tp means "tensor product"
-noncomputable
 def tpo1o1: OP.o1 →ₗ[ℂ] OP.o1 →ₗ[ℂ] OP.o2 :=
 LinearMap.mk₂ ℂ
 (fun op1:OP.o1 => fun op2:OP.o1 => TensorProduct.map op1 op2)
@@ -113,7 +129,17 @@ LinearMap.mk₂ ℂ
   simp [TensorProduct.map_smul_right]
 )
 
+-- Type 1: state of a composite system of 2 disjoint quantum
+--      subregistries of 1 qubit. Formally we take two oi1
+--      operators as input, but conceptually we transform
+--      one operator, - their tensor product. Disjointness
+--      is guaranteed by the condition i1 < i2.
+-- Type 2: state of quantum subregistry of 2 qubits
+-- Physical system 1: composite system of 2 disjoint quantum
+--      subregistries of 1 qubit
+-- Physical system 2: quantum subregistry of 2 qubits
 noncomputable
+-- tp means "tensor product"
 def tpo1o1i(i1 i2: Fin 3)(ord: i1 < i2):
 (OP.oi1 i1) →ₗ[ℂ] (OP.oi1 i2) →ₗ[ℂ] (OP.oi2 i1 i2 ord) :=
 LinearMap.mk₂ ℂ
