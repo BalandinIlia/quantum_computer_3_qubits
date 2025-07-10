@@ -1,19 +1,46 @@
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import QuantumComputer3Qubits.Formalization.InnerProduct
+-- This file formalizes orthonormal basis.
 
 open scoped TensorProduct
 
+-- This class represents orthonormal basis for given linear
+-- space over ℂ with inner product. However, there are many
+-- orthonormal basises for one and the same linear space,
+-- this class defines one "standard" linear space.
+-- This is the main class of this file. It is intended as the
+-- main interface of this file for the user.
 class OrthonormalBasis(T: Type)[AddCommMonoid T]
                                [Module ℂ T]
                                [IP T] where
+  -- linear space dimensionality
+  -- (number of vectors in the basis)
   N: ℕ
+  -- the basis
   basis: Basis (Fin N) ℂ T
+  -- proposition that basis is orthonormal
   prop: ∀i j: Fin N, (IP.f (basis i) (basis j)) =
                            if i = j then 1 else 0
 
 -- OB means "Orthonormal Basis"
 namespace OB
 
+-- Orthonormal basis inner implementation.
+-- The main difference between OrthonormalBasis and
+-- OrthonormalBasisImpl is using N (dimensionality) as
+-- explicit parameter:
+--
+-- OrthonormalBasis does not use N as a parameter
+-- since it is more logical: all basises in a linear space
+-- have one and the same number of elements, so it makes no
+-- sense setting N as class argument.
+--
+-- OrthonormalBasisImpl uses N as a parameter since
+-- it is more convenient for implementation of automatic
+-- propagation of orthonormal basis.
+--
+-- Formally OrthonormalBasisImpl T N can be though of as
+-- orthonormal basis for T with N elements
 class OrthonormalBasisImpl (T: Type)(N: ℕ) [AddCommMonoid T]
                                            [Module ℂ T]
                                            [IP T] where
@@ -21,6 +48,8 @@ class OrthonormalBasisImpl (T: Type)(N: ℕ) [AddCommMonoid T]
   prop: ∀i j: Fin N, (IP.f (basis i) (basis j)) =
                            if i = j then 1 else 0
 
+-- "Transfer" orthonormal basis between two linearly
+-- isomorphic types
 noncomputable
 def transferOrt(T: Type)(N: ℕ)
                {mon: AddCommMonoid T}
@@ -46,6 +75,12 @@ OrthonormalBasisImpl T N :=
     simp [ob.prop]
 }
 
+-- This function is used to transform a basis based on
+-- Fin 2 × Fin 2 (Basis Fin 2 × Fin 2 ℂ T) to basis based on
+-- Fin 4 (Basis Fin 4 ℂ T)
+--
+-- Further function rebase_a_b is used to "rebase" basis from
+-- Fin a × Fin b to Fin ab.
 def rebase_2_2: Fin 2 × Fin 2 ≃ Fin 4 :=
 {
   toFun := by
@@ -152,7 +187,13 @@ def rebase_2_4: Fin 2 × Fin 4 ≃ Fin 8 :=
     all_goals simp
 }
 
+-- This instance defines orthonormal basis for tensor product
+-- of 2 2-dimensional linear spaces with orthonormal basises.
+--
+-- Further tp_a_b defines orthonormal basis for tensor product
+-- of a-dimensional linear space and b-dimensional linear space.
 noncomputable
+-- tp means "tensor product"
 instance tp_2_2(T1 T2: Type)
                [mon1: AddCommMonoid T1]
                [mod1: Module ℂ T1]
@@ -223,33 +264,8 @@ OrthonormalBasisImpl (T1 ⊗[ℂ] T2) 8 :=
     all_goals simp [ob1.prop, ob2.prop]
 }
 
-class Dimensional(T: Type) where dim:ℕ
-
-instance transferDim(T: Type)
-                    [AddCommMonoid T]
-                    [Module ℂ T]
-                    [IP.Transfer T]
-                    [d: Dimensional T]:
-Dimensional T:=
-{
-  dim := d.dim
-}
-
-noncomputable
-instance tp_dim(T1 T2: Type)
-               [AddCommMonoid T1]
-               [Module ℂ T1]
-               [IP T1]
-               [d1: Dimensional T1]
-               [AddCommMonoid T2]
-               [Module ℂ T2]
-               [IP T2]
-               [d2: Dimensional T2]:
-Dimensional (T1 ⊗[ℂ] T2) :=
-{
-  dim := d1.dim * d2.dim
-}
-
+-- This instance (and the next two instances) "transfer"
+-- orthonormal basises from implementation to the interface.
 noncomputable
 instance OrthonormalBasisInstDim2(T: Type)
                                  [AddCommMonoid T]

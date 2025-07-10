@@ -1,5 +1,7 @@
 import QuantumComputer3Qubits.Formalization.InnerProduct
+-- This file formalizes outer product: |a⟩⟨b| (in Dirac notation)
 
+-- OP means "Outer Product"
 def OP{T: Type}
       [AddCommMonoid T]
       [m: Module ℂ T]

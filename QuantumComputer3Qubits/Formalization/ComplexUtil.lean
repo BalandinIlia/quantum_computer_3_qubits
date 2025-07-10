@@ -1,4 +1,5 @@
 import Mathlib.Data.Complex.Basic
+-- This file contains util lemmas for working with complex numbers.
 
 namespace ComplexUtil
 
