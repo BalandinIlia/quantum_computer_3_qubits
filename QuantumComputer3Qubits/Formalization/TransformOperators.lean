@@ -107,7 +107,7 @@ def o2_oi2(i1 i2: Fin 3)(ord: i1 < i2) : OP.o2 ≃ₗ[ℂ] (OP.oi2 i1 i2 ord) :=
 -- Physical system 1: composite system of 2 quantum
 --      registries of 1 qubit
 -- Physical system 2: quantum registry of 2 qubits
---
+noncomputable
 -- tp means "tensor product"
 def tpo1o1: OP.o1 →ₗ[ℂ] OP.o1 →ₗ[ℂ] OP.o2 :=
 LinearMap.mk₂ ℂ
