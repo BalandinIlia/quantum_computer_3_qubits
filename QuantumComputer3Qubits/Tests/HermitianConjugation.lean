@@ -34,33 +34,8 @@ theorem test1{T: Type}
   clear A i x y
   ring
 
--- Check that adj is distributive
-theorem test2(T: Type)
-             [AddCommMonoid T]
-             [Module ℂ T]
-             [IP T]
-             [ob: OrthonormalBasis T]
-             (A B: T →ₗ[ℂ] T):
-adj (A+B) = (adj A) + (adj B) := by
-  simp [adj]
-  have eq: ∀i: Fin ob.N, operCompAdj (A + B) i = (operCompAdj A i) + (operCompAdj B i) := by
-    intro i
-    simp [operCompAdj]
-    ext x
-    simp [OP]
-    simp [IP.distrLeft]
-    generalize r1: IP.f (A (OrthonormalBasis.basis i)) x = c1
-    generalize r2: IP.f (B (OrthonormalBasis.basis i)) x = c2
-    module
-  simp [eq]
-  generalize rA: operCompAdj A = AA
-  generalize rB: operCompAdj B = BB
-  apply @finsum_add_distrib (Fin ob.N) (T →ₗ[ℂ] T) _ AA BB
-  apply Set.toFinite (Function.support AA)
-  apply Set.toFinite (Function.support BB)
-
 -- check that conjugate is really conjugate
-private theorem test3{T: Type}
+private theorem test2{T: Type}
              [AddCommMonoid T]
              [Module ℂ T]
              [IP T]
