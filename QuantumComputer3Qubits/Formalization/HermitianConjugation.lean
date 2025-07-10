@@ -1,5 +1,6 @@
 import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
+import QuantumComputer3Qubits.Formalization.FiniteSum
 
 -- HC means "Hermitian Conjugation"
 namespace HC
@@ -36,4 +37,4 @@ def adj{T: Type}
        [IP T]
        [ob: OrthonormalBasis T]
        (A: T →ₗ[ℂ] T): T →ₗ[ℂ] T :=
-       finsum (fun i: Fin ob.N => operCompAdj A i)
+       FS.fs (fun i: Fin ob.N => operCompAdj A i)
