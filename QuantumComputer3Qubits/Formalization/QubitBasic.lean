@@ -52,6 +52,13 @@ instance QubitStateInnerProduct: IP QubitState :=
     rw [eq]
     rw [eq]
     ring
+  self := by
+    intro v
+    generalize r0: v 0 = c0
+    generalize r1: v 1 = c1
+    clear v r0 r1
+    simp
+    ring
 }
 
 -- Orthonormal basis explicitly defined for qubit state.
