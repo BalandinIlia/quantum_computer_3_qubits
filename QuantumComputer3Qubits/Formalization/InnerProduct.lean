@@ -12,6 +12,7 @@ class IP(M: Type)[AddCommMonoid M][mod: Module ℂ M] where
   comm: ∀v w: M, (f v w) = star (f w v)
   distrRight: ∀v w₁ w₂: M, (f v (w₁ + w₂)) = (f v w₁) + (f v w₂)
   smulRight: ∀v w: M, ∀m: ℂ, (f v (m • w)) = m * (f v w)
+  self: ∀v: M, (f v v).im = 0
 
 namespace IP
 
@@ -242,6 +243,81 @@ private lemma TPAux2{M : Type}
   c•TensorProduct.lift m1 := by
   aesop
 
+private lemma TPComm(T₁ T₂: Type)
+  [AddCommMonoid T₁][modM: Module ℂ T₁][ipM: IP T₁]
+  [AddCommMonoid T₂][modN: Module ℂ T₂][ipN: IP T₂]:
+∀v w : T₁ ⊗[ℂ] T₂,
+star ((TensorProduct.lift (IPLeft w)) v) = star (star ((TensorProduct.lift (IPLeft v)) w)) := by
+  intro v w
+  rw [ComplexUtil.DoubleStar]
+  apply Eq.symm
+
+  let pr(x y: T₁ ⊗[ℂ] T₂):Prop:=
+      (TensorProduct.lift (IPLeft x)) y = star ((TensorProduct.lift (IPLeft y)) x)
+  have lem(x y: T₁ ⊗[ℂ] T₂): pr x y ↔ pr y x := by
+    aesop
+  have lem2(x y z: T₁ ⊗[ℂ] T₂): (pr x y ∧ pr x z) → pr x (y+z)  := by
+    simp [pr, IPLeftLin]
+    rw [TPAux]
+    aesop
+  have lem3(x y z: T₁ ⊗[ℂ] T₂): (pr x z ∧ pr y z) → pr (x+y) z  := by
+    simp [pr, IPLeftLin]
+    rw [TPAux]
+    aesop
+
+  have fol: pr v w → (TensorProduct.lift (IPLeft v)) w = star ((TensorProduct.lift (IPLeft w)) v) := by
+    aesop
+  apply fol
+  clear fol
+  apply TensorProduct.induction_on
+      (motive := fun x:T₁ ⊗[ℂ] T₂ => pr x w)
+  apply TensorProduct.induction_on
+      (motive := fun y:T₁ ⊗[ℂ] T₂ => pr 0 y)
+  aesop
+  simp [pr, IPLeft]
+  aesop
+  apply TensorProduct.induction_on
+      (motive := fun z:T₁ ⊗[ℂ] T₂ => ∀ (x : T₁) (y : T₂), pr (x ⊗ₜ[ℂ] y) z)
+  simp [pr, IPLeft]
+  {
+    simp [pr, IPLeft, IPRight]
+    intro x y x₁ y₁
+    rw [IP.comm]
+    rw [IP.comm y y₁]
+    simp
+  }
+  {
+    intro a b
+    intro h₁ h₂
+    intro c d
+    apply lem2
+    apply And.intro
+    apply h₁
+    apply h₂
+  }
+  apply TensorProduct.induction_on
+      (motive := fun z:T₁ ⊗[ℂ] T₂ => ∀ (x y : T₁ ⊗[ℂ] T₂), pr x z → pr y z → pr (x + y) z)
+  {
+    intro a b
+    intro h₁ h₂
+    apply lem3
+    aesop
+  }
+  {
+    intro a b c d
+    intro h₁ h₂
+    apply lem3
+    aesop
+  }
+  {
+    intro a b
+    intro h₁ h₂
+    intro c d
+    intro h₃ h₄
+    apply lem3
+    aesop
+  }
+
 -- This instance is inner product of tensor product of 2
 -- linear spaces with inner product.
 -- The idea behind this instance is the following:
@@ -259,75 +335,7 @@ instance tensorProductIP(T₁ T₂: Type)
   f(inp1 inp2: (T₁ ⊗[ℂ] T₂)) :=
     star (TensorProduct.lift (IPLeft inp2) inp1)
   comm := by
-    intro v w
-    rw [ComplexUtil.DoubleStar]
-    apply Eq.symm
-
-    let pr(x y: T₁ ⊗[ℂ] T₂):Prop:=
-        (TensorProduct.lift (IPLeft x)) y = star ((TensorProduct.lift (IPLeft y)) x)
-    have lem(x y: T₁ ⊗[ℂ] T₂): pr x y ↔ pr y x := by
-      aesop
-    have lem2(x y z: T₁ ⊗[ℂ] T₂): (pr x y ∧ pr x z) → pr x (y+z)  := by
-      simp [pr, IPLeftLin]
-      rw [TPAux]
-      aesop
-    have lem3(x y z: T₁ ⊗[ℂ] T₂): (pr x z ∧ pr y z) → pr (x+y) z  := by
-      simp [pr, IPLeftLin]
-      rw [TPAux]
-      aesop
-
-    have fol: pr v w → (TensorProduct.lift (IPLeft v)) w = star ((TensorProduct.lift (IPLeft w)) v) := by
-      aesop
-    apply fol
-    clear fol
-    apply TensorProduct.induction_on
-        (motive := fun x:T₁ ⊗[ℂ] T₂ => pr x w)
-    apply TensorProduct.induction_on
-        (motive := fun y:T₁ ⊗[ℂ] T₂ => pr 0 y)
-    aesop
-    simp [pr, IPLeft]
-    aesop
-    apply TensorProduct.induction_on
-        (motive := fun z:T₁ ⊗[ℂ] T₂ => ∀ (x : T₁) (y : T₂), pr (x ⊗ₜ[ℂ] y) z)
-    simp [pr, IPLeft]
-    {
-      simp [pr, IPLeft, IPRight]
-      intro x y x₁ y₁
-      rw [IP.comm]
-      rw [IP.comm y y₁]
-      simp
-    }
-    {
-      intro a b
-      intro h₁ h₂
-      intro c d
-      apply lem2
-      apply And.intro
-      apply h₁
-      apply h₂
-    }
-    apply TensorProduct.induction_on
-        (motive := fun z:T₁ ⊗[ℂ] T₂ => ∀ (x y : T₁ ⊗[ℂ] T₂), pr x z → pr y z → pr (x + y) z)
-    {
-      intro a b
-      intro h₁ h₂
-      apply lem3
-      aesop
-    }
-    {
-      intro a b c d
-      intro h₁ h₂
-      apply lem3
-      aesop
-    }
-    {
-      intro a b
-      intro h₁ h₂
-      intro c d
-      intro h₃ h₄
-      apply lem3
-      aesop
-    }
+    apply TPComm T₁ T₂
   distrRight := by
     intro v w₁ w₂
     rw [ComplexUtil.DistrInvSumStar]
@@ -340,6 +348,33 @@ instance tensorProductIP(T₁ T₂: Type)
     rw [IPLeftLin2]
     rw [TPAux2]
     simp
+  self := by
+    intro v
+    apply TensorProduct.induction_on
+        (motive := fun z:T₁ ⊗[ℂ] T₂ => (star ((TensorProduct.lift (IPLeft z)) z)).im = 0)
+    {
+      simp [IPLeft, IPRight]
+    }
+    {
+      intro a b
+      simp [IPLeft, IPRight]
+      simp [ipN.self, ipM.self]
+    }
+    {
+      intro x y
+      intro hx hy
+      simp [IPLeftLin, IPLeftLin2]
+      simp [TPAux]
+      simp at hx hy
+      simp [hx, hy]
+      have eq: ((TensorProduct.lift (IPLeft y)) x) = star ((TensorProduct.lift (IPLeft x)) y) := by
+        let pr := TPComm T₁ T₂ y x
+        simp [ComplexUtil.DoubleStar] at pr
+        let pr_ := Eq.symm pr
+        rw [ComplexUtil.Aux] at pr_
+        apply pr_
+      simp [eq]
+    }
 }
 
 -- This class implements the following idea:
@@ -378,4 +413,8 @@ instance transferIP(T: Type)
     intro v w m
     rw [@LinearEquiv.map_smul ℂ T tr.TB _ _ tr.instMon _ tr.instMod tr.lE m w]
     rw [@IP.smulRight tr.TB tr.instMon tr.instMod tr.instIP (tr.lE v) (tr.lE w) m]
+  self := by
+    intro v
+    generalize r: Transfer.lE v = w
+    apply tr.instIP.self w
 }
