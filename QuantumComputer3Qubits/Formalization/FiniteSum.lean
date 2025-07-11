@@ -68,7 +68,7 @@ lemma distrLeft {T: Type}
                 {N: ℕ}
                 (op: T → T → ℂ)
                 (prop: ∀x1 x2 y: T, op (x1+x2) y = op x1 y + op x2 y)
-                (prop2: ∀m: ℂ, ∀x y: T, op (m • x) y = m * (op x y))
+                (prop2: ∀m: ℂ, ∀x y: T, op (m • x) y = (star m) * (op x y))
                 (S: Fin N → T)
                 (x: T):
 op (fs S) x = fs (fun i: Fin N => op (S i) x) := by
@@ -76,7 +76,7 @@ op (fs S) x = fs (fun i: Fin N => op (S i) x) := by
   cases N with
   | zero =>
     simp
-    have eq: op ((0:ℂ) • x) x = (0:ℂ) * (op x x) := by
+    have eq: op ((0:ℂ) • x) x = star (0:ℂ) * (op x x) := by
       apply prop2 (0:ℂ) x x
     simp at eq
     apply eq
