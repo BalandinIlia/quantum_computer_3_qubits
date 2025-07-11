@@ -27,7 +27,6 @@ def s10: StateReg2 := TensorProduct.tmul ℂ s1 s0
 noncomputable
 def s11: StateReg2 := TensorProduct.tmul ℂ s1 s1
 
-@[simp]
 def si0(i: Fin 3): StateReg1Ind i :=
 match i with
 | 0 => fun x: X1 => match x with
@@ -40,7 +39,6 @@ match i with
                     | X3.a => 1
                     | X3.b => 0
 
-@[simp]
 def si1(i: Fin 3): StateReg1Ind i :=
 match i with
 | 0 => fun x: X1 => match x with
