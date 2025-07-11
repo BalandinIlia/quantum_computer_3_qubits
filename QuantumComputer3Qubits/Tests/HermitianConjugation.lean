@@ -45,7 +45,7 @@ private theorem test2{T: Type}
   simp [isAdj, adj, operCompAdj, OP]
   intro x y
   simp [FS.applyMap]
-  rw [FS.distrLeft T ob.N (IP.f) IP.distrLeft (by sorry) (fun i:Fin ob.N => IP.f (A (OrthonormalBasis.basis i)) x • OrthonormalBasis.basis i) y]
+  rw [FS.distrLeft (IP.f) IP.distrLeft IP.smulLeft (fun i:Fin ob.N => IP.f (A (OrthonormalBasis.basis i)) x • OrthonormalBasis.basis i) y]
   simp [IP.smulLeft, IP.smulRight]
   simp [IP.comm _ x]
   have eq: ∀i: Fin ob.N,
@@ -57,13 +57,13 @@ private theorem test2{T: Type}
     ring_nf
     aesop
   simp [eq]
-  let pr1 := FS.distrRight T ob.N (IP.f) IP.distrRight (by sorry) (fun i:Fin ob.N => ((OP (A (OrthonormalBasis.basis i)) (OrthonormalBasis.basis i)) y)) x
+  let pr1 := FS.distrRight (IP.f) IP.distrRight (by intro m x y; apply IP.smulRight) (fun i:Fin ob.N => ((OP (A (OrthonormalBasis.basis i)) (OrthonormalBasis.basis i)) y)) x
   simp [Eq.symm pr1]
   clear pr1 eq
   have eq: FS.fs (fun i : Fin ob.N => (OP (A (OrthonormalBasis.basis i)) (OrthonormalBasis.basis i)) y) = A y := by
-    rw [FS.basis T ob.N pos ob.basis y]
+    rw [FS.basisReprAx ob.N pos ob.basis y]
     simp [FS.applyDistr]
     simp [OP]
     simp [ob.prop]
-    simp [FS.doubleFS T ob.N pos]
+    rw [FS.doubleFS ob.N pos]
   simp [eq]
