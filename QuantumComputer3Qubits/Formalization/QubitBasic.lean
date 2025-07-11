@@ -6,16 +6,6 @@ import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 @[reducible]
 def QubitState:Type := Fin 2 → ℂ
 
--- Quantum analog of a qubit containing 0
-def QZero:QubitState := fun x:Fin 2 => match x with
-                                       | 0 => 1
-                                       | 1 => 0
-
--- Quantum analog of a qubit containing 1
-def QOne:QubitState := fun x:Fin 2 => match x with
-                                      | 0 => 0
-                                      | 1 => 1
-
 -- Inner product explicitly defined for qubit state type.
 -- Qubit state is the only type we explicitly define inner
 -- product for.
@@ -77,3 +67,22 @@ instance QubitStateOrthonormalBasis: OB.OrthonormalBasisImpl QubitState 2 :=
     all_goals fin_cases j
     all_goals simp [IP.f]
 }
+
+-- Quantum analog of a qubit containing 0
+def QZero:QubitState := fun x:Fin 2 => match x with
+                                       | 0 => 1
+                                       | 1 => 0
+
+-- Quantum analog of a qubit containing 1
+def QOne:QubitState := fun x:Fin 2 => match x with
+                                      | 0 => 0
+                                      | 1 => 1
+
+theorem basisVec:
+(QubitStateOrthonormalBasis.basis 0 = QZero) ∧
+(QubitStateOrthonormalBasis.basis 1 = QOne) := by
+  simp [QubitStateOrthonormalBasis, Pi.single]
+  apply And.intro
+  all_goals ext i
+  all_goals fin_cases i
+  all_goals simp [QOne, QZero]
