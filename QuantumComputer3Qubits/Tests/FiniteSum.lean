@@ -1,0 +1,3 @@
+import QuantumComputer3Qubits.Formalization.FiniteSum
+
+namespace Test_FiniteSum

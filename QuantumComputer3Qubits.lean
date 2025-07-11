@@ -22,3 +22,4 @@ import QuantumComputer3Qubits.Tests.StateExamples
 import QuantumComputer3Qubits.Tests.TransformOperators
 import QuantumComputer3Qubits.Tests.OuterProduct
 import QuantumComputer3Qubits.Tests.HermitianConjugation
+import QuantumComputer3Qubits.Tests.FiniteSum
