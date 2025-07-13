@@ -7,14 +7,6 @@ import QuantumComputer3Qubits.Formalization.FiniteSum
 namespace Test_HermitianConjugation
 open HC
 
--- proposition that B is adjoint of A
-def isAdj{T: Type}
-         [AddCommMonoid T]
-         [Module ℂ T]
-         [IP T]
-         (A B: T →ₗ[ℂ] T): Prop :=
-         ∀x y: T, IP.f (B x) y = IP.f x (A y)
-
 -- check that adjoint operator component is really adjoint
 theorem test1{T: Type}
              [AddCommMonoid T]
