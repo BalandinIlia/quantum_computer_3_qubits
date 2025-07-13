@@ -36,13 +36,13 @@ noncomputable
 def s00 := qq 0 0
 @[simp]
 noncomputable
-def s01 := qq 0 0
+def s01 := qq 0 1
 @[simp]
 noncomputable
-def s10 := qq 0 0
+def s10 := qq 1 0
 @[simp]
 noncomputable
-def s11 := qq 0 0
+def s11 := qq 1 1
 
 -- qi means "qubit indexed"
 def qi(val: CV)(i: Fin 3): StateReg1Ind i :=
