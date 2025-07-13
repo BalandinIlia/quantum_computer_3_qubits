@@ -82,3 +82,28 @@ def qqq(val1 val2 val3: CV): StateReg3 :=
 TensorProduct.tmul ℂ
                    (qqi val1 val2 0 1 (by aesop))
                    (qi val3 2)
+
+@[simp]
+noncomputable
+def s000 := qqq 0 0 0
+@[simp]
+noncomputable
+def s001 := qqq 0 0 1
+@[simp]
+noncomputable
+def s010 := qqq 0 1 0
+@[simp]
+noncomputable
+def s011 := qqq 0 1 1
+@[simp]
+noncomputable
+def s100 := qqq 1 0 0
+@[simp]
+noncomputable
+def s101 := qqq 1 0 1
+@[simp]
+noncomputable
+def s110 := qqq 1 1 0
+@[simp]
+noncomputable
+def s111 := qqq 1 1 1
