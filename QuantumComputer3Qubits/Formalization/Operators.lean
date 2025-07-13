@@ -19,7 +19,16 @@ def o2: Type := StateReg2 →ₗ[ℂ] StateReg2
 @[reducible]
 def o3: Type := StateReg3 →ₗ[ℂ] StateReg3
 
-lemma hjk(op1 op2: o3):
+-- oi means "operator indexed"
+@[reducible]
+def oi1(i1: Fin 3):Type :=
+  (StateReg1Ind i1) →ₗ[ℂ] (StateReg1Ind i1)
+
+@[reducible]
+def oi2(i1 i2: Fin 3)(ord: (i1 < i2)):Type :=
+  (StateReg2Ind i1 i2 ord) →ₗ[ℂ] (StateReg2Ind i1 i2 ord)
+
+lemma Equality3(op1 op2: o3):
 (∀ v1 v2 v3: Fin 2, (op1 (CS.qqq v1 v2 v3) = op2 (CS.qqq v1 v2 v3))) →
 op1 = op2 := by
   intro h
@@ -31,12 +40,3 @@ op1 = op2 := by
     simp [CS.qqq] at h
     simp [h]
   aesop
-
--- oi means "operator indexed"
-@[reducible]
-def oi1(i1: Fin 3):Type :=
-  (StateReg1Ind i1) →ₗ[ℂ] (StateReg1Ind i1)
-
-@[reducible]
-def oi2(i1 i2: Fin 3)(ord: (i1 < i2)):Type :=
-  (StateReg2Ind i1 i2 ord) →ₗ[ℂ] (StateReg2Ind i1 i2 ord)
