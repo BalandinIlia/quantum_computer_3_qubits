@@ -1,6 +1,6 @@
 import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 import QuantumComputer3Qubits.Formalization.RegistryState
-import QuantumComputer3Qubits.Tests.StateExamples
+import QuantumComputer3Qubits.Formalization.ClassicalStates
 
 namespace Test_LinearEquivRegistryState
 

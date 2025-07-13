@@ -9,7 +9,7 @@ import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
-import QuantumComputer3Qubits.Tests.StateExamples
+import QuantumComputer3Qubits.Formalization.ClassicalStates
 
 namespace Hoare
 
@@ -334,3 +334,5 @@ Hoar (H.cond2 (OP (SE.si00 0 1 (by aesop)) (SE.si00 0 1 (by aesop))))
     aesop
   rw [repr] at st
   apply st
+
+#print axioms th1
