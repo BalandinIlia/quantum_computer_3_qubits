@@ -4,6 +4,8 @@ import Mathlib.Algebra.Module.Basic
 import Mathlib.LinearAlgebra.TensorProduct.Basis
 import QuantumComputer3Qubits.Formalization.ComplexUtil
 import QuantumComputer3Qubits.Formalization.FiniteSum
+import QuantumComputer3Qubits.Formalization.RegistryState
+import QuantumComputer3Qubits.Formalization.ClassicalStates
 
 -- DC means "decompose"
 namespace DC
@@ -140,3 +142,80 @@ def tp_4_2(T1 T2: Type)
       module
     }
 }
+
+def dc0: DC.Decompose2 (StateReg1Ind 0) :=
+{
+  bas := fun i: Fin 2 => match i with
+  -- Quantum analog of a qubit containing 0
+  | 0 => CS.qi 0 0
+  -- Quantum analog of a qubit containing 1
+  | 1 => CS.qi 1 0
+
+  prop := by
+    intro t
+    exists fun i: Fin 2 => match i with
+                           | 0 => t X1.a
+                           | 1 => t X1.b
+    ext i
+    cases i
+    all_goals simp [FS.FS2]
+    all_goals simp [StateReg1Ind, CS.qi, HAdd.hAdd]
+    all_goals simp [Add.add]
+    all_goals simp [HSMul.hSMul]
+    all_goals simp [SMul.smul]
+}
+
+def dc1: DC.Decompose2 (StateReg1Ind 1) :=
+{
+  bas := fun i: Fin 2 => match i with
+  -- Quantum analog of a qubit containing 0
+  | 0 => CS.qi 0 1
+  -- Quantum analog of a qubit containing 1
+  | 1 => CS.qi 1 1
+
+  prop := by
+    intro t
+    exists fun i: Fin 2 => match i with
+                           | 0 => t X2.a
+                           | 1 => t X2.b
+    ext i
+    cases i
+    all_goals simp [FS.FS2]
+    all_goals simp [StateReg1Ind, CS.qi, HAdd.hAdd]
+    all_goals simp [Add.add]
+    all_goals simp [HSMul.hSMul]
+    all_goals simp [SMul.smul]
+}
+
+def dc2: DC.Decompose2 (StateReg1Ind 2) :=
+{
+  bas := fun i: Fin 2 => match i with
+  -- Quantum analog of a qubit containing 0
+  | 0 => CS.qi 0 2
+  -- Quantum analog of a qubit containing 1
+  | 1 => CS.qi 1 2
+
+  prop := by
+    intro t
+    exists fun i: Fin 2 => match i with
+                           | 0 => t X3.a
+                           | 1 => t X3.b
+    ext i
+    cases i
+    all_goals simp [FS.FS2]
+    all_goals simp [StateReg1Ind, CS.qi, HAdd.hAdd]
+    all_goals simp [Add.add]
+    all_goals simp [HSMul.hSMul]
+    all_goals simp [SMul.smul]
+}
+
+noncomputable
+def dsReg3: DC.Decompose8 StateReg3 :=
+DC.tp_4_2 (StateReg2Ind 0 1 (by simp))
+          (QubitInd 2)
+          (DC.tp_2_2 (QubitInd 0)
+                     (QubitInd 1)
+                     dc0
+                     dc1
+          )
+          dc2
