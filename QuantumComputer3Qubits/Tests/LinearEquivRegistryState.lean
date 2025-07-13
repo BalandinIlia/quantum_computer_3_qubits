@@ -81,13 +81,13 @@ theorem test6:
 
 theorem test7:
 (LER.reg2ireg1i_reg3 1 2 (by aesop) 0 (by aesop) (by aesop)
-                    (tp ℂ (CS.qqi 0 0 1 2 (by aesop)) (CS.qi 0 0))) = SE.s000 ∧
+                    (tp ℂ (CS.qqi 0 0 1 2 (by aesop)) (CS.qi 0 0))) = CS.s000 ∧
 (LER.reg2ireg1i_reg3 1 2 (by aesop) 0 (by aesop) (by aesop)
-                    (tp ℂ (CS.qqi 1 0 1 2 (by aesop)) (CS.qi 0 0))) = SE.s010 ∧
+                    (tp ℂ (CS.qqi 1 0 1 2 (by aesop)) (CS.qi 0 0))) = CS.s010 ∧
 (LER.reg2ireg1i_reg3 1 2 (by aesop) 0 (by aesop) (by aesop)
-                    (tp ℂ (CS.qqi 0 1 1 2 (by aesop)) (CS.qi 0 0))) = SE.s001 ∧
+                    (tp ℂ (CS.qqi 0 1 1 2 (by aesop)) (CS.qi 0 0))) = CS.s001 ∧
 (LER.reg2ireg1i_reg3 1 2 (by aesop) 0 (by aesop) (by aesop)
-                    (tp ℂ (CS.qqi 0 0 1 2 (by aesop)) (CS.qi 1 0))) = SE.s100 := by
+                    (tp ℂ (CS.qqi 0 0 1 2 (by aesop)) (CS.qi 1 0))) = CS.s100 := by
   all_goals try apply And.intro
   all_goals try apply And.intro
   all_goals try apply And.intro
