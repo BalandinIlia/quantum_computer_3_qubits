@@ -18,6 +18,26 @@ def operComp{T: Type}
             (i: Fin ob.N): T →ₗ[ℂ] T :=
             OP (A (ob.basis i)) (ob.basis i)
 
+lemma reprOp{T: Type}
+            [AddCommMonoid T]
+            [Module ℂ T]
+            [IP T]
+            [ob: OrthonormalBasis T]
+            (pos: ob.N > 0)
+            (A: T →ₗ[ℂ] T):
+A = FS.fs (fun i: Fin ob.N => operComp A i) := by
+       ext s
+       have rt := FS.basisReprAx ob.N (by aesop) ob.basis s
+       simp [FS.basisRepr] at rt
+       rw [FS.applyMap]
+       rw [rt]
+       rw [FS.applyDistr]
+       simp [FS.applyDistr]
+       simp [operComp, OP]
+       simp [ob.prop]
+       let st := @FS.doubleFS T _ ob.N pos (fun i: Fin ob.N => fun i_1: Fin ob.N => (OrthonormalBasis.basis.repr s) i • A (OrthonormalBasis.basis i_1))
+       simp [st]
+
 -- This is an adjoint component.
 noncomputable
 def operCompAdj{T: Type}
