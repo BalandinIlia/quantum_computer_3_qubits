@@ -11,7 +11,7 @@ import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
-import QuantumComputer3Qubits.Formalization.Hoare
+import QuantumComputer3Qubits.Formalization.Language
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
@@ -24,3 +24,4 @@ import QuantumComputer3Qubits.Tests.TransformOperators
 import QuantumComputer3Qubits.Tests.OuterProduct
 import QuantumComputer3Qubits.Tests.HermitianConjugation
 import QuantumComputer3Qubits.Tests.FiniteSum
+import QuantumComputer3Qubits.Tests.HoareTriple1

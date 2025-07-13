@@ -30,3 +30,23 @@ def StateReg2Ind(i1 i2: Fin 3)(_: (i1 < i2)):Type := (QubitInd i1) ⊗[ℂ] (Qub
 -- State of 3-qubit registry
 @[reducible]
 def StateReg3:Type := (StateReg2Ind 0 1 (by simp)) ⊗[ℂ] (QubitInd 2)
+
+noncomputable
+instance ob1(i: Fin 3): OrthonormalBasis (StateReg1Ind i) :=
+match i with
+| 0 => inferInstance
+| 1 => inferInstance
+| 2 => inferInstance
+
+noncomputable
+instance ob2(i1 i2: Fin 3)(ord: i1 < i2): OrthonormalBasis (StateReg2Ind i1 i2 ord) :=
+match i1, i2 with
+| 0, 0 => inferInstance
+| 0, 1 => inferInstance
+| 0, 2 => inferInstance
+| 1, 0 => inferInstance
+| 1, 1 => inferInstance
+| 1, 2 => inferInstance
+| 2, 0 => inferInstance
+| 2, 1 => inferInstance
+| 2, 2 => inferInstance
