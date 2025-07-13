@@ -44,18 +44,18 @@ macro "po": tactic =>
 })
 
 theorem test1:
-  (IP.f SE.s00 SE.s01 = 0) ∧
-  (IP.f SE.s00 SE.s10 = 0) ∧
-  (IP.f SE.s00 SE.s11 = 0) ∧
-  (IP.f SE.s01 SE.s00 = 0) ∧
-  (IP.f SE.s01 SE.s10 = 0) ∧
-  (IP.f SE.s01 SE.s11 = 0) ∧
-  (IP.f SE.s10 SE.s01 = 0) ∧
-  (IP.f SE.s10 SE.s00 = 0) ∧
-  (IP.f SE.s10 SE.s11 = 0) ∧
-  (IP.f SE.s11 SE.s01 = 0) ∧
-  (IP.f SE.s11 SE.s10 = 0) ∧
-  (IP.f SE.s11 SE.s00 = 0) := by
+  (IP.f CS.s00 CS.s01 = 0) ∧
+  (IP.f CS.s00 CS.s10 = 0) ∧
+  (IP.f CS.s00 CS.s11 = 0) ∧
+  (IP.f CS.s01 CS.s00 = 0) ∧
+  (IP.f CS.s01 CS.s10 = 0) ∧
+  (IP.f CS.s01 CS.s11 = 0) ∧
+  (IP.f CS.s10 CS.s01 = 0) ∧
+  (IP.f CS.s10 CS.s00 = 0) ∧
+  (IP.f CS.s10 CS.s11 = 0) ∧
+  (IP.f CS.s11 CS.s01 = 0) ∧
+  (IP.f CS.s11 CS.s10 = 0) ∧
+  (IP.f CS.s11 CS.s00 = 0) := by
   all_goals try apply And.intro
   all_goals try apply And.intro
   all_goals try apply And.intro
@@ -70,10 +70,10 @@ theorem test1:
   all_goals simp [IP.f, IP.IPLeft, IP.IPRight]
 
 theorem test2:
-  (IP.f SE.s00 SE.s00 = 1) ∧
-  (IP.f SE.s01 SE.s01 = 1) ∧
-  (IP.f SE.s10 SE.s10 = 1) ∧
-  (IP.f SE.s11 SE.s11 = 1) := by
+  (IP.f CS.s00 CS.s00 = 1) ∧
+  (IP.f CS.s01 CS.s01 = 1) ∧
+  (IP.f CS.s10 CS.s10 = 1) ∧
+  (IP.f CS.s11 CS.s11 = 1) := by
   all_goals try apply And.intro
   all_goals try apply And.intro
   all_goals try apply And.intro
