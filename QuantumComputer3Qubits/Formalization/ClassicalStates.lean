@@ -31,6 +31,19 @@ noncomputable
 -- qq means 2 qubits
 def qq(val1 val2: CV): StateReg2 := TensorProduct.tmul ℂ (q val1) (q val2)
 
+@[simp]
+noncomputable
+def s00 := qq 0 0
+@[simp]
+noncomputable
+def s01 := qq 0 0
+@[simp]
+noncomputable
+def s10 := qq 0 0
+@[simp]
+noncomputable
+def s11 := qq 0 0
+
 -- qi means "qubit indexed"
 def qi(val: CV)(i: Fin 3): StateReg1Ind i :=
 match val with
