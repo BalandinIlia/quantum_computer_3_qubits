@@ -13,6 +13,7 @@ import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
 import QuantumComputer3Qubits.Formalization.Hoare
 import QuantumComputer3Qubits.Formalization.FiniteSum
+import QuantumComputer3Qubits.Formalization.Decompose
 
 import QuantumComputer3Qubits.Tests.QubitBasic
 import QuantumComputer3Qubits.Tests.QubitIndexed
