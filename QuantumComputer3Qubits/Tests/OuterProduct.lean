@@ -1,5 +1,5 @@
 import QuantumComputer3Qubits.Formalization.OuterProduct
-import QuantumComputer3Qubits.Tests.StateExamples
+import QuantumComputer3Qubits.Formalization.ClassicalStates
 
 namespace Test_OuterProduct
 

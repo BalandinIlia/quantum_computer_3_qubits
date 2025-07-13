@@ -65,7 +65,7 @@ def qqi(val1 val2: CV)(i1 i2: Fin 3)(ord: i1 < i2):
 
 @[simp]
 noncomputable
-def s(val1 val2 val3: CV): StateReg3 :=
+def qqq(val1 val2 val3: CV): StateReg3 :=
 TensorProduct.tmul ℂ
                    (qqi val1 val2 0 1 (by aesop))
                    (qi val3 2)
