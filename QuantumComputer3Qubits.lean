@@ -14,12 +14,12 @@ import QuantumComputer3Qubits.Formalization.HermitianConjugation
 import QuantumComputer3Qubits.Formalization.Hoare
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
+import QuantumComputer3Qubits.Formalization.ClassicalStates
 
 import QuantumComputer3Qubits.Tests.QubitBasic
 import QuantumComputer3Qubits.Tests.QubitIndexed
 import QuantumComputer3Qubits.Tests.RegistryState
 import QuantumComputer3Qubits.Tests.LinearEquivRegistryState
-import QuantumComputer3Qubits.Tests.StateExamples
 import QuantumComputer3Qubits.Tests.TransformOperators
 import QuantumComputer3Qubits.Tests.OuterProduct
 import QuantumComputer3Qubits.Tests.HermitianConjugation
