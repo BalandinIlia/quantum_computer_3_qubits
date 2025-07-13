@@ -1,7 +1,6 @@
 import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.Decompose
-import QuantumComputer3Qubits.Tests.StateExamples
 -- This file formalizes registry and subregistry states
 
 open scoped TensorProduct
@@ -33,13 +32,20 @@ def StateReg2Ind(i1 i2: Fin 3)(_: (i1 < i2)):Type := (QubitInd i1) ⊗[ℂ] (Qub
 @[reducible]
 def StateReg3:Type := (StateReg2Ind 0 1 (by simp)) ⊗[ℂ] (QubitInd 2)
 
+-- SD means "State Decomposition"
+namespace SD
+
 def dc0: DC.Decompose2 (StateReg1Ind 0) :=
 {
   bas := fun i: Fin 2 => match i with
   -- Quantum analog of a qubit containing 0
-  | 0 => SE.si0 0
+  | 0 => fun x: X1 => match x with
+                      | X1.a => 1
+                      | X1.b => 0
   -- Quantum analog of a qubit containing 1
-  | 1 => SE.si1 0
+  | 1 => fun x: X1 => match x with
+                      | X1.a => 0
+                      | X1.b => 1
 
   prop := by
     intro t
@@ -49,7 +55,7 @@ def dc0: DC.Decompose2 (StateReg1Ind 0) :=
     ext i
     cases i
     all_goals simp [FS.FS2]
-    all_goals simp [StateReg1Ind, HAdd.hAdd, SE.si0, SE.si1]
+    all_goals simp [StateReg1Ind, HAdd.hAdd]
     all_goals simp [Add.add]
     all_goals simp [HSMul.hSMul]
     all_goals simp [SMul.smul]
@@ -59,9 +65,13 @@ def dc1: DC.Decompose2 (StateReg1Ind 1) :=
 {
   bas := fun i: Fin 2 => match i with
   -- Quantum analog of a qubit containing 0
-  | 0 => SE.si0 1
+  | 0 => fun x: X2 => match x with
+                      | X2.a => 1
+                      | X2.b => 0
   -- Quantum analog of a qubit containing 1
-  | 1 => SE.si1 1
+  | 1 => fun x: X2 => match x with
+                      | X2.a => 0
+                      | X2.b => 1
 
   prop := by
     intro t
@@ -71,19 +81,23 @@ def dc1: DC.Decompose2 (StateReg1Ind 1) :=
     ext i
     cases i
     all_goals simp [FS.FS2]
-    all_goals simp [StateReg1Ind, HAdd.hAdd, SE.si0, SE.si1]
+    all_goals simp [StateReg1Ind, HAdd.hAdd]
     all_goals simp [Add.add]
     all_goals simp [HSMul.hSMul]
     all_goals simp [SMul.smul]
 }
 
-def ds2: DC.Decompose2 (StateReg1Ind 2) :=
+def dc2: DC.Decompose2 (StateReg1Ind 2) :=
 {
   bas := fun i: Fin 2 => match i with
   -- Quantum analog of a qubit containing 0
-  | 0 => SE.si0 2
+  | 0 => fun x: X3 => match x with
+                      | X3.a => 1
+                      | X3.b => 0
   -- Quantum analog of a qubit containing 1
-  | 1 => SE.si1 2
+  | 1 => fun x: X3 => match x with
+                      | X3.a => 0
+                      | X3.b => 1
 
   prop := by
     intro t
@@ -93,7 +107,7 @@ def ds2: DC.Decompose2 (StateReg1Ind 2) :=
     ext i
     cases i
     all_goals simp [FS.FS2]
-    all_goals simp [StateReg1Ind, HAdd.hAdd, SE.si0, SE.si1]
+    all_goals simp [StateReg1Ind, HAdd.hAdd]
     all_goals simp [Add.add]
     all_goals simp [HSMul.hSMul]
     all_goals simp [SMul.smul]
@@ -101,11 +115,11 @@ def ds2: DC.Decompose2 (StateReg1Ind 2) :=
 
 noncomputable
 def dsReg3: DC.Decompose8 StateReg3 :=
-DC.tp_4_3 (StateReg2Ind 0 1 (by simp))
+DC.tp_4_2 (StateReg2Ind 0 1 (by simp))
           (QubitInd 2)
           (DC.tp_2_2 (QubitInd 0)
                      (QubitInd 1)
-                     ds0
-                     ds1
+                     dc0
+                     dc1
           )
-          ds2
+          dc2
