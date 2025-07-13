@@ -29,6 +29,84 @@ match N with
 | 0 => 0
 | Nat.succ K => sumPartial T (K+1) (by omega) F (@Fin.mk (K+1) K (by omega))
 
+-- this is property that any vector is equal to its
+-- decomposition into basis vectors
+def basisRepr (N: ℕ) -- linear space dimension
+              (_: N > 0)
+              (T: Type) -- linear space vector type
+              [AddCommMonoid T]
+              [Module ℂ T]
+              (bas: Basis (Fin N) ℂ T) -- basis
+              (x: T) := -- decomposed vector
+  x = fs (fun i: Fin N => (Basis.repr bas x i) • (bas i))
+
+-- Here we set an axiom that any vector is equal to its
+-- decomposition into basis vectors
+axiom basisReprAx {T: Type}
+                  [AddCommMonoid T]
+                  [Module ℂ T]
+                  (N: ℕ)
+                  (pos: N > 0)
+                  (bas: Basis (Fin N) ℂ T)
+                  (x: T):
+  basisRepr N pos T bas x
+
+lemma FS8{T: Type}
+         [AddCommMonoid T]
+         (F: Fin 8 → T):
+  FS.fs F = F 0 + F 1 + F 2 + F 3 + F 4 + F 5 + F 6 + F 7 := by
+  simp [FS.fs, FS.sumPartial.eq_def]
+
+lemma FS8_rev{T: Type}
+             [AddCommMonoid T]
+             (f1 f2 f3 f4 f5 f6 f7 f8: T):
+f1 + f2 + f3 + f4 + f5 + f6 + f7 + f8 =
+FS.fs (fun i: Fin 8 => match i with
+            | 0 => f1
+            | 1 => f2
+            | 2 => f3
+            | 3 => f4
+            | 4 => f5
+            | 5 => f6
+            | 6 => f7
+            | 7 => f8
+      )  := by
+  simp [FS.fs, FS.sumPartial.eq_def]
+
+lemma FS4{T: Type}
+         [AddCommMonoid T]
+         (F: Fin 4 → T):
+  FS.fs F = F 0 + F 1 + F 2 + F 3 := by
+  simp [FS.fs, FS.sumPartial.eq_def]
+
+lemma FS4_rev{T: Type}
+             [AddCommMonoid T]
+             (f1 f2 f3 f4: T):
+f1 + f2 + f3 + f4 =
+FS.fs (fun i: Fin 4 => match i with
+            | 0 => f1
+            | 1 => f2
+            | 2 => f3
+            | 3 => f4
+      )  := by
+  simp [FS.fs, FS.sumPartial.eq_def]
+
+lemma FS2{T: Type}
+         [AddCommMonoid T]
+         (F: Fin 2 → T):
+  FS.fs F = F 0 + F 1 := by
+  simp [FS.fs, FS.sumPartial.eq_def]
+
+lemma FS2_rev{T: Type}
+             [AddCommMonoid T]
+             (f1 f2: T):
+f1 + f2 =
+FS.fs (fun i: Fin 2 => match i with
+            | 0 => f1
+            | 1 => f2
+      )  := by
+  simp [FS.fs, FS.sumPartial.eq_def]
+
 lemma applyMap {T: Type}
                [AddCommMonoid T]
                [Module ℂ T]
@@ -247,25 +325,3 @@ fs (fun i: Fin N => S i i) := by
         apply @Nat.le_of_lt_succ _ n st
       simp [r]
   simp [lem]
-
--- this is property that any vector is equal to its
--- decomposition into basis vectors
-def basisRepr (N: ℕ) -- linear space dimension
-              (_: N > 0)
-              (T: Type) -- linear space vector type
-              [AddCommMonoid T]
-              [Module ℂ T]
-              (bas: Basis (Fin N) ℂ T) -- basis
-              (x: T) := -- decomposed vector
-  x = fs (fun i: Fin N => (Basis.repr bas x i) • (bas i))
-
--- Here we set an axiom that any vector is equal to its
--- decomposition into basis vectors
-axiom basisReprAx {T: Type}
-                  [AddCommMonoid T]
-                  [Module ℂ T]
-                  (N: ℕ)
-                  (pos: N > 0)
-                  (bas: Basis (Fin N) ℂ T)
-                  (x: T):
-  basisRepr N pos T bas x
