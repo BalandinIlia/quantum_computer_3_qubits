@@ -61,18 +61,18 @@ Inf  (Cond.c2 (OP
         generalize r011:((isoQubitIndQubitBase 0) (CS.qi 1 0) 1) = co011
         generalize r111:((isoQubitIndQubitBase 1) (CS.qi 1 1) 1) = co111
         generalize r211:((isoQubitIndQubitBase 2) (CS.qi 1 2) 1) = co211
-        have s000: co000 = 1 := by simp [Eq.symm r000, CS.q, isoQubitIndQubitBase]
-        have s100: co100 = 1 := by simp [Eq.symm r100, CS.q, isoQubitIndQubitBase]
-        have s200: co200 = 1 := by simp [Eq.symm r200, CS.q, isoQubitIndQubitBase]
-        have s010: co010 = 0 := by simp [Eq.symm r010, CS.q, isoQubitIndQubitBase]
-        have s110: co110 = 0 := by simp [Eq.symm r110, CS.q, isoQubitIndQubitBase]
-        have s210: co210 = 0 := by simp [Eq.symm r210, CS.q, isoQubitIndQubitBase]
-        have s001: co001 = 0 := by simp [Eq.symm r001, CS.q, isoQubitIndQubitBase]
-        have s101: co101 = 0 := by simp [Eq.symm r101, CS.q, isoQubitIndQubitBase]
-        have s201: co201 = 0 := by simp [Eq.symm r201, CS.q, isoQubitIndQubitBase]
-        have s011: co011 = 1 := by simp [Eq.symm r011, CS.q, isoQubitIndQubitBase]
-        have s111: co111 = 1 := by simp [Eq.symm r111, CS.q, isoQubitIndQubitBase]
-        have s211: co211 = 1 := by simp [Eq.symm r211, CS.q, isoQubitIndQubitBase]
+        have s000: co000 = 1 := by simp [Eq.symm r000, CS.qi, isoQubitIndQubitBase]
+        have s100: co100 = 1 := by simp [Eq.symm r100, CS.qi, isoQubitIndQubitBase]
+        have s200: co200 = 1 := by simp [Eq.symm r200, CS.qi, isoQubitIndQubitBase]
+        have s010: co010 = 0 := by simp [Eq.symm r010, CS.qi, isoQubitIndQubitBase]
+        have s110: co110 = 0 := by simp [Eq.symm r110, CS.qi, isoQubitIndQubitBase]
+        have s210: co210 = 0 := by simp [Eq.symm r210, CS.qi, isoQubitIndQubitBase]
+        have s001: co001 = 0 := by simp [Eq.symm r001, CS.qi, isoQubitIndQubitBase]
+        have s101: co101 = 0 := by simp [Eq.symm r101, CS.qi, isoQubitIndQubitBase]
+        have s201: co201 = 0 := by simp [Eq.symm r201, CS.qi, isoQubitIndQubitBase]
+        have s011: co011 = 1 := by simp [Eq.symm r011, CS.qi, isoQubitIndQubitBase]
+        have s111: co111 = 1 := by simp [Eq.symm r111, CS.qi, isoQubitIndQubitBase]
+        have s211: co211 = 1 := by simp [Eq.symm r211, CS.qi, isoQubitIndQubitBase]
         simp [s000, s100, s200, s010, s110, s210, s001, s101, s201, s011, s111, s211]
       }
     have t2: sta = SE.s001 := by
