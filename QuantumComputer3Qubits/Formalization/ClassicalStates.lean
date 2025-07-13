@@ -15,7 +15,7 @@ match val with
 | 0 => fun x:Fin 2 => match x with
                       | 0 => 1
                       | 1 => 0
--- analog of state of classical bit with value 0
+-- analog of state of classical bit with value 1
 | 1 => fun x:Fin 2 => match x with
                       | 0 => 0
                       | 1 => 1
