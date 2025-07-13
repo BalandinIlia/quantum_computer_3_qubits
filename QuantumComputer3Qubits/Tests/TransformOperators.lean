@@ -29,12 +29,14 @@ theorem notProp: (not (CS.q 0) = (CS.q 1)) ∧ (not (CS.q 1) = (CS.q 0)) := by
 
 theorem test1:∀i: Fin 3, ∀s: StateReg1Ind i,
               TO.o1_oi1 i id s = s := by
+  intro i s
   simp [TO.o1_oi1, LER.reg1i_reg1]
   aesop
 
 theorem test2:∀i: Fin 3,
               (TO.o1_oi1 i not (CS.qi 0 i) = (CS.qi 1 i)) ∧
               (TO.o1_oi1 i not (CS.qi 1 i) = (CS.qi 0 i)) := by
+  intro i
   simp [TO.o1_oi1, LER.reg1i_reg1]
   aesop
 
