@@ -1,5 +1,5 @@
 import QuantumComputer3Qubits.Formalization.TransformOperators
-import QuantumComputer3Qubits.Tests.StateExamples
+import QuantumComputer3Qubits.Formalization.ClassicalStates
 
 namespace Test_TransformOperators
 

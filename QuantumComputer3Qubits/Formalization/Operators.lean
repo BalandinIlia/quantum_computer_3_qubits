@@ -1,6 +1,7 @@
 import QuantumComputer3Qubits.Formalization.RegistryState
-import QuantumComputer3Qubits.Tests.StateExamples
+import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.FiniteSum
+import QuantumComputer3Qubits.Formalization.HermitianConjugation
 -- This file defines types of linear operators in different
 -- (sub)registry linear spaces.
 
