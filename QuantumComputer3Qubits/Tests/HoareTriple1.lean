@@ -19,7 +19,7 @@ open Hoare
 
 set_option maxHeartbeats 1000000
 
-theorem th1:
+theorem triple1:
 Inf  (Cond.c2 (OP
                  (CS.qqi 0 0 0 1 (by aesop))
                  (CS.qqi 0 0 0 1 (by aesop))
@@ -75,7 +75,7 @@ Inf  (Cond.c2 (OP
         have s211: co211 = 1 := by simp [Eq.symm r211, CS.qi, isoQubitIndQubitBase]
         simp [s000, s100, s200, s010, s110, s210, s001, s101, s201, s011, s111, s211]
       }
-    have t2: sta = SE.s001 := by
+    have t2: sta = CS.s001 := by
       simp only [sta]
       clear t1 sta
       aesop
@@ -83,4 +83,4 @@ Inf  (Cond.c2 (OP
   rw [repr] at st
   apply st
 
-#print axioms th1
+#print axioms triple1
