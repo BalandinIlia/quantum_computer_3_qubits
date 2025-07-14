@@ -253,24 +253,27 @@ A (fs x) = fs (fun i: Fin N => A (x i)) := by
     simp [pr] at st_
     apply st_
 
-lemma doubleFS {T: Type}
-               [AddCommMonoid T]
-               (N: ℕ)
-               (pos: N > 0)
-               (S: Fin N → Fin N → T):
-fs (fun i: Fin N => fs (fun j: Fin N => if(i=j) then S j i else 0)) =
-fs (fun i: Fin N => S i i) := by
-  have lem: ∀i: Fin N, fs (fun j:Fin N => if i = j then S j i else 0) = S i i := by
-    intro i
-    simp [fs]
-    cases N with
+lemma oneFS {T: Type}
+            [AddCommMonoid T]
+            (N: ℕ)
+            (pos: N > 0)
+            (ind: Fin N)
+            (F: Fin N → T):
+fs (fun i:Fin N => if (ind=i) then F i else 0) = F ind := by
+  cases N with
     | zero =>
       aesop
     | succ n =>
-      simp
+      simp [fs]
+      clear pos
       let pr(m: ℕ)(ord: m < n + 1) :=
-          sumPartial T (n + 1) (by omega) (fun j => if i = j then S j i else 0) (Fin.mk m (by omega)) =
-          if m≥i then S i i else 0
+          sumPartial T
+                     (n + 1)
+                     (by omega)
+                     (fun i:Fin (n+1) =>
+                          if (ind=i) then F i else 0)
+                     (@Fin.mk (n+1) m ord) =
+          if m ≥ ind then F ind else 0
       have st(m: ℕ)(ord: m < n + 1): pr m ord := by
         induction m with
         | zero =>
@@ -283,45 +286,54 @@ fs (fun i: Fin N => S i i) := by
           simp
           simp [pr] at ih
           simp [ih]
-          let A:Prop := i ≤ nn
+          let A:Prop := ind ≤ nn
           by_cases A
           case pos hh =>
             simp [A] at hh
             simp [hh]
-            have t:↑i ≤ nn + 1 := by fin_omega
+            have t:↑ind ≤ nn + 1 := by fin_omega
             simp [t]
-            have r: ¬(i = Fin.mk (nn+1) (by omega)) := by
+            have r: ¬(ind = Fin.mk (nn+1) (by omega)) := by
               aesop
             simp [r]
           case neg hh =>
             simp [A] at hh
-            have t:¬(↑i ≤ nn) := by fin_omega
+            have t:¬(↑ind ≤ nn) := by fin_omega
             simp [t]
-            let B:Prop := i = Fin.mk (nn+1) (by omega)
+            let B:Prop := ind = Fin.mk (nn+1) (by omega)
             by_cases B
             case pos hhh =>
               simp [B] at hhh
-              have t:(↑i ≤ nn + 1) := by aesop
+              have t:(↑ind ≤ nn + 1) := by aesop
               simp [t, hhh]
             case neg hhh =>
               simp [B] at hhh
               simp [hhh]
               intro ui
               apply False.elim
-              clear ih A B t pr pos S
-              have hj:↑i = nn + 1 := by
+              clear ih A B t pr
+              have hj:↑ind = nn + 1 := by
                 clear hhh
                 omega
               clear ui hh
-              have io: i = Fin.mk i.val (by aesop) := by
+              have io: ind = Fin.mk ind.val (by aesop) := by
                 simp [Fin.mk]
               rw [io] at hhh
               simp [hj] at hhh
       have st_ := st n (by omega)
       simp [pr] at st_
       rw [st_]
-      have r: ↑i ≤ n := by
-        let st := @Fin.isLt (n+1) i
+      have r: ↑ind ≤ n := by
+        let st := @Fin.isLt (n+1) ind
         apply @Nat.le_of_lt_succ _ n st
       simp [r]
-  simp [lem]
+
+lemma doubleFS {T: Type}
+               [AddCommMonoid T]
+               (N: ℕ)
+               (pos: N > 0)
+               (S: Fin N → Fin N → T):
+fs (fun i: Fin N => fs (fun j: Fin N => if(i=j) then S j i else 0)) =
+fs (fun i: Fin N => S i i) := by
+  let st(ind: Fin N) := @oneSum T _ N pos ind (fun j:Fin N => S j ind)
+  simp [st]
