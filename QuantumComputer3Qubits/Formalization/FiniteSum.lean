@@ -286,6 +286,7 @@ fs (fun i:Fin N => if (ind=i) then F i else 0) = F ind := by
           simp
           simp [pr] at ih
           simp [ih]
+          clear ih pr
           let A:Prop := ind ≤ nn
           by_cases A
           case pos hh =>
