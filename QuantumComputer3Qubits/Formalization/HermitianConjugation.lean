@@ -53,7 +53,7 @@ lemma reprOp{T: Type}
             (A: T →ₗ[ℂ] T):
 A = FS.fs (fun i: Fin ob.N => operComp A i) := by
   ext s
-  have rt := FS.basisReprAx ob.N (by aesop) ob.basis s
+  have rt := FS.basisReprAx ob.N ob.posN ob.basis s
   simp [FS.basisRepr] at rt
   rw [FS.applyMap]
   rw [rt]
