@@ -62,6 +62,7 @@ axiom basisReprAx {T: Type}
                   (x: T):
   basisRepr N pos T bas x
 
+-- helper lemma to unfold sum of 8 values
 lemma FS8{T: Type}
          [AddCommMonoid T]
          (F: Fin 8 → T):
@@ -84,6 +85,7 @@ FS.fs (fun i: Fin 8 => match i with
       )  := by
   simp [FS.fs, FS.sumPartial.eq_def]
 
+-- helper lemma to unfold sum of 4 values
 lemma FS4{T: Type}
          [AddCommMonoid T]
          (F: Fin 4 → T):
@@ -102,6 +104,7 @@ FS.fs (fun i: Fin 4 => match i with
       )  := by
   simp [FS.fs, FS.sumPartial.eq_def]
 
+-- helper lemma to unfold sum of 2 values
 lemma FS2{T: Type}
          [AddCommMonoid T]
          (F: Fin 2 → T):
@@ -151,6 +154,10 @@ lemma applyMap {T: Type}
     simp [pr] at st_
     apply st_
 
+-- This function is distributive proposition. It is mainly
+-- intended for tensor product, however it is formulated
+-- commonly and does not require all inner product
+-- properties.
 lemma distrLeft {T: Type}
                 [AddCommMonoid T]
                 [Module ℂ T]
@@ -191,6 +198,10 @@ op (fs S) x = fs (fun i: Fin N => op (S i) x) := by
     simp [pr] at st_
     apply st_
 
+-- This function is distributive proposition. It is mainly
+-- intended for tensor product, however it is formulated
+-- commonly and does not require all inner product
+-- properties.
 lemma distrRight {T: Type}
                  [AddCommMonoid T]
                  [Module ℂ T]
