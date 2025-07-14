@@ -253,12 +253,12 @@ A (fs x) = fs (fun i: Fin N => A (x i)) := by
     simp [pr] at st_
     apply st_
 
-lemma oneFS {T: Type}
-            [AddCommMonoid T]
-            (N: ℕ)
-            (pos: N > 0)
-            (ind: Fin N)
-            (F: Fin N → T):
+lemma Kronecker {T: Type}
+                [AddCommMonoid T]
+                (N: ℕ)
+                (pos: N > 0)
+                (ind: Fin N)
+                (F: Fin N → T):
 fs (fun i:Fin N => if (ind=i) then F i else 0) = F ind := by
   cases N with
     | zero =>
@@ -312,7 +312,7 @@ fs (fun i:Fin N => if (ind=i) then F i else 0) = F ind := by
               simp [hhh]
               intro ui
               apply False.elim
-              clear ih A B t pr
+              clear A B t
               have hj:↑ind = nn + 1 := by
                 clear hhh
                 omega
@@ -329,12 +329,14 @@ fs (fun i:Fin N => if (ind=i) then F i else 0) = F ind := by
         apply @Nat.le_of_lt_succ _ n st
       simp [r]
 
-lemma doubleFS {T: Type}
-               [AddCommMonoid T]
-               (N: ℕ)
-               (pos: N > 0)
-               (S: Fin N → Fin N → T):
-fs (fun i: Fin N => fs (fun j: Fin N => if(i=j) then S j i else 0)) =
+lemma Kronecker2 {T: Type}
+                 [AddCommMonoid T]
+                 (N: ℕ)
+                 (pos: N > 0)
+                 (S: Fin N → Fin N → T):
+fs (fun i: Fin N =>
+       fs (fun j: Fin N => if(i=j) then S j i else 0)
+   ) =
 fs (fun i: Fin N => S i i) := by
-  let st(ind: Fin N) := @oneSum T _ N pos ind (fun j:Fin N => S j ind)
+  let st(ind: Fin N) := @Kronecker T _ N pos ind (fun j:Fin N => S j ind)
   simp [st]
