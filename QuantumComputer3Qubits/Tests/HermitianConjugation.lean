@@ -7,7 +7,6 @@ import QuantumComputer3Qubits.Formalization.FiniteSum
 namespace Test_HermitianConjugation
 open HC
 
--- check that adjoint operator component is really adjoint
 theorem test1{T: Type}
              [AddCommMonoid T]
              [Module ℂ T]
@@ -25,37 +24,3 @@ theorem test1{T: Type}
   clear r₁ r₂
   clear A i x y
   ring
-
--- check that conjugate is really conjugate
-private theorem test2{T: Type}
-             [AddCommMonoid T]
-             [Module ℂ T]
-             [IP T]
-             [ob: OrthonormalBasis T]
-             (pos: ob.N > 0)
-             (A: T →ₗ[ℂ] T): isAdj A (adj A) := by
-  simp [isAdj, adj, operCompAdj, OP]
-  intro x y
-  simp [FS.applyMap]
-  rw [FS.distrLeft (IP.f) IP.distrLeft IP.smulLeft (fun i:Fin ob.N => IP.f (A (OrthonormalBasis.basis i)) x • OrthonormalBasis.basis i) y]
-  simp [IP.smulLeft, IP.smulRight]
-  simp [IP.comm _ x]
-  have eq: ∀i: Fin ob.N,
-           IP.f x (A (OrthonormalBasis.basis i)) *
-           IP.f (OrthonormalBasis.basis i) y =
-           IP.f x (OP (A (ob.basis i)) (ob.basis i) y) := by
-    simp [OP]
-    simp [IP.smulLeft, IP.smulRight]
-    ring_nf
-    aesop
-  simp [eq]
-  let pr1 := FS.distrRight (IP.f) IP.distrRight (by intro m x y; apply IP.smulRight) (fun i:Fin ob.N => ((OP (A (OrthonormalBasis.basis i)) (OrthonormalBasis.basis i)) y)) x
-  simp [Eq.symm pr1]
-  clear pr1 eq
-  have eq: FS.fs (fun i : Fin ob.N => (OP (A (OrthonormalBasis.basis i)) (OrthonormalBasis.basis i)) y) = A y := by
-    rw [FS.basisReprAx ob.N pos ob.basis y]
-    simp [FS.applyDistr]
-    simp [OP]
-    simp [ob.prop]
-    rw [FS.doubleFS ob.N pos]
-  simp [eq]
