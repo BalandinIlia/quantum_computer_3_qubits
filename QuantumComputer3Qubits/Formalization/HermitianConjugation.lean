@@ -50,7 +50,6 @@ lemma reprOp{T: Type}
             [Module ℂ T]
             [IP T]
             [ob: OrthonormalBasis T]
-            (pos: ob.N > 0)
             (A: T →ₗ[ℂ] T):
 A = FS.fs (fun i: Fin ob.N => operComp A i) := by
   ext s
@@ -92,7 +91,6 @@ theorem reallyAdj{T: Type}
                  [Module ℂ T]
                  [IP T]
                  [ob: OrthonormalBasis T]
-                 (pos: ob.N > 0)
                  (A: T →ₗ[ℂ] T): isAdj A (adj A) := by
   simp [isAdj, adj, operCompAdj, OP]
   intro x y
@@ -125,7 +123,6 @@ lemma adjEx!{T: Type}
             [Module ℂ T]
             [IP T]
             [ob: OrthonormalBasis T]
-            (pos: ob.N > 0)
             (A: T →ₗ[ℂ] T):
             ∃! B: T →ₗ[ℂ] T, isAdj A B := by
   use adj A
