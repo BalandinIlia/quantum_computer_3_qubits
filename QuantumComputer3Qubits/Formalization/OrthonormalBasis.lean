@@ -16,6 +16,7 @@ class OrthonormalBasis(T: Type)[AddCommMonoid T]
   -- linear space dimensionality
   -- (number of vectors in the basis)
   N: ℕ
+  posN: N > 0
   -- the basis
   basis: Basis (Fin N) ℂ T
   -- proposition that basis is orthonormal
@@ -275,6 +276,7 @@ instance OrthonormalBasisInstDim2(T: Type)
                                  OrthonormalBasis T :=
 {
   N := 2
+  posN := by omega
   basis := impl.basis
   prop := by
     intro i j
@@ -290,6 +292,7 @@ instance OrthonormalBasisInstDim4(T: Type)
                                  OrthonormalBasis T :=
 {
   N := 4
+  posN := by omega
   basis := impl.basis
   prop := by
     intro i j
@@ -305,6 +308,7 @@ instance OrthonormalBasisInstDim8(T: Type)
                                  OrthonormalBasis T :=
 {
   N := 8
+  posN := by omega
   basis := impl.basis
   prop := by
     intro i j
