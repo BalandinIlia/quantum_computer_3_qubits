@@ -21,16 +21,16 @@ lemma commAdj{T: Type}
          [OrthonormalBasis T]
          (A B: T →ₗ[ℂ] T):
          isAdj A B → isAdj B A := by
-       simp [isAdj]
-       intro h
-       intro x y
-       let pr := h y x
-       rw [IP.comm (B y) x] at pr
-       rw [IP.comm y (A x)] at pr
-       let pr2 := ComplexUtil.EqStar (star (IP.f x (B y))) (star (IP.f (A x) y))
-       let pr3 := pr2 pr
-       simp [ComplexUtil.DoubleStar] at pr3
-       simp [pr3]
+  simp [isAdj]
+  intro h
+  intro x y
+  let pr := h y x
+  rw [IP.comm (B y) x] at pr
+  rw [IP.comm y (A x)] at pr
+  let pr2 := ComplexUtil.EqStar (star (IP.f x (B y))) (star (IP.f (A x) y))
+  let pr3 := pr2 pr
+  simp [ComplexUtil.DoubleStar] at pr3
+  simp [pr3]
 
 -- This is kind of operator component associated with the i-th
 -- vector of orthonormal basis.
@@ -53,17 +53,17 @@ lemma reprOp{T: Type}
             (pos: ob.N > 0)
             (A: T →ₗ[ℂ] T):
 A = FS.fs (fun i: Fin ob.N => operComp A i) := by
-       ext s
-       have rt := FS.basisReprAx ob.N (by aesop) ob.basis s
-       simp [FS.basisRepr] at rt
-       rw [FS.applyMap]
-       rw [rt]
-       rw [FS.applyDistr]
-       simp [FS.applyDistr]
-       simp [operComp, OP]
-       simp [ob.prop]
-       let st := @FS.Kronecker2 T _ ob.N pos (fun i: Fin ob.N => fun i_1: Fin ob.N => (OrthonormalBasis.basis.repr s) i • A (OrthonormalBasis.basis i_1))
-       simp [st]
+  ext s
+  have rt := FS.basisReprAx ob.N (by aesop) ob.basis s
+  simp [FS.basisRepr] at rt
+  rw [FS.applyMap]
+  rw [rt]
+  rw [FS.applyDistr]
+  simp [FS.applyDistr]
+  simp [operComp, OP]
+  simp [ob.prop]
+  let st := @FS.Kronecker2 T _ ob.N pos (fun i: Fin ob.N => fun i_1: Fin ob.N => (OrthonormalBasis.basis.repr s) i • A (OrthonormalBasis.basis i_1))
+  simp [st]
 
 -- This is an adjoint component.
 noncomputable
@@ -88,12 +88,12 @@ def adj{T: Type}
 
 -- check that adjoint is really adjoint
 theorem reallyAdj{T: Type}
-             [AddCommMonoid T]
-             [Module ℂ T]
-             [IP T]
-             [ob: OrthonormalBasis T]
-             (pos: ob.N > 0)
-             (A: T →ₗ[ℂ] T): isAdj A (adj A) := by
+                 [AddCommMonoid T]
+                 [Module ℂ T]
+                 [IP T]
+                 [ob: OrthonormalBasis T]
+                 (pos: ob.N > 0)
+                 (A: T →ₗ[ℂ] T): isAdj A (adj A) := by
   simp [isAdj, adj, operCompAdj, OP]
   intro x y
   simp [FS.applyMap]
@@ -127,73 +127,72 @@ lemma adjEx!{T: Type}
             [ob: OrthonormalBasis T]
             (pos: ob.N > 0)
             (A: T →ₗ[ℂ] T):
-       ∃!B: T →ₗ[ℂ] T, isAdj A B := by
-use adj A
-apply And.intro
-{
-       simp
-       apply reallyAdj
-       apply pos
-}
-{
-       intro C
-       simp
-       intro h
-       simp [isAdj] at h
-       have h2: ∀ (x y : T), IP.f x (A y) = IP.f ((adj A) x) y := by
-              intro x y
-              have st := reallyAdj pos A
-              simp [isAdj] at st
-              aesop
-       have h3: ∀ (x y : T), IP.f (C x) y = IP.f ((adj A) x) y := by
-              aesop
-       clear h h2
-       generalize repl: adj A = B
-       simp [repl] at h3
-       clear repl A
-       ext a
-       let h := h3 a
-       generalize rB: B a = b
-       generalize rC: C a = c
-       rw [rB, rC] at h
-       clear h3 rB rC a C B
-       let reprC := FS.basisReprAx ob.N pos ob.basis c
-       let reprB := FS.basisReprAx ob.N pos ob.basis b
-       simp [FS.basisRepr] at reprB reprC
-       have repl: (∀i: Fin ob.N, Basis.repr ob.basis b i = Basis.repr ob.basis c i) → c = b := by
-              intro h
-              rw [reprB, reprC]
-              simp [h]
-       apply repl
-       clear repl
-       rw [reprB, reprC] at h
-       clear reprB reprC
-       intro i
-       let hh := h (ob.basis i)
-       let stC := @FS.distrLeft T _ _ ob.N IP.f IP.distrLeft IP.smulLeft (fun i => (ob.basis.repr c) i • ob.basis i) (ob.basis i)
-       let stB := @FS.distrLeft T _ _ ob.N IP.f IP.distrLeft IP.smulLeft (fun i => (ob.basis.repr b) i • ob.basis i) (ob.basis i)
-       rw [stC, stB] at hh
-       clear stB stC
-       simp [IP.smulLeft] at hh
-       simp [ob.prop] at hh
-       have Kron: ∀ (F : Fin ob.N → ℂ), (FS.fs fun i_1 => if i_1 = i then F i_1 else 0) = F i := by
-              intro F
-              have st := @FS.Kronecker ℂ _ ob.N pos i F
-              rw [Eq.symm st]
-              have repl: ∀i j: Fin ob.N, (i=j) ↔ (j=i) := by
-                     aesop
-              aesop
-       simp [Kron] at hh
-       clear h Kron
-       generalize replBB: (OrthonormalBasis.basis.repr b) i = bb
-       generalize replCC: (OrthonormalBasis.basis.repr c) i = cc
-       simp [replBB, replCC] at hh
-       clear replBB replCC b c i pos ob
-       rw [ComplexUtil.Aux] at hh
-       rw [ComplexUtil.Aux] at hh
-       let h := ComplexUtil.EqStar (star cc) (star bb) hh
-       simp [ComplexUtil.DoubleStar] at h
-       apply (Eq.symm h)
+            ∃! B: T →ₗ[ℂ] T, isAdj A B := by
+  use adj A
+  apply And.intro
+  {
+    simp
+    apply reallyAdj
+    apply pos
+  }
+  {
+    intro C
+    simp
+    intro h
+    simp [isAdj] at h
+    have h2: ∀ (x y : T), IP.f x (A y) = IP.f ((adj A) x) y := by
+      intro x y
+      have st := reallyAdj pos A
+      simp [isAdj] at st
+      aesop
+    have h3: ∀ (x y : T), IP.f (C x) y = IP.f ((adj A) x) y := by
+      aesop
+    clear h h2
+    generalize repl: adj A = B
+    simp [repl] at h3
+    clear repl A
+    ext a
+    let h := h3 a
+    generalize rB: B a = b
+    generalize rC: C a = c
+    rw [rB, rC] at h
+    clear h3 rB rC a C B
+    let reprC := FS.basisReprAx ob.N pos ob.basis c
+    let reprB := FS.basisReprAx ob.N pos ob.basis b
+    simp [FS.basisRepr] at reprB reprC
+    have repl: (∀i: Fin ob.N, Basis.repr ob.basis b i = Basis.repr ob.basis c i) → c = b := by
+      intro h
+      rw [reprB, reprC]
+      simp [h]
+    apply repl
+    clear repl
+    rw [reprB, reprC] at h
+    clear reprB reprC
+    intro i
+    let hh := h (ob.basis i)
+    let stC := @FS.distrLeft T _ _ ob.N IP.f IP.distrLeft IP.smulLeft (fun i => (ob.basis.repr c) i • ob.basis i) (ob.basis i)
+    let stB := @FS.distrLeft T _ _ ob.N IP.f IP.distrLeft IP.smulLeft (fun i => (ob.basis.repr b) i • ob.basis i) (ob.basis i)
+    rw [stC, stB] at hh
+    clear stB stC
+    simp [IP.smulLeft] at hh
+    simp [ob.prop] at hh
+    have Kron: ∀ (F : Fin ob.N → ℂ), (FS.fs fun i_1 => if i_1 = i then F i_1 else 0) = F i := by
+      intro F
+      have st := @FS.Kronecker ℂ _ ob.N pos i F
+      rw [Eq.symm st]
+      have repl: ∀i j: Fin ob.N, (i=j) ↔ (j=i) := by aesop
+      aesop
+    simp [Kron] at hh
+    clear h Kron
+    generalize replBB: (OrthonormalBasis.basis.repr b) i = bb
+    generalize replCC: (OrthonormalBasis.basis.repr c) i = cc
+    simp [replBB, replCC] at hh
+    clear replBB replCC b c i pos ob
+    rw [ComplexUtil.Aux] at hh
+    rw [ComplexUtil.Aux] at hh
+    let h := ComplexUtil.EqStar (star cc) (star bb) hh
+    simp [ComplexUtil.DoubleStar] at h
+    apply (Eq.symm h)
 }
 
 -- helper lemma to construct adjoint operator in certain cases
