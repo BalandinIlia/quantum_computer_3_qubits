@@ -61,7 +61,7 @@ A = FS.fs (fun i: Fin ob.N => operComp A i) := by
   simp [FS.applyDistr]
   simp [operComp, OP]
   simp [ob.prop]
-  let st := @FS.Kronecker2 T _ ob.N pos (fun i: Fin ob.N => fun i_1: Fin ob.N => (OrthonormalBasis.basis.repr s) i • A (OrthonormalBasis.basis i_1))
+  let st := @FS.Kronecker2 T _ ob.N ob.posN (fun i: Fin ob.N => fun i_1: Fin ob.N => (OrthonormalBasis.basis.repr s) i • A (OrthonormalBasis.basis i_1))
   simp [st]
 
 -- This is an adjoint component.
@@ -111,7 +111,7 @@ theorem reallyAdj{T: Type}
   simp [Eq.symm pr1]
   clear pr1 eq
   have eq: FS.fs (fun i : Fin ob.N => (OP (A (OrthonormalBasis.basis i)) (OrthonormalBasis.basis i)) y) = A y := by
-    rw [FS.basisReprAx ob.N pos ob.basis y]
+    rw [FS.basisReprAx ob.N ob.posN ob.basis y]
     simp [FS.applyDistr]
     simp [OP]
     simp [ob.prop]
@@ -130,7 +130,7 @@ lemma adjEx!{T: Type}
   {
     simp
     apply reallyAdj
-    apply pos
+    apply ob.posN
   }
   {
     intro C
@@ -139,7 +139,7 @@ lemma adjEx!{T: Type}
     simp [isAdj] at h
     have h2: ∀ (x y : T), IP.f x (A y) = IP.f ((adj A) x) y := by
       intro x y
-      have st := reallyAdj pos A
+      have st := reallyAdj A
       simp [isAdj] at st
       aesop
     have h3: ∀ (x y : T), IP.f (C x) y = IP.f ((adj A) x) y := by
@@ -154,8 +154,8 @@ lemma adjEx!{T: Type}
     generalize rC: C a = c
     rw [rB, rC] at h
     clear h3 rB rC a C B
-    let reprC := FS.basisReprAx ob.N pos ob.basis c
-    let reprB := FS.basisReprAx ob.N pos ob.basis b
+    let reprC := FS.basisReprAx ob.N ob.posN ob.basis c
+    let reprB := FS.basisReprAx ob.N ob.posN ob.basis b
     simp [FS.basisRepr] at reprB reprC
     have repl: (∀i: Fin ob.N, Basis.repr ob.basis b i = Basis.repr ob.basis c i) → c = b := by
       intro h
@@ -175,7 +175,7 @@ lemma adjEx!{T: Type}
     simp [ob.prop] at hh
     have Kron: ∀ (F : Fin ob.N → ℂ), (FS.fs fun i_1 => if i_1 = i then F i_1 else 0) = F i := by
       intro F
-      have st := @FS.Kronecker ℂ _ ob.N pos i F
+      have st := @FS.Kronecker ℂ _ ob.N ob.posN i F
       rw [Eq.symm st]
       have repl: ∀i j: Fin ob.N, (i=j) ↔ (j=i) := by aesop
       aesop
@@ -184,7 +184,7 @@ lemma adjEx!{T: Type}
     generalize replBB: (OrthonormalBasis.basis.repr b) i = bb
     generalize replCC: (OrthonormalBasis.basis.repr c) i = cc
     simp [replBB, replCC] at hh
-    clear replBB replCC b c i pos ob
+    clear replBB replCC b c i ob.posN ob
     rw [ComplexUtil.Aux] at hh
     rw [ComplexUtil.Aux] at hh
     let h := ComplexUtil.EqStar (star cc) (star bb) hh
