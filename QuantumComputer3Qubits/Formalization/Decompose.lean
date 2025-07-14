@@ -6,16 +6,31 @@ import QuantumComputer3Qubits.Formalization.ComplexUtil
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.RegistryState
 import QuantumComputer3Qubits.Formalization.ClassicalStates
+-- This file formalizes vector decomposition into base vectors.
+-- This formalization has the following advantage against
+-- orthonormal basis:
+-- It is very hard to access particular basis vector values
+-- for orthonormal basis while in this formalization vector
+-- values are easily accessible.
+-- On the other hand, this formalization (unlike basis) does
+-- not provide neither linear independence of base vectors
+-- nor their orthonormality.
 
 -- DC means "decompose"
 namespace DC
 
+-- This structure means: any element of type T can be
+-- decomposed into linear combination of N vectors
 structure Decompose(N: ℕ)
                    (T: Type)
                    [AddCommMonoid T]
                    [Module ℂ T] where
+-- base (not basis) vectors
 bas: Fin N → T
-prop: ∀t: T, ∃c: Fin N → ℂ, t = FS.fs (fun i: Fin N => (c i) • (bas i))
+-- proposition that any vector is decomposable into linear
+-- combination of base vectors
+prop: ∀t: T, ∃c: Fin N → ℂ,
+    t = FS.fs (fun i: Fin N => (c i) • (bas i))
 
 def Decompose2 := Decompose 2
 def Decompose4 := Decompose 4
@@ -23,8 +38,9 @@ def Decompose8 := Decompose 8
 
 open scoped TensorProduct
 
+-- tp means "tensor product"
 noncomputable
-def tp_2_2(T1 T2: Type)
+def tp_2_2{T1 T2: Type}
           [AddCommMonoid T1]
           [Module ℂ T1]
           [AddCommMonoid T2]
@@ -80,7 +96,7 @@ def tp_2_2(T1 T2: Type)
 }
 
 noncomputable
-def tp_4_2(T1 T2: Type)
+def tp_4_2{T1 T2: Type}
           [AddCommMonoid T1]
           [Module ℂ T1]
           [AddCommMonoid T2]
@@ -143,6 +159,7 @@ def tp_4_2(T1 T2: Type)
     }
 }
 
+-- decomposable for 0th qubit
 def dc0: DC.Decompose2 (StateReg1Ind 0) :=
 {
   bas := fun i: Fin 2 => match i with
@@ -165,6 +182,7 @@ def dc0: DC.Decompose2 (StateReg1Ind 0) :=
     all_goals simp [SMul.smul]
 }
 
+-- decomposable for 1st qubit
 def dc1: DC.Decompose2 (StateReg1Ind 1) :=
 {
   bas := fun i: Fin 2 => match i with
@@ -187,6 +205,7 @@ def dc1: DC.Decompose2 (StateReg1Ind 1) :=
     all_goals simp [SMul.smul]
 }
 
+-- decomposable for 2nd qubit
 def dc2: DC.Decompose2 (StateReg1Ind 2) :=
 {
   bas := fun i: Fin 2 => match i with
@@ -209,6 +228,7 @@ def dc2: DC.Decompose2 (StateReg1Ind 2) :=
     all_goals simp [SMul.smul]
 }
 
+-- decomposable for 3-qubit registry state
 noncomputable
 def dsReg3: DC.Decompose8 StateReg3 :=
 DC.tp_4_2 (StateReg2Ind 0 1 (by simp))
