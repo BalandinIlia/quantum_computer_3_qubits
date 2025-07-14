@@ -231,6 +231,4 @@ def dc2: DC.Decompose2 (StateReg1Ind 2) :=
 -- decomposable for 3-qubit registry state
 noncomputable
 def dsReg3: DC.Decompose8 StateReg3 :=
-DC.tp_4_2 (QubitInd 2)
-          (DC.tp_2_2 dc0 dc1)
-          dc2
+DC.tp_4_2 (DC.tp_2_2 dc0 dc1) dc2
