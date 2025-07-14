@@ -9,6 +9,11 @@ import Mathlib.Data.Complex.Basic
 -- FS means "Finite Sum"
 namespace FS
 
+-- This function defines partial sum:
+-- We have N values of type T (represented with function
+-- Fin N → T below).
+-- We calculate sum of all values until M-th value.
+-- This function is used as implementation of finite sum.
 def sumPartial(T: Type)
               [AddCommMonoid T]
               (N: ℕ)
@@ -21,6 +26,8 @@ match M with
       (sumPartial T N pos F (@Fin.mk N m (by omega))) +
       (F (@Fin.mk N (Nat.succ m) ord))
 
+-- fs means "finite sum"
+-- fs defines sum of N values
 def fs{T: Type}
       [AddCommMonoid T]
       {N: ℕ}
@@ -41,7 +48,11 @@ def basisRepr (N: ℕ) -- linear space dimension
   x = fs (fun i: Fin N => (Basis.repr bas x i) • (bas i))
 
 -- Here we set an axiom that any vector is equal to its
--- decomposition into basis vectors
+-- decomposition into basis vectors.
+-- This is a very fragile part of the project (since it is
+-- an axiom, it does not have any proof), so it is
+-- carefully tested: basisRepr is proven for all N values
+-- from 1 to 6.
 axiom basisReprAx {T: Type}
                   [AddCommMonoid T]
                   [Module ℂ T]
