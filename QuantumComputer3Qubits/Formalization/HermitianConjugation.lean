@@ -115,7 +115,7 @@ theorem reallyAdj{T: Type}
     simp [FS.applyDistr]
     simp [OP]
     simp [ob.prop]
-    rw [FS.Kronecker2 ob.N pos]
+    rw [FS.Kronecker2 ob.N ob.posN]
   simp [eq]
 
 lemma adjEx!{T: Type}
@@ -130,7 +130,6 @@ lemma adjEx!{T: Type}
   {
     simp
     apply reallyAdj
-    apply ob.posN
   }
   {
     intro C
@@ -184,7 +183,7 @@ lemma adjEx!{T: Type}
     generalize replBB: (OrthonormalBasis.basis.repr b) i = bb
     generalize replCC: (OrthonormalBasis.basis.repr c) i = cc
     simp [replBB, replCC] at hh
-    clear replBB replCC b c i ob.posN ob
+    clear replBB replCC b c i ob
     rw [ComplexUtil.Aux] at hh
     rw [ComplexUtil.Aux] at hh
     let h := ComplexUtil.EqStar (star cc) (star bb) hh
