@@ -1,5 +1,3 @@
--- This module serves as the root of the `QuantumComputer3Qubits` library.
--- Import modules here that should be built as part of the library.
 import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.RegistryState
@@ -17,16 +15,7 @@ import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
-
-import QuantumComputer3Qubits.Tests.QubitBasic
-import QuantumComputer3Qubits.Tests.QubitIndexed
-import QuantumComputer3Qubits.Tests.RegistryState
-import QuantumComputer3Qubits.Tests.LinearEquivRegistryState
-import QuantumComputer3Qubits.Tests.TransformOperators
-import QuantumComputer3Qubits.Tests.OuterProduct
-import QuantumComputer3Qubits.Tests.HermitianConjugation
-import QuantumComputer3Qubits.Tests.FiniteSum
-
-import QuantumComputer3Qubits.HoareTriples.Triples1
 import QuantumComputer3Qubits.HoareTriples.Oracle
-import QuantumComputer3Qubits.HoareTriples.OracleTriples
+
+namespace HoareOracle
+open Hoare

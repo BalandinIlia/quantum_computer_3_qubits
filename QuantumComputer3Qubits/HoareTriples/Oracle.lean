@@ -16,7 +16,7 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
 
-namespace HoareTriples2
+namespace HoareOracle
 open Hoare
 
 structure F where
