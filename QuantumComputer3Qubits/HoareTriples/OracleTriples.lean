@@ -153,20 +153,7 @@ apply And.intro
         all_goals fin_cases v3
         all_goals try simp [eq]
         all_goals try dsimp [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
-        all_goals try rw [eq]
+        all_goals try repeat rw [eq]
         all_goals try clear eq
         all_goals try simp [mo]
     rw [repl] at pr
