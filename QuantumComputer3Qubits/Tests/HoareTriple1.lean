@@ -13,6 +13,8 @@ import QuantumComputer3Qubits.Formalization.Language
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
+import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
+import QuantumComputer3Qubits.Formalization.OperatorUtils
 
 namespace HoareTriples
 open Hoare
@@ -38,7 +40,7 @@ Inf  (Cond.c2 (OP
     (((TO.tpo2o1i 0 1 (by aesop) 2 (by aesop) (by aesop)) (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))) (OP (CS.qi 1 2) (CS.qi 1 2))) =
     (OP CS.s001 CS.s001) := by
     clear st
-    apply OP.Equality3
+    apply OU.Equality3
     intro v1 v2 v3
     all_goals fin_cases v1
     all_goals fin_cases v2
