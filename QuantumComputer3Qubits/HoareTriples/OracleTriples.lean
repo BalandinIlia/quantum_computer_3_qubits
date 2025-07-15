@@ -65,6 +65,14 @@ def stateAfter(f: F): StateReg3 := (r:ℂ) • (stateAfterRaw f)
 
 set_option maxHeartbeats 100000000
 
+lemma q1eq2: sqrt2 * sqrt2 = 2 := by
+        simp [sqrt2]
+        rw [ComplexUtil.DefMult]
+        aesop
+
+lemma q1eq: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
+        aesop
+
 theorem oracleTriple(f: F):
 transforms (State.s3 stateBefore)
            (Prog.gate3 (oracle f) (unitar f))
@@ -115,14 +123,8 @@ apply And.intro
     all_goals rw [ComplexUtil.Aux]
     all_goals rw [S2]
     all_goals clear eq
-    all_goals have eq: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
-        aesop
-    all_goals rw [eq]
-    all_goals have eq2: sqrt2 * sqrt2 = 2 := by
-        simp [sqrt2]
-        rw [ComplexUtil.DefMult]
-        aesop
-    all_goals simp [eq2]
+    all_goals rw [q1eq]
+    all_goals simp [q1eq2]
 }
 {
     let pr := Inf.Ax.UTF3 (OP stateBefore stateBefore) (oracle f) (unitar f)
