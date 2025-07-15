@@ -11,8 +11,8 @@ set_option maxHeartbeats 100000000
 
 theorem EqStatesByIP:
   ∀cv1 cv1_ cv2 cv2_ cv3 cv3_: CS.CV,
-      IP.f ((CS.qi cv1 0 ⊗ₜ[ℂ] CS.qi cv2 1) ⊗ₜ[ℂ] CS.qi cv3 2)
-           ((CS.qi cv1_ 0 ⊗ₜ[ℂ] CS.qi cv2_ 1) ⊗ₜ[ℂ] CS.qi cv3_ 2) =
+      IP.f (CS.qqq cv1 cv2 cv3)
+           (CS.qqq cv1_ cv2_ cv3_) =
       if (cv1 = cv1_ ∧ cv2 = cv2_ ∧ cv3 = cv3_)
           then 1
           else 0 := by
