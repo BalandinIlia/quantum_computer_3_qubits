@@ -135,7 +135,7 @@ apply And.intro
         all_goals fin_cases v1
         all_goals fin_cases v2
         all_goals fin_cases v3
-        all_goals simp [oracleCore, OU.o3ByCore, FS.FS8, OP, IP.smulLeft, IP.smulRight, IP.distrLeft, IP.distrRight, OU.o3AdjByCore, stateBefore, stateAfter, stateBeforeUnnormed, stateAfterUnnormed, tmp, TensorProduct.add_tmul, TensorProduct.tmul_add, TensorProduct.smul_tmul, TensorProduct.tmul_smul]
+        all_goals simp [oracleCore, OU.o3ByCore, FS.FS8, OP, IP.smulLeft, IP.smulRight, IP.distrLeft, IP.distrRight, OU.o3AdjByCore, stateBefore, stateAfter, stateBeforeUnnormed, stateAfterUnnorm, tmp, TensorProduct.add_tmul, TensorProduct.tmul_add, TensorProduct.smul_tmul, TensorProduct.tmul_smul]
         all_goals simp [eq]
         all_goals apply OU.Equality3S
         all_goals intro v1 v2 v3
