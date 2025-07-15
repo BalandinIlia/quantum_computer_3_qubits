@@ -9,7 +9,7 @@ import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 -- OU means "Operator Utils"
 namespace OU
 
-private lemma Equality3S(s1 s2: StateReg3):
+lemma Equality3S(s1 s2: StateReg3):
 (∀ v1 v2 v3: CS.CV, (IP.f s1 (CS.qqq v1 v2 v3) = IP.f s2 (CS.qqq v1 v2 v3))) →
 s1 = s2 := by
   let eq := EqStatesByIP
