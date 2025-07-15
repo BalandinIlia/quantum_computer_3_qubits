@@ -124,6 +124,29 @@ def o3ByCore(core: Core): OP.o3 := FS.fs
 | 7 => OP (core 1 1 1) (CS.qqq 1 1 1)
 )
 
+theorem o3CoreCorrect:
+∀c: Core, ∀cv1 cv2 cv3: CS.CV,
+(o3ByCore c) (CS.qqq cv1 cv2 cv3) = c cv1 cv2 cv3 := by
+  let eq := EqStatesByIP
+  simp [CS.qqq] at eq
+
+  intro c
+  intro cv1 cv2 cv3
+  simp [o3ByCore, OP]
+  simp [FS.FS8]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  all_goals fin_cases cv1
+  all_goals fin_cases cv2
+  all_goals fin_cases cv3
+  all_goals simp
+
 noncomputable
 def o3AdjByCore(core: Core): OP.o3 := FS.fs
 (fun i: Fin 8 => match i with
