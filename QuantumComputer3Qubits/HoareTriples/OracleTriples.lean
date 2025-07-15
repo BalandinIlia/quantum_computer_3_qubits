@@ -99,7 +99,7 @@ apply And.intro
     simp [stateAfter]
     simp [r, stateAfterRaw]
     simp [tmp]
-    simp [TensorProduct.add_tmul, TensorProduct.tmul_add]
+    simp [TensorProduct.add_tmul, TensorProduct.tmul_add, TensorProduct.smul_tmul]
     simp [IP.smulLeft, IP.smulRight, IP.distrLeft, IP.distrRight]
     all_goals generalize f.v00 = v00
     all_goals generalize f.v01 = v01
