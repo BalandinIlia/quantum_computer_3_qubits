@@ -191,6 +191,14 @@ lemma adjEx!{T: Type}
     apply (Eq.symm h)
 }
 
+def isUnitary{T: Type}
+           [AddCommMonoid T]
+           [Module ℂ T]
+           [IP T]
+           [OrthonormalBasis T]
+           (A: T →ₗ[ℂ] T): Prop :=
+  LinearMap.comp A (adj A) = 1 ∧ LinearMap.comp (adj A) A = 1
+
 -- helper lemma to construct adjoint operator in certain cases
 -- avoiding orthonormal basis
 lemma adjOP{T: Type}
