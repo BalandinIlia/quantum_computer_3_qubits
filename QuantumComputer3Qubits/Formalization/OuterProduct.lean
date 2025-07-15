@@ -22,3 +22,15 @@ def OP{T: Type}
     intro
     module
 }
+
+theorem OPDouble{T: Type}
+                [AddCommMonoid T]
+                [m: Module ℂ T]
+                [IP T]
+                (t1 t2 t3 t4: T):
+LinearMap.comp (OP t1 t2) (OP t3 t4) = (IP.f t2 t3) • (OP t1 t4) := by
+  simp [OP]
+  ext x
+  simp
+  simp [IP.smulRight]
+  module
