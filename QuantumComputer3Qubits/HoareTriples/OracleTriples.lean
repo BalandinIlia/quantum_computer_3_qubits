@@ -39,38 +39,33 @@ private lemma l3Sqrt2: star sqrt2 = sqrt2 := by
     rw [ComplexUtil.DefStar]
     aesop
 
-noncomputable
-def tmp(v1 v2: Fin 2):StateReg2Ind 0 1 (by aesop) :=
-        CS.qqi v1 v2 0 1 (by aesop)
-noncomputable
-def stateBeforeRaw: StateReg3 :=
-TensorProduct.tmul ℂ ((tmp 0 0) +
-                      (tmp 0 1) +
-                      (tmp 1 0) +
-                      (tmp 1 1))
-                     ((CS.qi 0 2)  + mo • (CS.qi 1 2))
-
-noncomputable
-def r:ℂ := 1/(2*sqrt2)
-noncomputable
-def stateBefore: StateReg3 := (r:ℂ) • stateBeforeRaw
-
 def inv(x: Fin 2): ℂ :=
 match x with
 | 0 => 1
 | 1 => mo
 
 noncomputable
-def stateAfterRaw(f: F): StateReg3 :=
+def tmp(v1 v2: Fin 2):StateReg2Ind 0 1 (by aesop) :=
+        CS.qqi v1 v2 0 1 (by aesop)
+noncomputable
+def stateBeforeUnnormed: StateReg3 :=
+TensorProduct.tmul ℂ ((tmp 0 0) +
+                      (tmp 0 1) +
+                      (tmp 1 0) +
+                      (tmp 1 1))
+                     ((CS.qi 0 2)  + mo • (CS.qi 1 2))
+noncomputable
+def stateBefore: StateReg3 := (1/(2*sqrt2)) • stateBeforeUnnormed
+
+noncomputable
+def stateAfterUnnorm(f: F): StateReg3 :=
 TensorProduct.tmul ℂ (((inv f.v00) • (tmp 0 0)) +
                       ((inv f.v01) • (tmp 0 1)) +
                       ((inv f.v10) • (tmp 1 0)) +
                       ((inv f.v11) • (tmp 1 1)))
                      ((CS.qi 0 2) + mo • (CS.qi 1 2))
 noncomputable
-def r2:ℝ := 1/2
-noncomputable
-def stateAfter(f: F): StateReg3 := (r:ℂ) • (stateAfterRaw f)
+def stateAfter(f: F): StateReg3 := (1/(2*sqrt2)) • (stateAfterUnnorm f)
 
 set_option maxHeartbeats 100000000
 
@@ -85,7 +80,7 @@ simp [transforms]
 apply And.intro
 {
     simp [stateBefore]
-    simp [r, stateBeforeRaw]
+    simp [stateBeforeUnnormed]
     simp [tmp]
     simp [TensorProduct.add_tmul, TensorProduct.tmul_add]
     simp [IP.smulLeft, IP.smulRight, IP.distrLeft, IP.distrRight]
@@ -99,8 +94,7 @@ apply And.intro
 }
 apply And.intro
 {
-    simp [stateAfter]
-    simp [r, stateAfterRaw]
+    simp [stateAfter, stateAfterUnnorm]
     simp [tmp]
     simp [TensorProduct.add_tmul, TensorProduct.tmul_add, TensorProduct.smul_tmul]
     simp [IP.smulLeft, IP.smulRight, IP.distrLeft, IP.distrRight]
@@ -108,6 +102,7 @@ apply And.intro
     all_goals generalize f.v01 = v01
     all_goals generalize f.v10 = v10
     all_goals generalize f.v11 = v11
+    all_goals clear f
     all_goals fin_cases v00
     all_goals fin_cases v01
     all_goals fin_cases v10
@@ -116,10 +111,7 @@ apply And.intro
     all_goals simp [mo]
     all_goals ring_nf
     all_goals rw [ComplexUtil.Aux]
-    all_goals rw [l3Sqrt2]
-    all_goals clear eq
-    all_goals rw [l1Sqrt2]
-    all_goals simp [l2Sqrt2]
+    all_goals simp [l1Sqrt2, l2Sqrt2, l3Sqrt2]
 }
 {
     let pr := Inf.Ax.UTF3 (OP stateBefore stateBefore) (oracle f) (unitar f)
@@ -127,7 +119,7 @@ apply And.intro
         clear pr
         simp [oracle]
         simp [OU.o3CoreAdj]
-        simp [oracleCore, stateAfter, stateAfterRaw]
+        simp [oracleCore, stateAfter, stateAfterUnnorm]
         generalize f.v00 = v00
         generalize f.v01 = v01
         generalize f.v10 = v10
