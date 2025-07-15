@@ -15,6 +15,7 @@ import QuantumComputer3Qubits.Formalization.Language
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
+import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 
 import QuantumComputer3Qubits.Tests.QubitBasic
 import QuantumComputer3Qubits.Tests.QubitIndexed
