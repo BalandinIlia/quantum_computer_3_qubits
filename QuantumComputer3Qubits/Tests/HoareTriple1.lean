@@ -16,7 +16,7 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
 
-namespace HoareTriples
+namespace HoareTriples1
 open Hoare
 
 set_option maxHeartbeats 1000000
@@ -92,4 +92,168 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
     apply pr
   }
 
+theorem triple2:
+transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
+           (Prog.ass1 (CS.qi 1 1))
+           (State.s3 CS.s010) := by
+  simp [transforms]
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  {
+    let pr := Inf.Ax.Inf_2_1 0
+                             2
+                             (by aesop)
+                             1
+                             (by aesop)
+                             (by aesop)
+                             (OP (CS.qqi 0 0 0 2 (by aesop)) (CS.qqi 0 0 0 2 (by aesop)))
+                             (CS.qi 1 1)
+    have repr:
+      (((TO.tpo2o1i 0 2 (by aesop) 1 (by aesop) (by aesop)) (OP (CS.qqi 0 0 0 2 (by aesop)) (CS.qqi 0 0 0 2 (by aesop)))) (OP (CS.qi 1 1) (CS.qi 1 1))) =
+      (OP CS.s010 CS.s010) := by
+      clear pr
+      simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      apply OU.Equality3
+      intro v1 v2 v3
+      all_goals fin_cases v1
+      all_goals fin_cases v2
+      all_goals fin_cases v3
+      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals solve
+    rw [repr] at pr
+    apply pr
+  }
+
+theorem triple3:
+transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
+           (Prog.ass1 (CS.qi 1 0))
+           (State.s3 CS.s100) := by
+  simp [transforms]
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  {
+    let pr := Inf.Ax.Inf_2_1 1
+                             2
+                             (by aesop)
+                             0
+                             (by aesop)
+                             (by aesop)
+                             (OP (CS.qqi 0 0 1 2 (by aesop)) (CS.qqi 0 0 1 2 (by aesop)))
+                             (CS.qi 1 0)
+    have repr:
+      (((TO.tpo2o1i 1 2 (by aesop) 0 (by aesop) (by aesop)) (OP (CS.qqi 0 0 1 2 (by aesop)) (CS.qqi 0 0 1 2 (by aesop)))) (OP (CS.qi 1 0) (CS.qi 1 0))) =
+      (OP CS.s100 CS.s100) := by
+      clear pr
+      simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      apply OU.Equality3
+      intro v1 v2 v3
+      all_goals fin_cases v1
+      all_goals fin_cases v2
+      all_goals fin_cases v3
+      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals solve
+    rw [repr] at pr
+    apply pr
+  }
+
+theorem triple4:
+transforms (State.s1 (CS.qi 0 0))
+           (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)))
+           (State.s3 CS.s011) := by
+  simp [transforms]
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  {
+    let pr := Inf.Ax.Inf_1_2 1
+                             2
+                             (by aesop)
+                             0
+                             (by aesop)
+                             (by aesop)
+                             (OP (CS.qi 0 0) (CS.qi 0 0))
+                             (CS.qqi 1 1 1 2 (by aesop))
+    have repr:
+      (((TO.tpo2o1i 1 2 (by aesop) 0 (by aesop) (by aesop)) (OP (CS.qqi 1 1 1 2 (by aesop)) (CS.qqi 1 1 1 2 (by aesop)))) (OP (CS.qi 0 0) (CS.qi 0 0))) =
+      (OP CS.s011 CS.s011) := by
+      clear pr
+      simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      apply OU.Equality3
+      intro v1 v2 v3
+      all_goals fin_cases v1
+      all_goals fin_cases v2
+      all_goals fin_cases v3
+      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals solve
+    rw [repr] at pr
+    apply pr
+  }
+
+theorem triple5:
+transforms (State.s1 (CS.qi 0 1))
+           (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)))
+           (State.s3 CS.s101) := by
+  simp [transforms]
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  {
+    let pr := Inf.Ax.Inf_1_2 0
+                             2
+                             (by aesop)
+                             1
+                             (by aesop)
+                             (by aesop)
+                             (OP (CS.qi 0 1) (CS.qi 0 1))
+                             (CS.qqi 1 1 0 2 (by aesop))
+    have repr:
+      (((TO.tpo2o1i 0 2 (by aesop) 1 (by aesop) (by aesop)) (OP (CS.qqi 1 1 0 2 (by aesop)) (CS.qqi 1 1 0 2 (by aesop)))) (OP (CS.qi 0 1) (CS.qi 0 1))) =
+      (OP CS.s101 CS.s101) := by
+      clear pr
+      simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      apply OU.Equality3
+      intro v1 v2 v3
+      all_goals fin_cases v1
+      all_goals fin_cases v2
+      all_goals fin_cases v3
+      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals solve
+    rw [repr] at pr
+    apply pr
+  }
+
 #print axioms triple1
+#print axioms triple2
+#print axioms triple3
+#print axioms triple4
+#print axioms triple5
