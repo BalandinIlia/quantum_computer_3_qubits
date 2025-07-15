@@ -49,7 +49,7 @@ def stateBefore: StateReg3 := (r:ℂ) • stateBeforeRaw
 def inv(x: Fin 2): ℂ :=
 match x with
 | 0 => 1
-| 1 => -1
+| 1 => mo
 
 noncomputable
 def stateAfterRaw(f: F): StateReg3 :=
