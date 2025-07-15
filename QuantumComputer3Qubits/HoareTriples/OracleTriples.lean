@@ -173,7 +173,7 @@ apply And.intro
         all_goals try rw [eq]
         all_goals try rw [eq]
         all_goals clear eq
-        all_goals simp
+        all_goals try simp
     rw [repl] at pr
     apply pr
 }
