@@ -114,6 +114,7 @@ apply And.intro
     all_goals ring_nf
     all_goals rw [ComplexUtil.Aux]
     all_goals rw [S2]
+    clear eq
     have eq: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
         aesop
     all_goals rw [eq]
