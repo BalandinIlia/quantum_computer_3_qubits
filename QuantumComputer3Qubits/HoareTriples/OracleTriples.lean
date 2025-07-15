@@ -115,10 +115,10 @@ apply And.intro
     all_goals rw [ComplexUtil.Aux]
     all_goals rw [S2]
     all_goals clear eq
-    have eq: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
+    all_goals have eq: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
         aesop
     all_goals rw [eq]
-    have eq2: sqrt2 * sqrt2 = 2 := by
+    all_goals have eq2: sqrt2 * sqrt2 = 2 := by
         simp [sqrt2]
         rw [ComplexUtil.DefMult]
         aesop
@@ -155,7 +155,7 @@ apply And.intro
         all_goals fin_cases v2
         all_goals fin_cases v3
         all_goals simp [eq]
-        all_goals dsimp [eq]
+        all_goals try dsimp [eq]
         all_goals try rw [eq]
         all_goals try rw [eq]
         all_goals try rw [eq]
