@@ -21,59 +21,75 @@ open Hoare
 
 set_option maxHeartbeats 1000000
 
+macro "solve": tactic =>
+`(tactic |
+(
+  generalize r000:((isoQubitIndQubitBase 0) (CS.qi 0 0) 0) = co000
+  generalize r100:((isoQubitIndQubitBase 1) (CS.qi 0 1) 0) = co100
+  generalize r200:((isoQubitIndQubitBase 2) (CS.qi 0 2) 0) = co200
+  generalize r010:((isoQubitIndQubitBase 0) (CS.qi 1 0) 0) = co010
+  generalize r110:((isoQubitIndQubitBase 1) (CS.qi 1 1) 0) = co110
+  generalize r210:((isoQubitIndQubitBase 2) (CS.qi 1 2) 0) = co210
+  generalize r001:((isoQubitIndQubitBase 0) (CS.qi 0 0) 1) = co001
+  generalize r101:((isoQubitIndQubitBase 1) (CS.qi 0 1) 1) = co101
+  generalize r201:((isoQubitIndQubitBase 2) (CS.qi 0 2) 1) = co201
+  generalize r011:((isoQubitIndQubitBase 0) (CS.qi 1 0) 1) = co011
+  generalize r111:((isoQubitIndQubitBase 1) (CS.qi 1 1) 1) = co111
+  generalize r211:((isoQubitIndQubitBase 2) (CS.qi 1 2) 1) = co211
+  have s000: co000 = 1 := by simp [Eq.symm r000, CS.qi, isoQubitIndQubitBase]
+  have s100: co100 = 1 := by simp [Eq.symm r100, CS.qi, isoQubitIndQubitBase]
+  have s200: co200 = 1 := by simp [Eq.symm r200, CS.qi, isoQubitIndQubitBase]
+  have s010: co010 = 0 := by simp [Eq.symm r010, CS.qi, isoQubitIndQubitBase]
+  have s110: co110 = 0 := by simp [Eq.symm r110, CS.qi, isoQubitIndQubitBase]
+  have s210: co210 = 0 := by simp [Eq.symm r210, CS.qi, isoQubitIndQubitBase]
+  have s001: co001 = 0 := by simp [Eq.symm r001, CS.qi, isoQubitIndQubitBase]
+  have s101: co101 = 0 := by simp [Eq.symm r101, CS.qi, isoQubitIndQubitBase]
+  have s201: co201 = 0 := by simp [Eq.symm r201, CS.qi, isoQubitIndQubitBase]
+  have s011: co011 = 1 := by simp [Eq.symm r011, CS.qi, isoQubitIndQubitBase]
+  have s111: co111 = 1 := by simp [Eq.symm r111, CS.qi, isoQubitIndQubitBase]
+  have s211: co211 = 1 := by simp [Eq.symm r211, CS.qi, isoQubitIndQubitBase]
+  simp [s000, s100, s200, s010, s110, s210, s001, s101, s201, s011, s111, s211]
+)
+)
+
 theorem triple1:
-Inf  (Cond.c2 (OP
-                 (CS.qqi 0 0 0 1 (by aesop))
-                 (CS.qqi 0 0 0 1 (by aesop))
-              )
-     )
-     (Prog.ass1 (CS.qi 1 2))
-     (Cond.c3 (OP CS.s001 CS.s001)) := by
-  let st := Inf.Ax.Inf_2_1 0 1
-        (by aesop)
-        2
-        (by aesop)
-        (by aesop)
-        (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))
-        (CS.qi 1 2)
-  have repr:
-    (((TO.tpo2o1i 0 1 (by aesop) 2 (by aesop) (by aesop)) (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))) (OP (CS.qi 1 2) (CS.qi 1 2))) =
-    (OP CS.s001 CS.s001) := by
-    clear st
-    apply OU.Equality3
-    intro v1 v2 v3
-    all_goals fin_cases v1
-    all_goals fin_cases v2
-    all_goals fin_cases v3
-    all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
-    all_goals {
-      generalize r000:((isoQubitIndQubitBase 0) (CS.qi 0 0) 0) = co000
-      generalize r100:((isoQubitIndQubitBase 1) (CS.qi 0 1) 0) = co100
-      generalize r200:((isoQubitIndQubitBase 2) (CS.qi 0 2) 0) = co200
-      generalize r010:((isoQubitIndQubitBase 0) (CS.qi 1 0) 0) = co010
-      generalize r110:((isoQubitIndQubitBase 1) (CS.qi 1 1) 0) = co110
-      generalize r210:((isoQubitIndQubitBase 2) (CS.qi 1 2) 0) = co210
-      generalize r001:((isoQubitIndQubitBase 0) (CS.qi 0 0) 1) = co001
-      generalize r101:((isoQubitIndQubitBase 1) (CS.qi 0 1) 1) = co101
-      generalize r201:((isoQubitIndQubitBase 2) (CS.qi 0 2) 1) = co201
-      generalize r011:((isoQubitIndQubitBase 0) (CS.qi 1 0) 1) = co011
-      generalize r111:((isoQubitIndQubitBase 1) (CS.qi 1 1) 1) = co111
-      generalize r211:((isoQubitIndQubitBase 2) (CS.qi 1 2) 1) = co211
-      have s000: co000 = 1 := by simp [Eq.symm r000, CS.qi, isoQubitIndQubitBase]
-      have s100: co100 = 1 := by simp [Eq.symm r100, CS.qi, isoQubitIndQubitBase]
-      have s200: co200 = 1 := by simp [Eq.symm r200, CS.qi, isoQubitIndQubitBase]
-      have s010: co010 = 0 := by simp [Eq.symm r010, CS.qi, isoQubitIndQubitBase]
-      have s110: co110 = 0 := by simp [Eq.symm r110, CS.qi, isoQubitIndQubitBase]
-      have s210: co210 = 0 := by simp [Eq.symm r210, CS.qi, isoQubitIndQubitBase]
-      have s001: co001 = 0 := by simp [Eq.symm r001, CS.qi, isoQubitIndQubitBase]
-      have s101: co101 = 0 := by simp [Eq.symm r101, CS.qi, isoQubitIndQubitBase]
-      have s201: co201 = 0 := by simp [Eq.symm r201, CS.qi, isoQubitIndQubitBase]
-      have s011: co011 = 1 := by simp [Eq.symm r011, CS.qi, isoQubitIndQubitBase]
-      have s111: co111 = 1 := by simp [Eq.symm r111, CS.qi, isoQubitIndQubitBase]
-      have s211: co211 = 1 := by simp [Eq.symm r211, CS.qi, isoQubitIndQubitBase]
-      simp [s000, s100, s200, s010, s110, s210, s001, s101, s201, s011, s111, s211]
-    }
-  rw [repr] at st
-  apply st
+transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
+           (Prog.ass1 (CS.qi 1 2))
+           (State.s3 CS.s001) := by
+  simp [transforms]
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  {
+    let pr := Inf.Ax.Inf_2_1 0
+                             1
+                             (by aesop)
+                             2
+                             (by aesop)
+                             (by aesop)
+                             (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))
+                             (CS.qi 1 2)
+    have repr:
+      (((TO.tpo2o1i 0 1 (by aesop) 2 (by aesop) (by aesop)) (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))) (OP (CS.qi 1 2) (CS.qi 1 2))) =
+      (OP CS.s001 CS.s001) := by
+      clear pr
+      simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      apply OU.Equality3
+      intro v1 v2 v3
+      all_goals fin_cases v1
+      all_goals fin_cases v2
+      all_goals fin_cases v3
+      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals solve
+    rw [repr] at pr
+    apply pr
+  }
 
 #print axioms triple1
