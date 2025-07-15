@@ -26,4 +26,7 @@ import QuantumComputer3Qubits.Tests.TransformOperators
 import QuantumComputer3Qubits.Tests.OuterProduct
 import QuantumComputer3Qubits.Tests.HermitianConjugation
 import QuantumComputer3Qubits.Tests.FiniteSum
-import QuantumComputer3Qubits.Tests.HoareTriple1
+
+import QuantumComputer3Qubits.HoareTriples.Triples1
+import QuantumComputer3Qubits.HoareTriples.Oracle
+import QuantumComputer3Qubits.HoareTriples.OracleTriples

@@ -9,7 +9,7 @@ import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 -- OU means "Operator Utils"
 namespace OU
 
-private lemma Equality3S(s1 s2: StateReg3):
+lemma Equality3S(s1 s2: StateReg3):
 (∀ v1 v2 v3: CS.CV, (IP.f s1 (CS.qqq v1 v2 v3) = IP.f s2 (CS.qqq v1 v2 v3))) →
 s1 = s2 := by
   let eq := EqStatesByIP
@@ -123,6 +123,29 @@ def o3ByCore(core: Core): OP.o3 := FS.fs
 | 6 => OP (core 1 1 0) (CS.qqq 1 1 0)
 | 7 => OP (core 1 1 1) (CS.qqq 1 1 1)
 )
+
+theorem o3CoreCorrect:
+∀c: Core, ∀cv1 cv2 cv3: CS.CV,
+(o3ByCore c) (CS.qqq cv1 cv2 cv3) = c cv1 cv2 cv3 := by
+  let eq := EqStatesByIP
+  simp [CS.qqq] at eq
+
+  intro c
+  intro cv1 cv2 cv3
+  simp [o3ByCore, OP]
+  simp [FS.FS8]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  rw [eq]
+  all_goals fin_cases cv1
+  all_goals fin_cases cv2
+  all_goals fin_cases cv3
+  all_goals simp
 
 noncomputable
 def o3AdjByCore(core: Core): OP.o3 := FS.fs
