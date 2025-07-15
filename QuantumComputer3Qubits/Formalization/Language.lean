@@ -68,6 +68,12 @@ inductive Inf: Cond → Prog → Cond → Prop
           (Prog.gate2 tr un)
           (Cond.c2 ((tr • op)•(HC.adj tr)))
 
+| Ax.UTF3(op tr: OP.o3)
+         (un: HC.isUnitary tr):
+      Inf (Cond.c3 op)
+          (Prog.gate3 tr un)
+          (Cond.c3 ((tr • op)•(HC.adj tr)))
+
 | Ax.Inf_1_1(i1 i2: Fin 3)
             (ord: i1 < i2)
             (op: OP.oi1 i1)
