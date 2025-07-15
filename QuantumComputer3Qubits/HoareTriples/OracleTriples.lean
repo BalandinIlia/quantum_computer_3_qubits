@@ -24,6 +24,22 @@ open Hoare
 def mo:ℂ := -1
 
 noncomputable
+def sqrt2:ℂ := Complex.mk (Real.sqrt 2) 0
+
+private lemma l1Sqrt2: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
+        aesop
+
+private lemma l2Sqrt2: sqrt2 * sqrt2 = 2 := by
+        simp [sqrt2]
+        rw [ComplexUtil.DefMult]
+        aesop
+
+private lemma l3Sqrt2: star sqrt2 = sqrt2 := by
+    rw [sqrt2]
+    rw [ComplexUtil.DefStar]
+    aesop
+
+noncomputable
 def tmp(v1 v2: Fin 2):StateReg2Ind 0 1 (by aesop) :=
         CS.qqi v1 v2 0 1 (by aesop)
 noncomputable
@@ -33,13 +49,6 @@ TensorProduct.tmul ℂ ((tmp 0 0) +
                       (tmp 1 0) +
                       (tmp 1 1))
                      ((CS.qi 0 2)  + mo • (CS.qi 1 2))
-noncomputable
-def sqrt2:ℂ := Complex.mk (Real.sqrt 2) 0
-
-lemma S2: star sqrt2 = sqrt2 := by
-    rw [sqrt2]
-    rw [ComplexUtil.DefStar]
-    aesop
 
 noncomputable
 def r:ℂ := 1/(2*sqrt2)
@@ -65,14 +74,6 @@ def stateAfter(f: F): StateReg3 := (r:ℂ) • (stateAfterRaw f)
 
 set_option maxHeartbeats 100000000
 
-lemma q1eq2: sqrt2 * sqrt2 = 2 := by
-        simp [sqrt2]
-        rw [ComplexUtil.DefMult]
-        aesop
-
-lemma q1eq: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
-        aesop
-
 theorem oracleTriple(f: F):
 transforms (State.s3 stateBefore)
            (Prog.gate3 (oracle f) (unitar f))
@@ -92,15 +93,9 @@ apply And.intro
     simp [mo]
     ring_nf
     rw [ComplexUtil.Aux]
-    rw [S2]
-    have eq: sqrt2⁻¹ * sqrt2⁻¹ = 1/(sqrt2 * sqrt2) := by
-        aesop
-    rw [eq]
-    have eq2: sqrt2 * sqrt2 = 2 := by
-        simp [sqrt2]
-        rw [ComplexUtil.DefMult]
-        aesop
-    simp [eq2]
+    rw [l3Sqrt2]
+    rw [l1Sqrt2]
+    simp [l2Sqrt2]
 }
 apply And.intro
 {
@@ -121,10 +116,10 @@ apply And.intro
     all_goals simp [mo]
     all_goals ring_nf
     all_goals rw [ComplexUtil.Aux]
-    all_goals rw [S2]
+    all_goals rw [l3Sqrt2]
     all_goals clear eq
-    all_goals rw [q1eq]
-    all_goals simp [q1eq2]
+    all_goals rw [l1Sqrt2]
+    all_goals simp [l2Sqrt2]
 }
 {
     let pr := Inf.Ax.UTF3 (OP stateBefore stateBefore) (oracle f) (unitar f)
