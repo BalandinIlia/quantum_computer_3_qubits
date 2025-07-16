@@ -116,6 +116,17 @@ def CondSt(s: State): Cond := match s with
 | State.s3 s => Cond.c3 (OP s s)
 
 def transforms(sBeg: State)(prog: Prog)(sFin: State): Prop :=
-(IP.f sBeg sBeg) = 1 ∧
-(IP.f sFin sFin) = 1 ∧
-Inf (CondSt sBeg) prog (CondSt sFin)
+Inf (CondSt sBeg) prog (CondSt sFin) ∧
+(
+    match sBeg with
+    | State.s1 s => (IP.f s s) = 1
+    | State.s2 s => (IP.f s s) = 1
+    | State.s3 s => (IP.f s s) = 1
+)
+∧
+(
+    match sFin with
+    | State.s1 s => (IP.f s s) = 1
+    | State.s2 s => (IP.f s s) = 1
+    | State.s3 s => (IP.f s s) = 1
+)
