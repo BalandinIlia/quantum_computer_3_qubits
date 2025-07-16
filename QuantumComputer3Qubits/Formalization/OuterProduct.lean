@@ -23,6 +23,8 @@ def OP{T: Type}
     module
 }
 
+-- This theorem allows to simplify composition of two outer
+-- products.
 theorem OPDouble{T: Type}
                 [AddCommMonoid T]
                 [m: Module ℂ T]

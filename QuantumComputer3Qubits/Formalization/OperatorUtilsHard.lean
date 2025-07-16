@@ -3,6 +3,11 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
 import QuantumComputer3Qubits.Formalization.Decompose
+-- This file contains operator "hard" utilities which require much
+-- Lean workload for proof.
+-- These utilities were moved to a separate (from other
+-- utilities) file for convinence: when we change utilities
+-- file we don't have to wait until these utilities compile.
 
 -- OU means "operator utils"
 namespace OU
