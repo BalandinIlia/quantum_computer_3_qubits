@@ -143,7 +143,6 @@ apply And.intro
         all_goals fin_cases v1
         all_goals fin_cases v2
         all_goals fin_cases v3
-        all_goals try simp [eq]
         all_goals repeat rw [eq]
         all_goals try simp [mo]
     rw [repl] at pr
