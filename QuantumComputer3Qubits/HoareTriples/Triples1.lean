@@ -56,7 +56,7 @@ theorem triple1:
 transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
            (Prog.ass1 (CS.qi 1 2))
            (State.s3 CS.s001) := by
-  simp [transforms]
+  simp [transforms, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -96,7 +96,7 @@ theorem triple2:
 transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
            (Prog.ass1 (CS.qi 1 1))
            (State.s3 CS.s010) := by
-  simp [transforms]
+  simp [transforms, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -136,7 +136,7 @@ theorem triple3:
 transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
            (Prog.ass1 (CS.qi 1 0))
            (State.s3 CS.s100) := by
-  simp [transforms]
+  simp [transforms, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -176,7 +176,7 @@ theorem triple4:
 transforms (State.s1 (CS.qi 0 0))
            (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)))
            (State.s3 CS.s011) := by
-  simp [transforms]
+  simp [transforms, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]

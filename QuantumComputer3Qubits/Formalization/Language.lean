@@ -18,18 +18,6 @@ inductive Cond where
 | c2{i1 i2: Fin 3}{ord: i1 < i2}:  (OP.oi2 i1 i2 ord) → Cond
 | c3:                              OP.o3 → Cond
 
-noncomputable
-def CondSt1{i:Fin 3}(s: StateReg1Ind i): Cond :=
-Cond.c1 (OP s s)
-
-noncomputable
-def CondSt2{i1 i2: Fin 3}{ord: i1 < i2}
-           (s: StateReg2Ind i1 i2 ord): Cond :=
-Cond.c2 (OP s s)
-
-noncomputable
-def CondSt3(s: StateReg3): Cond := Cond.c3 (OP s s)
-
 inductive Prog where
 | skip:
     Prog
@@ -121,59 +109,13 @@ inductive State where
 | s3(s: StateReg3):
       State
 
+noncomputable
+def CondSt(s: State): Cond := match s with
+| State.s1 s => Cond.c1 (OP s s)
+| State.s2 s => Cond.c2 (OP s s)
+| State.s3 s => Cond.c3 (OP s s)
+
 def transforms(sBeg: State)(prog: Prog)(sFin: State): Prop :=
-match sBeg, sFin with
-| State.s1 sBeg, State.s1 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c1 (OP sBeg sBeg))
-               prog
-               (Cond.c1 (OP sFin sFin)))
-| State.s1 sBeg, State.s2 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c1 (OP sBeg sBeg))
-               prog
-               (Cond.c2 (OP sFin sFin)))
-| State.s1 sBeg, State.s3 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c1 (OP sBeg sBeg))
-               prog
-               (Cond.c3 (OP sFin sFin)))
-| State.s2 sBeg, State.s1 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c2 (OP sBeg sBeg))
-               prog
-               (Cond.c1 (OP sFin sFin)))
-| State.s2 sBeg, State.s2 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c2 (OP sBeg sBeg))
-               prog
-               (Cond.c2 (OP sFin sFin)))
-| State.s2 sBeg, State.s3 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c2 (OP sBeg sBeg))
-               prog
-               (Cond.c3 (OP sFin sFin)))
-| State.s3 sBeg, State.s1 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c3 (OP sBeg sBeg))
-               prog
-               (Cond.c1 (OP sFin sFin)))
-| State.s3 sBeg, State.s2 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c3 (OP sBeg sBeg))
-               prog
-               (Cond.c2 (OP sFin sFin)))
-| State.s3 sBeg, State.s3 sFin =>
-          (IP.f sBeg sBeg) = 1 ∧
-          (IP.f sFin sFin) = 1 ∧
-          (Inf (Cond.c3 (OP sBeg sBeg))
-               prog
-               (Cond.c3 (OP sFin sFin)))
+(IP.f sBeg sBeg) = 1 ∧
+(IP.f sFin sFin) = 1 ∧
+Inf (CondSt sBeg) prog (CondSt sFin)

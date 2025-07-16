@@ -76,7 +76,7 @@ transforms (State.s3 stateBefore)
 let eq := OU.EqStatesByIP
 simp [CS.qqq] at eq
 
-simp [transforms]
+simp [transforms, CondSt]
 apply And.intro
 {
     simp [stateBefore]
