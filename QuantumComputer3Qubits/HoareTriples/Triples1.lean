@@ -216,7 +216,7 @@ theorem triple5:
 transforms (State.s1 (CS.qi 0 1))
            (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)))
            (State.s3 CS.s101) := by
-  simp [transforms]
+  simp [transforms, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
