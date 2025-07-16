@@ -52,9 +52,17 @@ macro "solve": tactic =>
 )
 )
 
+macro "prove_norm": tactic =>
+`(tactic|
+(
+  simp [IP.f, IP.IPLeft, IP.IPRight, IP.Transfer.lE]
+  solve
+)
+)
+
 theorem triple1:
 transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
-           (Prog.ass1 (CS.qi 1 2))
+           (Prog.ass1 (CS.qi 1 2) (by prove_norm))
            (State.s3 CS.s001) := by
   simp [transforms, CondSt]
   apply And.intro
@@ -70,8 +78,8 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
   {
     let pr := Inf.Ax.Inf_2_1 0
                              1
-                             (by aesop)
                              2
+                             (by aesop)
                              (by aesop)
                              (by aesop)
                              (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))
@@ -86,7 +94,7 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
       all_goals fin_cases v1
       all_goals fin_cases v2
       all_goals fin_cases v3
-      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals simp
       all_goals solve
     rw [repr] at pr
     apply pr
@@ -94,7 +102,7 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
 
 theorem triple2:
 transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
-           (Prog.ass1 (CS.qi 1 1))
+           (Prog.ass1 (CS.qi 1 1) (by prove_norm))
            (State.s3 CS.s010) := by
   simp [transforms, CondSt]
   apply And.intro
@@ -110,8 +118,8 @@ transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
   {
     let pr := Inf.Ax.Inf_2_1 0
                              2
-                             (by aesop)
                              1
+                             (by aesop)
                              (by aesop)
                              (by aesop)
                              (OP (CS.qqi 0 0 0 2 (by aesop)) (CS.qqi 0 0 0 2 (by aesop)))
@@ -126,7 +134,7 @@ transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
       all_goals fin_cases v1
       all_goals fin_cases v2
       all_goals fin_cases v3
-      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals simp
       all_goals solve
     rw [repr] at pr
     apply pr
@@ -134,7 +142,7 @@ transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
 
 theorem triple3:
 transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
-           (Prog.ass1 (CS.qi 1 0))
+           (Prog.ass1 (CS.qi 1 0) (by prove_norm))
            (State.s3 CS.s100) := by
   simp [transforms, CondSt]
   apply And.intro
@@ -150,8 +158,8 @@ transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
   {
     let pr := Inf.Ax.Inf_2_1 1
                              2
-                             (by aesop)
                              0
+                             (by aesop)
                              (by aesop)
                              (by aesop)
                              (OP (CS.qqi 0 0 1 2 (by aesop)) (CS.qqi 0 0 1 2 (by aesop)))
@@ -166,7 +174,7 @@ transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
       all_goals fin_cases v1
       all_goals fin_cases v2
       all_goals fin_cases v3
-      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals simp
       all_goals solve
     rw [repr] at pr
     apply pr
@@ -174,7 +182,7 @@ transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
 
 theorem triple4:
 transforms (State.s1 (CS.qi 0 0))
-           (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)))
+           (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)) (by prove_norm))
            (State.s3 CS.s011) := by
   simp [transforms, CondSt]
   apply And.intro
@@ -188,10 +196,10 @@ transforms (State.s1 (CS.qi 0 0))
     solve
   }
   {
-    let pr := Inf.Ax.Inf_1_2 1
+    let pr := Inf.Ax.Inf_1_2 0
+                             1
                              2
                              (by aesop)
-                             0
                              (by aesop)
                              (by aesop)
                              (OP (CS.qi 0 0) (CS.qi 0 0))
@@ -206,7 +214,7 @@ transforms (State.s1 (CS.qi 0 0))
       all_goals fin_cases v1
       all_goals fin_cases v2
       all_goals fin_cases v3
-      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals simp
       all_goals solve
     rw [repr] at pr
     apply pr
@@ -214,7 +222,7 @@ transforms (State.s1 (CS.qi 0 0))
 
 theorem triple5:
 transforms (State.s1 (CS.qi 0 1))
-           (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)))
+           (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)) (by prove_norm))
            (State.s3 CS.s101) := by
   simp [transforms, CondSt]
   apply And.intro
@@ -228,10 +236,10 @@ transforms (State.s1 (CS.qi 0 1))
     solve
   }
   {
-    let pr := Inf.Ax.Inf_1_2 0
+    let pr := Inf.Ax.Inf_1_2 1
+                             0
                              2
                              (by aesop)
-                             1
                              (by aesop)
                              (by aesop)
                              (OP (CS.qi 0 1) (CS.qi 0 1))
@@ -246,7 +254,7 @@ transforms (State.s1 (CS.qi 0 1))
       all_goals fin_cases v1
       all_goals fin_cases v2
       all_goals fin_cases v3
-      all_goals simp [TO.tpo2o1i, TO.impl, OP, IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+      all_goals simp
       all_goals solve
     rw [repr] at pr
     apply pr

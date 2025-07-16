@@ -27,3 +27,30 @@ def oi1(i1: Fin 3):Type :=
 @[reducible]
 def oi2(i1 i2: Fin 3)(ord: (i1 < i2)):Type :=
   (StateReg2Ind i1 i2 ord) →ₗ[ℂ] (StateReg2Ind i1 i2 ord)
+
+-- identity operator
+noncomputable
+def idoi1(i: Fin 3): oi1 i :=
+{
+  toFun(st: StateReg1Ind i) := st
+  map_add' := by aesop
+  map_smul' := by aesop
+}
+
+-- identity operator
+noncomputable
+def idoi2(i1 i2: Fin 3)(ord: (i1 < i2)): oi2 i1 i2 ord :=
+{
+  toFun(st: StateReg2Ind i1 i2 ord) := st
+  map_add' := by aesop
+  map_smul' := by aesop
+}
+
+-- identity operator
+noncomputable
+def ido3: o3 :=
+{
+  toFun(st: StateReg3) := st
+  map_add' := by aesop
+  map_smul' := by aesop
+}

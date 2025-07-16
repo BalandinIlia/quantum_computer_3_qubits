@@ -207,3 +207,11 @@ LinearMap.mk₂ ℂ
   simp [TensorProduct.map_smul_right]
   aesop
 )
+
+noncomputable
+def tp3(op0: OP.oi1 0)
+       (op1: OP.oi1 1)
+       (op2: OP.oi1 2):OP.o3 :=
+tpo2o1i 0 1 (by omega) 2 (by omega) (by omega)
+        (tpo1o1i 0 1 (by omega) op0 op1)
+        op2
