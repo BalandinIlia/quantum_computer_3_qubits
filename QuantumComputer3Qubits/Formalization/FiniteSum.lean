@@ -275,6 +275,9 @@ A (fs x) = fs (fun i: Fin N => A (x i)) := by
     simp [pr] at st_
     apply st_
 
+-- This lemma formalizes Kronecker trick:
+-- Finite sum with only one non-zero summand is equal to the
+-- non-zero summand.
 lemma Kronecker {T: Type}
                 [AddCommMonoid T]
                 (N: ℕ)

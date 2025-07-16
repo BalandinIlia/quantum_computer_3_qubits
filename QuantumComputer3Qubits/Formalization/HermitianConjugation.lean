@@ -1,11 +1,29 @@
 import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Formalization.FiniteSum
+-- This file formalizes Hermitian conjugation and
+-- Hermitian-conjugation-related stuff.
+--
+-- Here is the motivation why we have to develop our custom
+-- formalization of Hermitian-conjugation-related stuff and
+-- why we don't just use formalization from Mathlib:
+-- Mathematical (not linked to any proof assistant) concept
+-- of Hermitian conjugation bases on inner product concept,
+-- because Hermitian conjugation is defined using inner
+-- product. So any formalization of Hermition conjugation
+-- needs to base on inner product formalization. However, we
+-- have rejected Mathlib inner product formalization and
+-- developed our custom inner product formalization. So, we
+-- can't use Mathlib Hermitian conjugation formalization and
+-- we have to develop our own custom Hermitian conjugation
+-- formalization.
 
 -- HC means "Hermitian Conjugation"
 namespace HC
 
--- definition that B is adjoint of A
+-- This is a propostion that B is adjoint of A.
+-- In other words this is a proposition that B is Hermitian
+-- conjugated to A.
 def isAdj{T: Type}
          [AddCommMonoid T]
          [Module ℂ T]
@@ -14,6 +32,7 @@ def isAdj{T: Type}
          (A B: T →ₗ[ℂ] T): Prop :=
          ∀x y: T, IP.f (B x) y = IP.f x (A y)
 
+-- commAdj means "commutativeness adjoint"
 lemma commAdj{T: Type}
          [AddCommMonoid T]
          [Module ℂ T]
@@ -32,9 +51,8 @@ lemma commAdj{T: Type}
   simp [ComplexUtil.DoubleStar] at pr3
   simp [pr3]
 
--- This is kind of operator component associated with the i-th
--- vector of orthonormal basis.
--- Sum of all components is equal to the operator.
+-- This is our custom-defined operator component associated
+-- with the i-th vector of orthonormal basis.
 noncomputable
 def operComp{T: Type}
             [AddCommMonoid T]
@@ -45,6 +63,7 @@ def operComp{T: Type}
             (i: Fin ob.N): T →ₗ[ℂ] T :=
             OP (A (ob.basis i)) (ob.basis i)
 
+-- Sum of all components is equal to the operator.
 lemma reprOp{T: Type}
             [AddCommMonoid T]
             [Module ℂ T]
@@ -75,7 +94,8 @@ def operCompAdj{T: Type}
                (i: Fin ob.N): T →ₗ[ℂ] T :=
                OP (ob.basis i) (A (ob.basis i))
 
--- This is an adjoint operator formulated as a sum of adjoint components.
+-- This is an adjoint operator formulated as a sum
+-- of adjoint components.
 noncomputable
 def adj{T: Type}
        [AddCommMonoid T]
@@ -85,7 +105,8 @@ def adj{T: Type}
        (A: T →ₗ[ℂ] T): T →ₗ[ℂ] T :=
        FS.fs (fun i: Fin ob.N => operCompAdj A i)
 
--- check that adjoint is really adjoint
+-- proof that adjoint operator defined before is actually
+-- adjoint
 theorem reallyAdj{T: Type}
                  [AddCommMonoid T]
                  [Module ℂ T]
@@ -118,6 +139,7 @@ theorem reallyAdj{T: Type}
     rw [FS.Kronecker2 ob.N ob.posN]
   simp [eq]
 
+-- For any operator one and only one adjoint operator exists.
 lemma adjEx!{T: Type}
             [AddCommMonoid T]
             [Module ℂ T]
@@ -191,6 +213,7 @@ lemma adjEx!{T: Type}
     apply (Eq.symm h)
 }
 
+-- Defintion of the unitary operator
 def isUnitary{T: Type}
            [AddCommMonoid T]
            [Module ℂ T]
@@ -199,8 +222,8 @@ def isUnitary{T: Type}
            (A: T →ₗ[ℂ] T): Prop :=
   LinearMap.comp A (adj A) = 1 ∧ LinearMap.comp (adj A) A = 1
 
--- helper lemma to construct adjoint operator in certain cases
--- avoiding orthonormal basis
+-- Helper lemma to construct adjoint operator in certain
+-- cases in a simplified way (avoiding orthonormal basis)
 lemma adjOP{T: Type}
          [AddCommMonoid T]
          [Module ℂ T]
@@ -215,8 +238,8 @@ lemma adjOP{T: Type}
        simp
        ring
 
--- helper lemma to construct adjoint operator in certain cases
--- avoiding orthonormal basis
+-- Helper lemma to construct adjoint operator in certain
+-- cases in a simplified way (avoiding orthonormal basis)
 lemma adjSum{T: Type}
          [AddCommMonoid T]
          [Module ℂ T]
