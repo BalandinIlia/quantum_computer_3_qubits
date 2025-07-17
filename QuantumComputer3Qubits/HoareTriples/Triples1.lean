@@ -78,8 +78,8 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
   {
     let pr := Ing.Ax.Inf_2_1 0
                              1
-                             2
                              (by aesop)
+                             2
                              (by aesop)
                              (by aesop)
                              (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))
@@ -118,8 +118,8 @@ transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
   {
     let pr := Ing.Ax.Inf_2_1 0
                              2
-                             1
                              (by aesop)
+                             1
                              (by aesop)
                              (by aesop)
                              (OP (CS.qqi 0 0 0 2 (by aesop)) (CS.qqi 0 0 0 2 (by aesop)))
@@ -158,8 +158,8 @@ transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
   {
     let pr := Ing.Ax.Inf_2_1 1
                              2
-                             0
                              (by aesop)
+                             0
                              (by aesop)
                              (by aesop)
                              (OP (CS.qqi 0 0 1 2 (by aesop)) (CS.qqi 0 0 1 2 (by aesop)))
