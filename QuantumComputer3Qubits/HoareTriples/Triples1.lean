@@ -76,7 +76,7 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
     solve
   }
   {
-    let pr := Inf.Ax.Inf_2_1 0
+    let pr := Ing.Ax.Inf_2_1 0
                              1
                              2
                              (by aesop)
@@ -116,7 +116,7 @@ transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
     solve
   }
   {
-    let pr := Inf.Ax.Inf_2_1 0
+    let pr := Ing.Ax.Inf_2_1 0
                              2
                              1
                              (by aesop)
@@ -156,7 +156,7 @@ transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
     solve
   }
   {
-    let pr := Inf.Ax.Inf_2_1 1
+    let pr := Ing.Ax.Inf_2_1 1
                              2
                              0
                              (by aesop)
@@ -196,7 +196,7 @@ transforms (State.s1 (CS.qi 0 0))
     solve
   }
   {
-    let pr := Inf.Ax.Inf_1_2 0
+    let pr := Ing.Ax.Inf_1_2 0
                              1
                              2
                              (by aesop)
@@ -236,7 +236,7 @@ transforms (State.s1 (CS.qi 0 1))
     solve
   }
   {
-    let pr := Inf.Ax.Inf_1_2 1
+    let pr := Ing.Ax.Inf_1_2 1
                              0
                              2
                              (by aesop)

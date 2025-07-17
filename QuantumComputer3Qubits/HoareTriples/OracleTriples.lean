@@ -114,7 +114,7 @@ apply And.intro
     all_goals simp [l1Sqrt2, l2Sqrt2, l3Sqrt2]
 }
 {
-    let pr := Inf.Ax.UTF3 (OP stateBefore stateBefore) (oracle f) (unitar f)
+    let pr := Ing.Ax.UTF3 (OP stateBefore stateBefore) (oracle f) (unitar f)
     have repl: ((oracle f • OP stateBefore stateBefore) • HC.adj (oracle f)) = OP (stateAfter f) (stateAfter f) := by
         clear pr
         simp [oracle]
