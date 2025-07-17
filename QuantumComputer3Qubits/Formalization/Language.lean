@@ -84,7 +84,7 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 --     U: UnitaryOp x
 --     A: LinOp x
 --   Output:
---     {A} Prog.gate U {U • A • U^}
+--     {A} Prog.gate U {U ∘ₗ A ∘ₗ U^}
 -- Ax.InF:
 --   Input:
 --     S: System
@@ -108,7 +108,7 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 --     A: LinOp (x_1 + x_2)
 --   Output:
 --     {A} Prog.seq (Prog.gate U_1) (Prog.gate U_2)
---         {(U_1⊗U_2)•A•(U_1⊗U_2)^}
+--         {(U_1⊗U_2)∘ₗA∘ₗ(U_1⊗U_2)^}
 -- Ax.UTFP3:
 --   Input:
 --     x_1: System
@@ -122,7 +122,7 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 --     A: LinOp (x_1 + x_2 + x_3)
 --   Output:
 --     {A} Prog.seq (Prog.gate U_1) (Prog.gate U_2) (Prog.gate U_3)
---         {(U_1⊗U_2⊗U_3)•A•(U_1⊗U_2⊗U_3)^}
+--         {(U_1⊗U_2⊗U_3)∘ₗA∘ₗ(U_1⊗U_2⊗U_3)^}
 -- Ax.InFP is also separated in 2-system case and 3-system
 -- case:
 -- Ax.InFP2:
@@ -272,7 +272,7 @@ inductive Ing: Cond → Prog → Cond → Prop
     (A: (OP.oi1 xi)):
       Ing (Cond.c1 A)
           (Prog.gate1 U un)
-          (Cond.c1 (U • A • (HC.adj U)))
+          (Cond.c1 (U ∘ₗ A ∘ₗ (HC.adj U)))
 
 -- Ax.UTF for case when x is a 2-qubit system
 | Ax.UTF2
@@ -281,7 +281,7 @@ inductive Ing: Cond → Prog → Cond → Prop
     (A: (OP.oi2 xi1 xi2 ord)):
       Ing (Cond.c2 A)
           (Prog.gate2 U un)
-          (Cond.c2 (U • A •(HC.adj U)))
+          (Cond.c2 (U ∘ₗ A ∘ₗ(HC.adj U)))
 
 -- Ax.UTF for case when x is a 3-qubit system
 | Ax.UTF3
@@ -290,7 +290,7 @@ inductive Ing: Cond → Prog → Cond → Prop
     (A: OP.o3):
       Ing (Cond.c3 A)
           (Prog.gate3 U un)
-          (Cond.c3 (U • A • (HC.adj U)))
+          (Cond.c3 (U ∘ₗ A ∘ₗ (HC.adj U)))
 
 -- Ax.Inf for case when S and x are both 1-qubit systems
 | Ax.Inf_1_1
@@ -350,14 +350,14 @@ inductive Ing: Cond → Prog → Cond → Prop
                 have less: ix1 < ix2 := by aesop
                 simp [less, min, max] at A
                 let tpU := TO.tpo1o1i ix1 ix2 less U_1 U_2
-                exact Cond.c2 (tpU • A • (HC.adj tpU))
+                exact Cond.c2 (tpU ∘ₗ A ∘ₗ (HC.adj tpU))
              }
              {
                 have less: ix2 < ix1 := by omega
                 have s:¬(ix1 < ix2) := by aesop
                 simp [s, min, max] at A
                 let tpU := TO.tpo1o1i ix2 ix1 less U_2 U_1
-                exact Cond.c2 (tpU • A • (HC.adj tpU))
+                exact Cond.c2 (tpU ∘ₗ A ∘ₗ (HC.adj tpU))
              }
            )
 
@@ -375,7 +375,7 @@ inductive Ing: Cond → Prog → Cond → Prop
           )
            (Cond.c3 (by
                         let tpU := TO.tpo2o1i x1_1 x1_2 ord x2 disj1 disj2 U_1 U_2
-                        exact tpU • A • (HC.adj tpU)
+                        exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
                     )
            )
 
@@ -393,7 +393,7 @@ inductive Ing: Cond → Prog → Cond → Prop
           )
            (Cond.c3 (by
                         let tpU := TO.tpo2o1i x2_1 x2_2 ord x1 disj1 disj2 U_2 U_1
-                        exact tpU • A • (HC.adj tpU)
+                        exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
                     )
            )
 
@@ -424,7 +424,7 @@ Ing (Cond.c3 A)
                 exact TO.tpo2o1i x_2 x_1 (by f2 x_1 x_2) x_3 (by f2 x_1 x_2) (by f2 x_1 x_2)
                                 (TO.tpo1o1i x_2 x_1 (by f2 x_1 x_2) U_2 U_1)
                                 U_3
-            exact tpU • A • (HC.adj tpU)
+            exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
         )
     )
 
@@ -510,9 +510,9 @@ Ing (Cond.c0)
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
     (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c1 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
+Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
     C
-    (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
+    (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (B i))))
 
 -- R.CC.P for 1-qubit system and 2-qubit system
 | R.CC.P_1_2
@@ -526,9 +526,9 @@ Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
     (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c2 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
+Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
     C
-    (Cond.c2 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
+    (Cond.c2 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (B i))))
 
 -- R.CC.P for 1-qubit system and 3-qubit system
 | R.CC.P_1_3
@@ -542,9 +542,9 @@ Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
     (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c3 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
+Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
     C
-    (Cond.c3 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
+    (Cond.c3 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (B i))))
 
 -- R.El rule for 1-qubit system and 1-qubit system
 | R.El_1_1
