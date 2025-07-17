@@ -64,22 +64,22 @@ lemma unitar(f: F): HC.isUnitary (oracle f) := by
   simp [OU.o3CoreAdj]
   apply And.intro
   all_goals simp [OU.o3ByCore, OU.o3AdjByCore, oracleCore]
-  all_goals apply OU.Equality3
-  all_goals intro v1 v2 v3
-  all_goals simp
   all_goals generalize f.v00 = v00
   all_goals generalize f.v01 = v01
   all_goals generalize f.v10 = v10
   all_goals generalize f.v11 = v11
+  all_goals clear f
   all_goals fin_cases v00
   all_goals fin_cases v01
   all_goals fin_cases v10
   all_goals fin_cases v11
+  all_goals simp
+  all_goals apply OU.Equality3
+  all_goals intro v1 v2 v3
   all_goals simp
   all_goals simp [FS.FS8, OP]
   all_goals simp [eq]
   all_goals fin_cases v1
   all_goals fin_cases v2
   all_goals fin_cases v3
-  all_goals simp
   all_goals simp [eq]
