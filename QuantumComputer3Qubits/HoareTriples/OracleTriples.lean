@@ -115,7 +115,7 @@ apply And.intro
 }
 {
     let pr := Ing.Ax.UTF3 (oracle f) (unitar f) (OP stateBefore stateBefore)
-    have repl: ((oracle f • OP stateBefore stateBefore) • HC.adj (oracle f)) = OP (stateAfter f) (stateAfter f) := by
+    have repl: (oracle f • OP stateBefore stateBefore • HC.adj (oracle f)) = OP (stateAfter f) (stateAfter f) := by
         clear pr
         simp [oracle]
         simp [OU.o3CoreAdj]
