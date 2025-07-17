@@ -10,8 +10,194 @@ import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
 import QuantumComputer3Qubits.Formalization.ClassicalStates
+-- This file specifies Hoare rules.
+--
+-- In order to translate rules from the main article into
+-- Lean code, we developed an intermediate language
+-- for specifying Hoare rules:
+-- Each statement in the language is separated into input
+-- and output.
+-- 1. Input consists of terms of the following types:
+--   1.1. System: a set of qubits; if we have two Systems:
+--        s1, s2: System, then s1∪s2 is a system which
+--        contains all qubits that belong to at least one of
+--        the systems.
+--   1.2. QuantState s: type parametrized by System. The type
+--        represents state of the quantum system.
+--   1.3. LinOp s: type parametrized by System. The type
+--        represents arbitrary linear operator, acting
+--        in the state space of quantum system s.
+--        U^ means Hermitian conjugation.
+--   1.4. UnitaryOp s: type parametrized by System. The type
+--        represents unitary linear operator, acting
+--        in the state space of quantum system s.
+--   1.5. Prop: proposition, - represents arbitrary
+--        proposition written in natural language. Special
+--        type of proposition is {A}C{B} - Hoare triple.
+--        For proposition we also specify its value through
+--        :=. For example: pr: Prop := {A}C{B} means
+--        proposition pr stating that {A}C{B} is a correct
+--        Hoare triple.
+--   1.6. Prog: a program
+--        Particular instance of Prog can be spceified with
+--        the following abstract syntax:
+--        Prog := skip | ass QuantState | gate UnitaryOp |
+--                seq Prog Prog | seq Prog Prog Prog
+--   1.7. ℕ: natural number
+--   1.8. ℝ: real number
+--   1.9. Array N Type: array of terms of type Type with
+--        lenght N
+--   I s is a function of type LinOp s. It generates identity
+--   operator
+-- 2. Output is just a Hoare triple.
+--
+-- This language is something in the middle between Lean and
+-- inference rules written in natural language:
+-- 1. On the one hand it is different from natural language,
+--    because it divides all input it typified term, which
+--    look like Lean terms.
+-- 2. On the other hand it is different from Lean, because:
+--   2.1. It does not care about how quantum systems are
+--        formalized in Lean (for example just writes s
+--        instead i1 i2:Fin 3 ord: i1 < i2)
+--   2.2. The same for quantum states, linear operators
+--   2.3. Allows to write propositions in a most convenient
+--        way, not necessary Lean-readable.
+-- So we use this language as an intermediate step between
+-- inference rules written in natural language and inference
+-- rules written in Lean. In other words each inference rule
+-- is first translated from natural language to the
+-- intermediate language and then from the intermediate
+-- language into Lean.
+--
+-- Here we present Hoare inference rules rewritten in the
+-- intermediate language:
+-- Ax.Sk:
+--   Input:
+--     s: System
+--     A: LinOp s
+--   Output:
+--     {A}Skip{A}
+-- Ax.UTF:
+--   Input:
+--     x: System
+--     U: UnitaryOp x
+--     A: LinOp x
+--   Output:
+--     {A} Prog.gate U {U • A • U^}
+-- Ax.InF:
+--   Input:
+--     S: System
+--     x: System
+--     disj: Prop := S ∩ x = ∅
+--     A: LinOp S
+--     t: QuantState x
+--   Ouput:
+--     {A} Prog.ass t {A ⊗ |t⟩⟨t|}
+-- R.SC: We don't transfer this rule into
+-- Ax.UTFP we separate into two rules: for two system and
+-- for 3 systems (4 systems is impossible since we have only
+-- 3 qubits):
+-- Ax.UTFP2:
+--   Input:
+--     x_1: System
+--     x_2: System
+--     disj: Prop := x_1 ∩ x_2 = ∅
+--     U_1: UnitaryOp x_1
+--     U_2: UnitaryOp x_2
+--     A: LinOp (x_1 + x_2)
+--   Output:
+--     {A} Prog.seq (Prog.gate U_1) (Prog.gate U_2)
+--         {(U_1⊗U_2)•A•(U_1⊗U_2)^}
+-- Ax.UTFP3:
+--   Input:
+--     x_1: System
+--     x_2: System
+--     x_3: System
+--     disj: Prop := (x_1 ∩ x_2 = ∅) ∧ (x_1 ∩ x_3 = ∅) ∧
+--                   (x_2 ∩ x_3 = ∅)
+--     U_1: UnitaryOp x_1
+--     U_2: UnitaryOp x_2
+--     U_3: UnitaryOp x_3
+--     A: LinOp (x_1 + x_2 + x_3)
+--   Output:
+--     {A} Prog.seq (Prog.gate U_1) (Prog.gate U_2) (Prog.gate U_3)
+--         {(U_1⊗U_2⊗U_3)•A•(U_1⊗U_2⊗U_3)^}
+-- Ax.InFP is also separated in 2-system case and 3-system
+-- case:
+-- Ax.InFP2:
+--   Input:
+--     x_1: System
+--     x_2: System
+--     disj: Prop := x_1 ∩ x_2 = ∅
+--     t_1: QuantState x_1
+--     t_2: QuantState x_2
+--   Output:
+--     {1} Prog.seq (Prog.ass t_1) (Prog.ass t_2)
+--         {|t_1⟩⟨t_1| ⊗ |t_2⟩⟨t_2|}
+-- Ax.InFP3:
+--   Input:
+--     x_1: System
+--     x_2: System
+--     x_3: System
+--     disj: Prop := (x_1 ∩ x_2 = ∅) ∧ (x_1 ∩ x_3 = ∅) ∧
+--                   (x_2 ∩ x_3 = ∅)
+--     t_1: QuantState x_1
+--     t_2: QuantState x_2
+--     t_3: QuantState x_3
+--   Output:
+--     {1} Prog.seq (Prog.ass t_1) (Prog.ass t_2) (Prog.ass t_3)
+--         {|t_1⟩⟨t_1| ⊗ |t_2⟩⟨t_2| ⊗ |t_3⟩⟨t_3|}
+-- R.CC.P:
+--   Input:
+--     N: ℕ
+--     x_A: System
+--     x_B: System
+--     A: Array N (LinOp x_A)
+--     B: Array N (LinOp x_B)
+--     λ: Array N ℝ
+--     C: Prog
+--     pr_λ_pos: ∀i: λ[i]≥0 where [] means addressing
+--               particular array element
+--     pr_λ_sum: ∑λ[i] ≤ 1
+--     hoar: ∀i: {A[i]}C{B[i]}
+--   Ouput:
+--     {sum (λ[i] * A[i])} C {sum (λ[i] * B[i])}
+-- R.El:
+--   Input:
+--     S_A: System
+--     S: System
+--     S_B: System
+--     disj: S_A ∩ S = ∅
+--     A_S_A: LinOp S_A
+--     C: Prog
+--     B: LinOp B
+--     hoar: {A_S_A}C{B}
+--   Output:
+--     {A_S_A ⊗ (I S)} C {B}
 
 namespace Hoare
+
+def min(i j: Fin 3): Fin 3 := if i < j then i else j
+def max(i j: Fin 3): Fin 3 := if i < j then j else i
+
+lemma fin3{A: Prop}(i: Fin 3):
+((i=0)→A) →
+((i=1)→A) →
+((i=2)→A) →
+A := by
+    intro h1 h2 h3
+    fin_cases i
+    all_goals aesop
+
+macro "f2" a:ident b:ident : tactic =>
+`(tactic|(
+    all_goals apply fin3 $a
+    all_goals apply fin3 $b
+    all_goals try simp [min, max]
+    all_goals try omega
+    all_goals try aesop
+))
 
 -- Condition of Hoare triple.
 -- Conditions can have several types each of which is
@@ -67,138 +253,8 @@ inductive Prog where
 | seq(p1 p2: Prog):
     Prog
 
--- Inf2 A p1 p2 B means that:
--- A (p1, p2) B is correct Hoare triple
--- A (p2, p1) B is correct Hoare triple
--- This is used for rules involvind two subprograms
-inductive Inf2: Cond → Prog → Prog → Cond → Prop
-
--- Ax.UTFP formalization for two disjoint 1-qubit systems
--- We put it under Inf2 because operations (quantum gates)
--- can go in any order in it: different orders can be
--- obtained by just changing indexes places
-| Ax.UTFP2_1_1(i j: Fin 3)
-              (ord: i < j)
-              (A: OP.oi2 i j ord)
-              (U_i: OP.oi1 i)
-              (U_j: OP.oi1 j)
-              (un_i: HC.isUnitary U_i)
-              (un_j: HC.isUnitary U_j):
-      Inf2 (Cond.c2 A)
-           (Prog.gate1 U_i un_i)
-           (Prog.gate1 U_j un_j)
-           (Cond.c2 (
-                    (TO.tpo1o1i i j ord U_i U_j) •
-                    A •
-                    (HC.adj (TO.tpo1o1i i j ord U_i U_j))
-           ))
-
-| Ax.UTFP2_2_1(i1 i2 j: Fin 3)
-              (ord: i1 < i2)
-              (neq1: ¬(j=i1))
-              (neq2: ¬(j=i2))
-              (A: OP.o3)
-              (U_i: OP.oi2 i1 i2 ord)
-              (U_j: OP.oi1 j)
-              (un_i: HC.isUnitary U_i)
-              (un_j: HC.isUnitary U_j):
-      Inf2 (Cond.c3 A)
-           (Prog.gate2 U_i un_i)
-           (Prog.gate1 U_j un_j)
-           (Cond.c3 (
-                    (TO.tpo2o1i i1 i2 ord j neq1 neq2 U_i U_j) •
-                    A •
-                    (HC.adj (TO.tpo2o1i i1 i2 ord j neq1 neq2 U_i U_j))
-           ))
-
-| Ax.InFP2_1_1(i: Fin 3)
-              (j: Fin 3)
-              (ord: i < j)
-              (t_i: StateReg1Ind i)
-              (t_j: StateReg1Ind j)
-              (norm_i: (IP.f t_i t_i) = 1)
-              (norm_j: (IP.f t_j t_j) = 1):
-      Inf2 (Cond.c0)
-           (Prog.ass1 t_i norm_i)
-           (Prog.ass1 t_j norm_j)
-           (Cond.c2
-               (TO.tpo1o1i i j ord (OP t_i t_i) (OP t_j t_j))
-           )
-
-| Ax.InFP2_2_1(i1 i2: Fin 3)
-              (ord: i1 < i2)
-              (j: Fin 3)
-              (neq1: ¬(j=i1))
-              (neq2: ¬(j=i2))
-              (t_i: StateReg2Ind i1 i2 ord)
-              (t_j: StateReg1Ind j)
-              (norm_i: (IP.f t_i t_i) = 1)
-              (norm_j: (IP.f t_j t_j) = 1):
-      Inf2 (Cond.c0)
-           (Prog.ass2 t_i norm_i)
-           (Prog.ass1 t_j norm_j)
-           (Cond.c3
-               (TO.tpo2o1i i1 i2 ord j neq1 neq2 (OP t_i t_i) (OP t_j t_j))
-           )
-
--- Inf3 A p1 p2 p3 B means that:
--- A (p1, p2, p3) B is correct Hoare triple
--- A (p1, p3, p2) B is correct Hoare triple
--- A (p2, p1, p3) B is correct Hoare triple
--- A (p2, p3, p1) B is correct Hoare triple
--- A (p3, p2, p1) B is correct Hoare triple
--- A (p3, p1, p2) B is correct Hoare triple
--- In other word subprograms can go in any order
--- This is used for rules involving three subprograms
-inductive Inf3: Cond → Prog → Prog → Prog → Cond → Prop
-| Ax.UTFP3(A: OP.o3)
-          (U_1: OP.oi1 0)
-          (U_2: OP.oi1 1)
-          (U_3: OP.oi1 2)
-          (un_1: HC.isUnitary U_1)
-          (un_2: HC.isUnitary U_2)
-          (un_3: HC.isUnitary U_3):
-      Inf3 (Cond.c3 A)
-           (Prog.gate1 U_1 un_1)
-           (Prog.gate1 U_2 un_2)
-           (Prog.gate1 U_3 un_3)
-           (Cond.c3 (
-                    (TO.tp3 U_1 U_2 U_3) •
-                    A •
-                    (HC.adj (TO.tp3 U_1 U_2 U_3))
-           ))
-
-| Ax.InFP3 (t_0: StateReg1Ind 0)
-           (t_1: StateReg1Ind 1)
-           (t_2: StateReg1Ind 2)
-           (norm_0: (IP.f t_0 t_0) = 1)
-           (norm_1: (IP.f t_1 t_1) = 1)
-           (norm_2: (IP.f t_2 t_2) = 1):
-      Inf3 (Cond.c0)
-           (Prog.ass1 t_0 norm_0)
-           (Prog.ass1 t_1 norm_1)
-           (Prog.ass1 t_2 norm_2)
-           (Cond.c3
-               (TO.tp3 (OP t_0 t_0) (OP t_1 t_1) (OP t_2 t_2))
-           )
-
-
 -- set of inference rules
 inductive Inf: Cond → Prog → Cond → Prop
-
-| inf2(A B: Cond)(C1 C2: Prog):
-    ((Inf2 A C1 C2 B) ∨
-    (Inf2 A C2 C1 B)) →
-    Inf A (Prog.seq C1 C2) B
-
-| inf3(A B: Cond)(C1 C2 C3: Prog):
-    ((Inf3 A C1 C2 C3 B) ∨
-     (Inf3 A C1 C3 C2 B) ∨
-     (Inf3 A C2 C1 C3 B) ∨
-     (Inf3 A C2 C3 C1 B) ∨
-     (Inf3 A C3 C1 C2 B) ∨
-     (Inf3 A C3 C2 C1 B)) →
-    Inf A (Prog.seq (Prog.seq C1 C2) C3) B
 
 -- rule for skip program
 | Ax.Sk(A: Cond): Inf A Prog.skip A
@@ -230,16 +286,21 @@ inductive Inf: Cond → Prog → Cond → Prop
           (Prog.gate3 U un)
           (Cond.c3 ((U • A)•(HC.adj U)))
 
--- Now we start with Ax.Inf rule. This rule depends on two
--- sets of qubits: S, - system staying untouched and x, -
--- system being assigned. Each Ax.Inf version in the code
--- has two numbers going after its name: size of S and
--- size of x
-| Ax.Inf_1_1(iS iX: Fin 3)-- "addresses" of S and x systems
-            (neq: ¬(iS = iX))-- system disjointness proposition
-            (A_S: OP.oi1 iS)
-            (t: StateReg1Ind iX)
-            (norm: (IP.f t t) = 1):
+-- Ax.Inf rule says:
+-- ∀S, x:
+--   S∩x=∅ → (∀|t⟩, A_S: {A_S}x:=|t⟩{A_S⊗|t⟩⟨t|})
+-- Here: x and S are qubit sets, |t⟩ is state in space of x,
+-- A_S is operator in space of S
+-- _1_1 means that both systems (S and X) are 1-qubit
+| Ax.Inf_1_1
+    -- this argument defines S system
+    (iS: Fin 3)
+    -- this argument defines x system
+    (iX: Fin 3)
+    -- system disjointness proposition
+    (neq: ¬(iS = iX))
+    (t: StateReg1Ind iX)(norm: (IP.f t t) = 1)
+    (A_S: OP.oi1 iS):
       Inf (Cond.c1 A_S)
           (Prog.ass1 t norm)
           (by
@@ -249,33 +310,106 @@ inductive Inf: Cond → Prog → Cond → Prop
              exact Cond.c2 (TO.tpo1o1i iX iS (by omega) (OP t t) A_S)
           )
 
-| Ax.Inf_2_1(iS1 iS2 iX: Fin 3)-- "addresses" of S and x systems
-            -- This proposition (iS1 < iS2) does not limit
-            -- scope of rule applicability. It just defines
-            -- order in which iS1 and iS2 should be passed to
-            -- the rule
-            (ord: iS1 < iS2)
-            (neq1: ¬(iX = iS1))-- system disjointness proposition
-            (neq2: ¬(iX = iS2))-- system disjointness proposition
-            (A_S: OP.oi2 iS1 iS2 ord)
-            (t: StateReg1Ind iX)
-            (norm: (IP.f t t) = 1):
+| Ax.Inf_2_1
+    -- S definition
+    (iS1 iS2: Fin 3)(ord: iS1 < iS2)
+    -- x definition
+    (iX: Fin 3)
+    -- system disjointness propositions
+    (neq1: ¬(iX = iS1))(neq2: ¬(iX = iS2))
+    (t: StateReg1Ind iX)(norm: (IP.f t t) = 1)
+    (A_S: OP.oi2 iS1 iS2 ord):
       Inf (Cond.c2 A_S)
           (Prog.ass1 t norm)
           (Cond.c3 (TO.tpo2o1i iS1 iS2 ord iX neq1 neq2 A_S (OP t t)))
 
-| Ax.Inf_1_2(iS iX1 iX2: Fin 3)
-            (ord: iX1 < iX2)
-            (neq1: ¬(iS = iX1))
-            (neq2: ¬(iS = iX2))
-            (A_S: OP.oi1 iS)
-            (t: StateReg2Ind iX1 iX2 ord)
-            (norm: (IP.f t t) = 1):
+| Ax.Inf_1_2
+    -- S definition
+    (iS: Fin 3)
+    -- x definition
+    (iX1 iX2: Fin 3)(ord: iX1 < iX2)
+    -- system disjointness propositions
+    (neq1: ¬(iS = iX1))(neq2: ¬(iS = iX2))
+    (t: StateReg2Ind iX1 iX2 ord)(norm: (IP.f t t) = 1)
+    (A_S: OP.oi1 iS):
       Inf (Cond.c1 A_S)
           (Prog.ass2 t norm)
           (Cond.c3 (TO.tpo2o1i iX1 iX2 ord iS neq1 neq2 (OP t t) A_S))
 
 | R.SC: ∀A B C: Cond, ∀S1 S2: Prog, Inf A S1 B → Inf B S2 C → Inf A (Prog.seq S1 S2) C
+
+-- AX.UTFP rule from the main article applied to 2 systems
+-- says:
+-- ∀x_1, x_2:
+--     x_1 ∩ x_2 = ∅ →
+--          ∀A,U_1,U_2: {A}
+--              x_1:=U_1 x_1, x_2:=U_2 x_2
+--              {(U_1⊗U_2)A(adj(U_1⊗U_2))}
+-- here x_1, x_2 are variables that can be interpreted as
+-- subsystems of quantum registry
+-- It is obvious from the rule that A acts in the space
+-- x_1∪x_2
+-- Ax.UTFP2 means that the rule is applied to 2 systems,
+-- _1_1 means that both systems are 1 qubit
+| Ax.UTFP2_1_1
+    -- first system
+    (i1: Fin 3)
+    -- second system
+    (i2: Fin 3)
+    -- condition that systems are disjoint
+    (disj: ¬(i1 = i2))
+    (A: OP.oi2 (min i1 i2) (max i1 i2) (by f2 i1 i2))
+    (U_1: OP.oi1 i1)(un_1: HC.isUnitary U_1)
+    (U_2: OP.oi1 i2)(un_2: HC.isUnitary U_2):
+      Inf (Cond.c2 A)
+          (Prog.seq
+            (Prog.gate1 U_1 un_1)
+            (Prog.gate1 U_2 un_2)
+          )
+          (by
+             let pr:Prop := i1 < i2
+             by_cases pr
+             {
+                have less:i1 < i2 := by aesop
+                simp [less, min, max] at A
+                exact Cond.c2 (
+                              (TO.tpo1o1i i1 i2 less U_1 U_2) •
+                              A •
+                              (HC.adj (TO.tpo1o1i i1 i2 less U_1 U_2))
+                              )
+             }
+             {
+                have less:i2 < i1 := by omega
+                have s:¬(i1 < i2) := by aesop
+                simp [s, min, max] at A
+                exact Cond.c2 (
+                              (TO.tpo1o1i i2 i1 less U_2 U_1) •
+                              A •
+                             (HC.adj (TO.tpo1o1i i2 i1 less U_2 U_1))
+                             )
+             }
+           )
+
+| Ax.UTFP2_2_1
+    -- first system
+    (i1 i2)(ord: i1 < i2)
+    -- second system
+    (j: Fin 3)
+    -- system disjointness propositions
+    (neq1: ¬(j=i1))(neq2: ¬(j=i2))
+    (A: OP.o3)
+    (U_1: OP.oi2 i1 i2 ord)(un_1: HC.isUnitary U_i)
+    (U_2: OP.oi1 j)(un_2: HC.isUnitary U_2):
+      Inf (Cond.c3 A)
+          (Prog.seq
+           (Prog.gate2 U_i un_i)
+           (Prog.gate1 U_j un_j)
+          )
+           (Cond.c3 (
+                    (TO.tpo2o1i i1 i2 ord j neq1 neq2 U_i U_j) •
+                    A •
+                    (HC.adj (TO.tpo2o1i i1 i2 ord j neq1 neq2 U_i U_j))
+           ))
 
 | R.CC.P_1_1 (iA iB: Fin 3)
              (N: ℕ)
