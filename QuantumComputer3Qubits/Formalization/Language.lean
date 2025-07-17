@@ -510,9 +510,9 @@ Ing (Cond.c0)
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
     (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c1 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
+Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     C
-    (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (B i))))
+    (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
 
 -- R.CC.P for 1-qubit system and 2-qubit system
 | R.CC.P_1_2
@@ -526,9 +526,9 @@ Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
     (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c2 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
+Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     C
-    (Cond.c2 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (B i))))
+    (Cond.c2 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
 
 -- R.CC.P for 1-qubit system and 3-qubit system
 | R.CC.P_1_3
@@ -542,9 +542,9 @@ Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
     (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c3 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (A i))))
+Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     C
-    (Cond.c3 (FS.fs (fun i: Fin N => ((lam i):ℂ) ∘ₗ (B i))))
+    (Cond.c3 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
 
 -- R.El rule for 1-qubit system and 1-qubit system
 | R.El_1_1
