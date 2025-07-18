@@ -16,10 +16,11 @@ import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
-import QuantumComputer3Qubits.HoareTriples.Oracle
+import QuantumComputer3Qubits.HoareTriples.DeutschJozsaOracle
 
-namespace HoareOracle
-open Hoare
+namespace DeutschJozsaTriple
+open QWhile
+open DeutschJozsaOracle
 
 def mo:ℂ := -1
 
@@ -126,7 +127,7 @@ apply And.intro
     all_goals simp [l1Sqrt2, l2Sqrt2, l3Sqrt2]
 }
 {
-    let pr := Ing.Ax.UTF3 (oracle f) (unitar f) (OP stateBefore stateBefore)
+    let pr := InfRules.Ax.UTF3 (oracle f) (unitar f) (OP stateBefore stateBefore)
     have repl: (oracle f ∘ₗ (OP stateBefore stateBefore) ∘ₗ (HC.adj (oracle f))) = OP (stateAfter f) (stateAfter f) := by
         clear pr
         simp [oracle]

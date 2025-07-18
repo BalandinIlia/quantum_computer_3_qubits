@@ -176,7 +176,7 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 --   Output:
 --     {A_S_A ⊗ (I S)} C {B}
 
-namespace Hoare
+namespace QWhile
 
 def min(i j: Fin 3): Fin 3 := if i < j then i else j
 def max(i j: Fin 3): Fin 3 := if i < j then j else i
@@ -186,17 +186,17 @@ lemma fin3{A: Prop}(i: Fin 3):
 ((i=1)→A) →
 ((i=2)→A) →
 A := by
-    intro h1 h2 h3
-    fin_cases i
-    all_goals aesop
+  intro h1 h2 h3
+  fin_cases i
+  all_goals aesop
 
 macro "f2" a:ident b:ident : tactic =>
 `(tactic|(
-    all_goals apply fin3 $a
-    all_goals apply fin3 $b
-    all_goals try simp [min, max]
-    all_goals try omega
-    all_goals try aesop
+  all_goals apply fin3 $a
+  all_goals apply fin3 $b
+  all_goals try simp [min, max]
+  all_goals try omega
+  all_goals try aesop
 ))
 
 -- Condition of Hoare triple.
@@ -257,145 +257,147 @@ inductive Prog where
 -- These inference rules are translated from the intermediate
 -- language. Each string in the input correspond to one
 -- term in the intermediate language:
-inductive Ing: Cond → Prog → Cond → Prop
+inductive InfRules: Cond → Prog → Cond → Prop
 
 -- rule for skip program
 -- Here we do an exception, since the rule is trivial and,
 -- in fact does not require intermediate langauge in order
 -- to be formalized in Lean
-| Ax.Sk(A: Cond): Ing A Prog.skip A
+| Ax.Sk(A: Cond): InfRules A Prog.skip A
 
 -- Ax.UTF for case when x is a 1-qubit system
 | Ax.UTF1
-    (xi: Fin 3)
-    (U: (OP.oi1 xi))(un: HC.isUnitary U)
-    (A: (OP.oi1 xi)):
-      Ing (Cond.c1 A)
-          (Prog.gate1 U un)
-          (Cond.c1 (U ∘ₗ A ∘ₗ (HC.adj U)))
+    (x: Fin 3)
+    (U: (OP.oi1 x))(un: HC.isUnitary U)
+    (A: (OP.oi1 x)):
+InfRules (Cond.c1 A)
+         (Prog.gate1 U un)
+         (Cond.c1 (U ∘ₗ A ∘ₗ (HC.adj U)))
 
 -- Ax.UTF for case when x is a 2-qubit system
 | Ax.UTF2
-    (xi1 xi2: Fin 3)(ord: xi1 < xi2)
-    (U: (OP.oi2 xi1 xi2 ord))(un: HC.isUnitary U)
-    (A: (OP.oi2 xi1 xi2 ord)):
-      Ing (Cond.c2 A)
-          (Prog.gate2 U un)
-          (Cond.c2 (U ∘ₗ A ∘ₗ(HC.adj U)))
+    (x_1 x_2: Fin 3)(ord: x_1 < x_2)
+    (U: (OP.oi2 x_1 x_2 ord))(un: HC.isUnitary U)
+    (A: (OP.oi2 x_1 x_2 ord)):
+InfRules (Cond.c2 A)
+         (Prog.gate2 U un)
+         (Cond.c2 (U ∘ₗ A ∘ₗ(HC.adj U)))
 
 -- Ax.UTF for case when x is a 3-qubit system
 | Ax.UTF3
     -- In this string we formalize x, but for this case it is empty.
     (U: OP.o3)(un: HC.isUnitary U)
     (A: OP.o3):
-      Ing (Cond.c3 A)
-          (Prog.gate3 U un)
-          (Cond.c3 (U ∘ₗ A ∘ₗ (HC.adj U)))
+InfRules (Cond.c3 A)
+         (Prog.gate3 U un)
+         (Cond.c3 (U ∘ₗ A ∘ₗ (HC.adj U)))
 
 -- Ax.Inf for case when S and x are both 1-qubit systems
 | Ax.Inf_1_1
-    (iS: Fin 3)
-    (iX: Fin 3)
-    (disj: ¬(iS = iX))
-    (A_S: OP.oi1 iS)
-    (t: StateReg1Ind iX)(norm: (IP.f t t) = 1):
-      Ing (Cond.c1 A_S)
-          (Prog.ass1 t norm)
-          (by
-             let pr := (iS < iX)
-             by_cases pr
-             exact Cond.c2 (TO.tpo1o1i iS iX (by aesop) A_S (OP t t))
-             exact Cond.c2 (TO.tpo1o1i iX iS (by omega) (OP t t) A_S)
-          )
+    (S: Fin 3)
+    (x: Fin 3)
+    (disj: ¬(S = x))
+    (A_S: OP.oi1 S)
+    (t: StateReg1Ind x)(norm: (IP.f t t) = 1):
+InfRules (Cond.c1 A_S)
+         (Prog.ass1 t norm)
+         (by
+            let pr := (S < x)
+            by_cases pr
+            exact Cond.c2 (TO.tpo1o1i S x (by aesop) A_S (OP t t))
+            exact Cond.c2 (TO.tpo1o1i x S (by omega) (OP t t) A_S)
+         )
 
 | Ax.Inf_2_1
-    (iS1 iS2: Fin 3)(ord: iS1 < iS2)
-    (iX: Fin 3)
-    (disj1: ¬(iX = iS1))(disj2: ¬(iX = iS2))
-    (A_S: OP.oi2 iS1 iS2 ord)
-    (t: StateReg1Ind iX)(norm: (IP.f t t) = 1):
-      Ing (Cond.c2 A_S)
-          (Prog.ass1 t norm)
-          (Cond.c3 (TO.tpo2o1i iS1 iS2 ord iX disj1 disj2 A_S (OP t t)))
+    (S_1 S_2: Fin 3)(ord: S_1 < S_2)
+    (x: Fin 3)
+    (disj1: ¬(x = S_1))(disj2: ¬(x = S_2))
+    (A_S: OP.oi2 S_1 S_2 ord)
+    (t: StateReg1Ind x)(norm: (IP.f t t) = 1):
+InfRules (Cond.c2 A_S)
+         (Prog.ass1 t norm)
+         (Cond.c3 (TO.tpo2o1i S_1 S_2 ord x disj1 disj2 A_S (OP t t)))
 
 | Ax.Inf_1_2
-    (iS: Fin 3)
-    (iX1 iX2: Fin 3)(ord: iX1 < iX2)
-    (disj1: ¬(iS = iX1))(disj2: ¬(iS = iX2))
-    (A_S: OP.oi1 iS)
-    (t: StateReg2Ind iX1 iX2 ord)(norm: (IP.f t t) = 1):
-      Ing (Cond.c1 A_S)
-          (Prog.ass2 t norm)
-          (Cond.c3 (TO.tpo2o1i iX1 iX2 ord iS disj1 disj2 (OP t t) A_S))
+    (S: Fin 3)
+    (x_1 x_2: Fin 3)(ord: x_1 < x_2)
+    (disj1: ¬(S = x_1))(disj2: ¬(S = x_2))
+    (A_S: OP.oi1 S)
+    (t: StateReg2Ind x_1 x_2 ord)(norm: (IP.f t t) = 1):
+InfRules (Cond.c1 A_S)
+         (Prog.ass2 t norm)
+         (Cond.c3 (TO.tpo2o1i x_1 x_2 ord S disj1 disj2 (OP t t) A_S))
 
-| R.SC: ∀A B C: Cond, ∀S1 S2: Prog, Ing A S1 B → Ing B S2 C → Ing A (Prog.seq S1 S2) C
+| R.SC: ∀A B C: Cond, ∀S1 S2: Prog, InfRules A S1 B →
+                                    InfRules B S2 C →
+                                    InfRules A (Prog.seq S1 S2) C
 
 -- Ax.UTFP2 for 1-qubit and 1-qubit systems
 | Ax.UTFP2_1_1
-    (ix1: Fin 3)
-    (ix2: Fin 3)
-    (disj: ¬(ix1 = ix2))
-    (U_1: OP.oi1 ix1)(un_1: HC.isUnitary U_1)
-    (U_2: OP.oi1 ix2)(un_2: HC.isUnitary U_2)
-    (A: OP.oi2 (min ix1 ix2) (max ix1 ix2) (by f2 ix1 ix2)):
-      Ing (Cond.c2 A)
-          (Prog.seq
+    (x_1: Fin 3)
+    (x_2: Fin 3)
+    (disj: ¬(x_1 = x_2))
+    (U_1: OP.oi1 x_1)(un_1: HC.isUnitary U_1)
+    (U_2: OP.oi1 x_2)(un_2: HC.isUnitary U_2)
+    (A: OP.oi2 (min x_1 x_2) (max x_1 x_2) (by f2 x_1 x_2)):
+InfRules (Cond.c2 A)
+         (Prog.seq
             (Prog.gate1 U_1 un_1)
             (Prog.gate1 U_2 un_2)
-          )
-          (by
-             let pr:Prop := ix1 < ix2
-             by_cases pr
-             {
-                have less: ix1 < ix2 := by aesop
-                simp [less, min, max] at A
-                let tpU := TO.tpo1o1i ix1 ix2 less U_1 U_2
-                exact Cond.c2 (tpU ∘ₗ A ∘ₗ (HC.adj tpU))
-             }
-             {
-                have less: ix2 < ix1 := by omega
-                have s:¬(ix1 < ix2) := by aesop
-                simp [s, min, max] at A
-                let tpU := TO.tpo1o1i ix2 ix1 less U_2 U_1
-                exact Cond.c2 (tpU ∘ₗ A ∘ₗ (HC.adj tpU))
-             }
-           )
+         )
+         (by
+            let pr:Prop := x_1 < x_2
+            by_cases pr
+            {
+               have less: x_1 < x_2 := by aesop
+               simp [less, min, max] at A
+               let tpU := TO.tpo1o1i x_1 x_2 less U_1 U_2
+               exact Cond.c2 (tpU ∘ₗ A ∘ₗ (HC.adj tpU))
+            }
+            {
+               have less: x_2 < x_1 := by omega
+               have s:¬(x_1 < x_2) := by aesop
+               simp [s, min, max] at A
+               let tpU := TO.tpo1o1i x_2 x_1 less U_2 U_1
+               exact Cond.c2 (tpU ∘ₗ A ∘ₗ (HC.adj tpU))
+            }
+         )
 
 | Ax.UTFP2_2_1
-    (x1_1 x1_2: Fin 3)(ord: x1_1 < x1_2)
-    (x2: Fin 3)
-    (disj1: ¬(x2=x1_1))(disj2: ¬(x2=x1_2))
-    (U_1: OP.oi2 x1_1 x1_2 ord)(un_1: HC.isUnitary U_1)
-    (U_2: OP.oi1 x2)(un_2: HC.isUnitary U_2)
+    (x_1_1 x_1_2: Fin 3)(ord: x_1_1 < x_1_2)
+    (x_2: Fin 3)
+    (disj1: ¬(x_2=x_1_1))(disj2: ¬(x_2=x_1_2))
+    (U_1: OP.oi2 x_1_1 x_1_2 ord)(un_1: HC.isUnitary U_1)
+    (U_2: OP.oi1 x_2)(un_2: HC.isUnitary U_2)
     (A: OP.o3):
-      Ing (Cond.c3 A)
-          (Prog.seq
-           (Prog.gate2 U_1 un_1)
-           (Prog.gate1 U_2 un_2)
-          )
-           (Cond.c3 (by
-                        let tpU := TO.tpo2o1i x1_1 x1_2 ord x2 disj1 disj2 U_1 U_2
-                        exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
-                    )
-           )
+InfRules (Cond.c3 A)
+         (Prog.seq
+            (Prog.gate2 U_1 un_1)
+            (Prog.gate1 U_2 un_2)
+         )
+         (Cond.c3 (by
+                     let tpU := TO.tpo2o1i x_1_1 x_1_2 ord x_2 disj1 disj2 U_1 U_2
+                     exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
+                  )
+         )
 
 | Ax.UTFP2_1_2
-    (x1: Fin 3)
-    (x2_1 x2_2: Fin 3)(ord: x2_1 < x2_2)
-    (disj1: ¬(x1=x2_1))(disj2: ¬(x1=x2_2))
-    (U_1: OP.oi1 x1)(un_1: HC.isUnitary U_1)
-    (U_2: OP.oi2 x2_1 x2_2 ord)(un_2: HC.isUnitary U_2)
+    (x_1: Fin 3)
+    (x_2_1 x_2_2: Fin 3)(ord: x_2_1 < x_2_2)
+    (disj1: ¬(x_1=x_2_1))(disj2: ¬(x_1=x_2_2))
+    (U_1: OP.oi1 x_1)(un_1: HC.isUnitary U_1)
+    (U_2: OP.oi2 x_2_1 x_2_2 ord)(un_2: HC.isUnitary U_2)
     (A: OP.o3):
-      Ing (Cond.c3 A)
-          (Prog.seq
-           (Prog.gate1 U_1 un_1)
-           (Prog.gate2 U_2 un_2)
-          )
-           (Cond.c3 (by
-                        let tpU := TO.tpo2o1i x2_1 x2_2 ord x1 disj1 disj2 U_2 U_1
-                        exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
-                    )
-           )
+InfRules (Cond.c3 A)
+         (Prog.seq
+            (Prog.gate1 U_1 un_1)
+            (Prog.gate2 U_2 un_2)
+         )
+         (Cond.c3 (by
+                     let tpU := TO.tpo2o1i x_2_1 x_2_2 ord x_1 disj1 disj2 U_2 U_1
+                     exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
+                  )
+         )
 
 | Ax.UTFP3
     (x_1: Fin 3)
@@ -406,27 +408,36 @@ inductive Ing: Cond → Prog → Cond → Prop
     (U_2: OP.oi1 x_2)(un_2: HC.isUnitary U_2)
     (U_3: OP.oi1 x_3)(un_3: HC.isUnitary U_3)
     (A: OP.o3):
-Ing (Cond.c3 A)
-    (Prog.seq
-        (Prog.seq (Prog.gate1 U_1 un_1)
-                  (Prog.gate1 U_2 un_2)
-        )
-        (Prog.gate1 U_3 un_3)
-    )
-    (Cond.c3
-        (by
-            let tpU: OP.o3 := by
-                let pr: Prop := x_1 < x_2
-                by_cases pr
-                exact TO.tpo2o1i x_1 x_2 (by f2 x_1 x_2) x_3 (by f2 x_1 x_2) (by f2 x_1 x_2)
-                                (TO.tpo1o1i x_1 x_2 (by f2 x_1 x_2) U_1 U_2)
-                                U_3
-                exact TO.tpo2o1i x_2 x_1 (by f2 x_1 x_2) x_3 (by f2 x_1 x_2) (by f2 x_1 x_2)
-                                (TO.tpo1o1i x_2 x_1 (by f2 x_1 x_2) U_2 U_1)
-                                U_3
-            exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
-        )
-    )
+InfRules (Cond.c3 A)
+         (Prog.seq
+            (Prog.seq (Prog.gate1 U_1 un_1)
+                      (Prog.gate1 U_2 un_2)
+            )
+            (Prog.gate1 U_3 un_3)
+         )
+         (Cond.c3 (by
+                     let tpU: OP.o3 := by
+                       let pr: Prop := x_1 < x_2
+                       by_cases pr
+                       exact TO.tpo2o1i x_1
+                                        x_2
+                                        (by f2 x_1 x_2)
+                                        x_3
+                                        (by f2 x_1 x_2)
+                                        (by f2 x_1 x_2)
+                                        (TO.tpo1o1i x_1 x_2 (by f2 x_1 x_2) U_1 U_2)
+                                        U_3
+                       exact TO.tpo2o1i x_2
+                                        x_1
+                                        (by f2 x_1 x_2)
+                                        x_3
+                                        (by f2 x_1 x_2)
+                                        (by f2 x_1 x_2)
+                                        (TO.tpo1o1i x_2 x_1 (by f2 x_1 x_2) U_2 U_1)
+                                        U_3
+                     exact tpU ∘ₗ A ∘ₗ (HC.adj tpU)
+                  )
+         )
 
 -- Ax.InFP2 rule for two 1-qubit systems
 | Ax.InFP2_1_1
@@ -435,14 +446,14 @@ Ing (Cond.c3 A)
     (disj: ¬(x_1 = x_2))
     (t_1: StateReg1Ind x_1)(n_1: IP.f t_1 t_1 = 1)
     (t_2: StateReg1Ind x_2)(n_2: IP.f t_2 t_2 = 1):
-Ing (Cond.c0)
-    (Prog.seq (Prog.ass1 t_1 n_1) (Prog.ass1 t_2 n_2))
-    (by
-        let pr: Prop := x_1 < x_2
-        by_cases pr
-        exact Cond.c2 (TO.tpo1o1i x_1 x_2 (by f2 x_1 x_2) (OP t_1 t_1) (OP t_2 t_2))
-        exact Cond.c2 (TO.tpo1o1i x_2 x_1 (by f2 x_1 x_2) (OP t_2 t_2) (OP t_1 t_1))
-    )
+InfRules (Cond.c0)
+         (Prog.seq (Prog.ass1 t_1 n_1) (Prog.ass1 t_2 n_2))
+         (by
+            let pr: Prop := x_1 < x_2
+            by_cases pr
+            exact Cond.c2 (TO.tpo1o1i x_1 x_2 (by f2 x_1 x_2) (OP t_1 t_1) (OP t_2 t_2))
+            exact Cond.c2 (TO.tpo1o1i x_2 x_1 (by f2 x_1 x_2) (OP t_2 t_2) (OP t_1 t_1))
+         )
 
 -- Ax.InFP2 rule for 2-qubit system and 1-qubit system
 | Ax.InFP2_2_1
@@ -451,13 +462,18 @@ Ing (Cond.c0)
     (disj1: ¬(x_1_1 = x_2))(disj1: ¬(x_1_2 = x_2))
     (t_1: StateReg2Ind x_1_1 x_1_2 ord)(n_1: IP.f t_1 t_1 = 1)
     (t_2: StateReg1Ind x_2)(n_2: IP.f t_2 t_2 = 1):
-Ing (Cond.c0)
-    (Prog.seq (Prog.ass2 t_1 n_1) (Prog.ass1 t_2 n_2))
-    (Cond.c3 (TO.tpo2o1i x_1_1 x_1_2 ord x_2 (by f2 x_1_1 x_2) (by f2 x_1_2 x_2)
-                         (OP t_1 t_1)
-                         (OP t_2 t_2)
-             )
-    )
+InfRules (Cond.c0)
+         (Prog.seq (Prog.ass2 t_1 n_1) (Prog.ass1 t_2 n_2))
+         (Cond.c3 (TO.tpo2o1i x_1_1
+                              x_1_2
+                              ord
+                              x_2
+                              (by f2 x_1_1 x_2)
+                              (by f2 x_1_2 x_2)
+                              (OP t_1 t_1)
+                              (OP t_2 t_2)
+                  )
+         )
 
 -- Ax.InFP2 rule for 1-qubit system and 2-qubit system
 | Ax.InFP2_1_2
@@ -466,13 +482,18 @@ Ing (Cond.c0)
     (disj1: ¬(x_1 = x_2_1))(disj1: ¬(x_1 = x_2_2))
     (t_1: StateReg1Ind x_1)(n_1: IP.f t_1 t_1 = 1)
     (t_2: StateReg2Ind x_2_1 x_2_2 ord)(n_2: IP.f t_2 t_2 = 1):
-Ing (Cond.c0)
-    (Prog.seq (Prog.ass1 t_1 n_1) (Prog.ass2 t_2 n_2))
-    (Cond.c3 (TO.tpo2o1i x_2_1 x_2_2 ord x_1 (by f2 x_1 x_2_1) (by f2 x_1 x_2_2)
-                         (OP t_2 t_2)
-                         (OP t_1 t_1)
-             )
-    )
+InfRules (Cond.c0)
+         (Prog.seq (Prog.ass1 t_1 n_1) (Prog.ass2 t_2 n_2))
+         (Cond.c3 (TO.tpo2o1i x_2_1
+                              x_2_2
+                              ord
+                              x_1
+                              (by f2 x_1 x_2_1)
+                              (by f2 x_1 x_2_2)
+                              (OP t_2 t_2)
+                              (OP t_1 t_1)
+                  )
+         )
 
 | Ax.inFP3
     (x_1: Fin 3)
@@ -482,21 +503,31 @@ Ing (Cond.c0)
     (t_1: StateReg1Ind x_1)(n_1: IP.f t_1 t_1 = 1)
     (t_2: StateReg1Ind x_2)(n_2: IP.f t_2 t_2 = 1)
     (t_3: StateReg1Ind x_3)(n_3: IP.f t_3 t_3 = 1):
-Ing (Cond.c0)
-    (Prog.seq (Prog.seq (Prog.ass1 t_1 n_1) (Prog.ass1 t_2 n_2))
-              (Prog.ass1 t_3 n_3)
-    )
-    (Cond.c3 (by
-                let pr: Prop := x_1 < x_2
-                by_cases pr
-                exact TO.tpo2o1i x_1 x_2 (by f2 x_1 x_2) x_3 (by f2 x_1 x_3) (by f2 x_2 x_3)
-                                (TO.tpo1o1i x_1 x_2 (by f2 x_1 x_2) (OP t_1 t_1) (OP t_2 t_2))
-                                (OP t_3 t_3)
-                exact TO.tpo2o1i x_2 x_1 (by f2 x_1 x_2) x_3 (by f2 x_1 x_3) (by f2 x_2 x_3)
-                                (TO.tpo1o1i x_2 x_1 (by f2 x_1 x_2) (OP t_2 t_2) (OP t_1 t_1))
-                                (OP t_3 t_3)
-             )
-    )
+InfRules (Cond.c0)
+         (Prog.seq (Prog.seq (Prog.ass1 t_1 n_1) (Prog.ass1 t_2 n_2))
+                   (Prog.ass1 t_3 n_3)
+         )
+         (Cond.c3 (by
+                     let pr: Prop := x_1 < x_2
+                     by_cases pr
+                     exact TO.tpo2o1i x_1
+                                      x_2
+                                      (by f2 x_1 x_2)
+                                      x_3
+                                      (by f2 x_1 x_3)
+                                      (by f2 x_2 x_3)
+                                      (TO.tpo1o1i x_1 x_2 (by f2 x_1 x_2) (OP t_1 t_1) (OP t_2 t_2))
+                                      (OP t_3 t_3)
+                     exact TO.tpo2o1i x_2
+                                      x_1
+                                      (by f2 x_1 x_2)
+                                      x_3
+                                      (by f2 x_1 x_3)
+                                      (by f2 x_2 x_3)
+                                      (TO.tpo1o1i x_2 x_1 (by f2 x_1 x_2) (OP t_2 t_2) (OP t_1 t_1))
+                                      (OP t_3 t_3)
+                  )
+         )
 
 -- R.CC.P for 2 1-qubit systems
 | R.CC.P_1_1
@@ -509,10 +540,10 @@ Ing (Cond.c0)
     (C: Prog)
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
-    (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c1 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
-    C
-    (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
+    (hoar: ∀i: Fin N, InfRules (Cond.c1 (A i)) C (Cond.c1 (B i))):
+InfRules (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
+         C
+         (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
 
 -- R.CC.P for 1-qubit system and 2-qubit system
 | R.CC.P_1_2
@@ -525,10 +556,10 @@ Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     (C: Prog)
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
-    (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c2 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
-    C
-    (Cond.c2 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
+    (hoar: ∀i: Fin N, InfRules (Cond.c1 (A i)) C (Cond.c2 (B i))):
+InfRules (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
+         C
+         (Cond.c2 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
 
 -- R.CC.P for 1-qubit system and 3-qubit system
 | R.CC.P_1_3
@@ -541,10 +572,10 @@ Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     (C: Prog)
     (pr_lam_pos: ∀i: Fin N, lam i ≥ 0)
     (pr_lam_sum: FS.fs lam ≤ 1)
-    (hoar: ∀i: Fin N, Ing (Cond.c1 (A i)) C (Cond.c3 (B i))):
-Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
-    C
-    (Cond.c3 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
+    (hoar: ∀i: Fin N, InfRules (Cond.c1 (A i)) C (Cond.c3 (B i))):
+InfRules (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
+         C
+         (Cond.c3 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (B i))))
 
 -- R.El rule for 1-qubit system and 1-qubit system
 | R.El_1_1
@@ -555,15 +586,62 @@ Ing (Cond.c1 (FS.fs (fun i: Fin N => ((lam i):ℂ) • (A i))))
     (A_S_A: OP.oi1 S_A)
     (C: Prog)
     (B: Cond)
-    (hoar: Ing (Cond.c1 A_S_A) C B):
-Ing (by
-        let pr:Prop := S_A < S
-        by_cases pr
-        exact Cond.c2 (TO.tpo1o1i S_A S (by f2 S_A S) A_S_A (OP.idoi1 S))
-        exact Cond.c2 (TO.tpo1o1i S S_A (by f2 S_A S) (OP.idoi1 S) A_S_A)
-    )
-    C
-    B
+    (hoar: InfRules (Cond.c1 A_S_A) C B):
+InfRules (by
+            let pr:Prop := S_A < S
+            by_cases pr
+            exact Cond.c2 (TO.tpo1o1i S_A S (by f2 S_A S) A_S_A (OP.idoi1 S))
+            exact Cond.c2 (TO.tpo1o1i S S_A (by f2 S_A S) (OP.idoi1 S) A_S_A)
+         )
+         C
+         B
+
+-- R.El rule for 2-qubit system and 1-qubit system
+| R.El_2_1
+    (S_A_1 S_A_2: Fin 3)(ord: S_A_1 < S_A_2)
+    (S: Fin 3)
+    -- here we make a trick and cover all possible B systems in one rule
+    (disj1: ¬(S = S_A_1))(disj1: ¬(S = S_A_2))
+    (A_S_A: OP.oi2 S_A_1 S_A_2 ord)
+    (C: Prog)
+    (B: Cond)
+    (hoar: InfRules (Cond.c2 A_S_A) C B):
+InfRules (Cond.c3 (TO.tpo2o1i S_A_1
+                              S_A_2
+                              ord
+                              S
+                              (by f2 S S_A_1)
+                              (by f2 S S_A_2)
+                              A_S_A
+                              (OP.idoi1 S)
+                  )
+         )
+         C
+         B
+
+-- R.El rule for 2-qubit system and 1-qubit system
+| R.El_1_2
+    (S_A: Fin 3)
+    (S_1 S_2: Fin 3)(ord: S_1 < S_2)
+    -- here we make a trick and cover all possible B systems in one rule
+    (disj1: ¬(S_1 = S_A))(disj1: ¬(S_2 = S_A))
+    (A_S_A: OP.oi1 S_A)
+    (C: Prog)
+    (B: Cond)
+    (hoar: InfRules (Cond.c1 A_S_A) C B):
+InfRules (Cond.c3 (TO.tpo2o1i S_1
+                              S_2
+                              ord
+                              S_A
+                              (by f2 S_1 S_A)
+                              (by f2 S_2 S_A)
+                              (OP.idoi2 S_1 S_2 ord)
+                              A_S_A
+                  )
+         )
+         C
+         B
+
 
 inductive State where
 | s1{i:Fin 3}(s: StateReg1Ind i):
@@ -594,4 +672,4 @@ def transforms(sBeg: State)(prog: Prog)(sFin: State): Prop :=
     | State.s3 s => (IP.f s s) = 1
 )
 ∧
-Ing (CondSt sBeg) prog (CondSt sFin)
+InfRules (CondSt sBeg) prog (CondSt sFin)

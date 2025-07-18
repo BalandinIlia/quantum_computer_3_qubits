@@ -28,5 +28,5 @@ import QuantumComputer3Qubits.Tests.HermitianConjugation
 import QuantumComputer3Qubits.Tests.FiniteSum
 
 import QuantumComputer3Qubits.HoareTriples.Triples1
-import QuantumComputer3Qubits.HoareTriples.Oracle
-import QuantumComputer3Qubits.HoareTriples.OracleTriples
+import QuantumComputer3Qubits.HoareTriples.DeutschJozsaOracle
+import QuantumComputer3Qubits.HoareTriples.DeutschJozsaTriple

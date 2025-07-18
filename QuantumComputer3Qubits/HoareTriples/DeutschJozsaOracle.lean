@@ -16,8 +16,8 @@ import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
 
-namespace HoareOracle
-open Hoare
+namespace DeutschJozsaOracle
+open QWhile
 
 structure F where
 v00: Fin 2

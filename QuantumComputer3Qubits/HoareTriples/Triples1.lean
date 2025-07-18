@@ -17,7 +17,7 @@ import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
 
 namespace HoareTriples1
-open Hoare
+open QWhile
 
 set_option maxHeartbeats 500000
 
@@ -76,14 +76,14 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
     solve
   }
   {
-    let pr := Ing.Ax.Inf_2_1 0
-                             1
-                             (by aesop)
-                             2
-                             (by aesop)
-                             (by aesop)
-                             (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))
-                             (CS.qi 1 2)
+    let pr := InfRules.Ax.Inf_2_1 0
+                                  1
+                                  (by aesop)
+                                  2
+                                  (by aesop)
+                                  (by aesop)
+                                  (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))
+                                  (CS.qi 1 2)
     have repr:
       (((TO.tpo2o1i 0 1 (by aesop) 2 (by aesop) (by aesop)) (OP (CS.qqi 0 0 0 1 (by aesop)) (CS.qqi 0 0 0 1 (by aesop)))) (OP (CS.qi 1 2) (CS.qi 1 2))) =
       (OP CS.s001 CS.s001) := by
@@ -116,14 +116,14 @@ transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
     solve
   }
   {
-    let pr := Ing.Ax.Inf_2_1 0
-                             2
-                             (by aesop)
-                             1
-                             (by aesop)
-                             (by aesop)
-                             (OP (CS.qqi 0 0 0 2 (by aesop)) (CS.qqi 0 0 0 2 (by aesop)))
-                             (CS.qi 1 1)
+    let pr := InfRules.Ax.Inf_2_1 0
+                                  2
+                                  (by aesop)
+                                  1
+                                  (by aesop)
+                                  (by aesop)
+                                  (OP (CS.qqi 0 0 0 2 (by aesop)) (CS.qqi 0 0 0 2 (by aesop)))
+                                  (CS.qi 1 1)
     have repr:
       (((TO.tpo2o1i 0 2 (by aesop) 1 (by aesop) (by aesop)) (OP (CS.qqi 0 0 0 2 (by aesop)) (CS.qqi 0 0 0 2 (by aesop)))) (OP (CS.qi 1 1) (CS.qi 1 1))) =
       (OP CS.s010 CS.s010) := by
@@ -156,14 +156,14 @@ transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
     solve
   }
   {
-    let pr := Ing.Ax.Inf_2_1 1
-                             2
-                             (by aesop)
-                             0
-                             (by aesop)
-                             (by aesop)
-                             (OP (CS.qqi 0 0 1 2 (by aesop)) (CS.qqi 0 0 1 2 (by aesop)))
-                             (CS.qi 1 0)
+    let pr := InfRules.Ax.Inf_2_1 1
+                                  2
+                                  (by aesop)
+                                  0
+                                  (by aesop)
+                                  (by aesop)
+                                  (OP (CS.qqi 0 0 1 2 (by aesop)) (CS.qqi 0 0 1 2 (by aesop)))
+                                  (CS.qi 1 0)
     have repr:
       (((TO.tpo2o1i 1 2 (by aesop) 0 (by aesop) (by aesop)) (OP (CS.qqi 0 0 1 2 (by aesop)) (CS.qqi 0 0 1 2 (by aesop)))) (OP (CS.qi 1 0) (CS.qi 1 0))) =
       (OP CS.s100 CS.s100) := by
@@ -196,14 +196,14 @@ transforms (State.s1 (CS.qi 0 0))
     solve
   }
   {
-    let pr := Ing.Ax.Inf_1_2 0
-                             1
-                             2
-                             (by aesop)
-                             (by aesop)
-                             (by aesop)
-                             (OP (CS.qi 0 0) (CS.qi 0 0))
-                             (CS.qqi 1 1 1 2 (by aesop))
+    let pr := InfRules.Ax.Inf_1_2 0
+                                  1
+                                  2
+                                  (by aesop)
+                                  (by aesop)
+                                  (by aesop)
+                                  (OP (CS.qi 0 0) (CS.qi 0 0))
+                                  (CS.qqi 1 1 1 2 (by aesop))
     have repr:
       (((TO.tpo2o1i 1 2 (by aesop) 0 (by aesop) (by aesop)) (OP (CS.qqi 1 1 1 2 (by aesop)) (CS.qqi 1 1 1 2 (by aesop)))) (OP (CS.qi 0 0) (CS.qi 0 0))) =
       (OP CS.s011 CS.s011) := by
@@ -236,14 +236,14 @@ transforms (State.s1 (CS.qi 0 1))
     solve
   }
   {
-    let pr := Ing.Ax.Inf_1_2 1
-                             0
-                             2
-                             (by aesop)
-                             (by aesop)
-                             (by aesop)
-                             (OP (CS.qi 0 1) (CS.qi 0 1))
-                             (CS.qqi 1 1 0 2 (by aesop))
+    let pr := InfRules.Ax.Inf_1_2 1
+                                  0
+                                  2
+                                  (by aesop)
+                                  (by aesop)
+                                  (by aesop)
+                                  (OP (CS.qi 0 1) (CS.qi 0 1))
+                                  (CS.qqi 1 1 0 2 (by aesop))
     have repr:
       (((TO.tpo2o1i 0 2 (by aesop) 1 (by aesop) (by aesop)) (OP (CS.qqi 1 1 0 2 (by aesop)) (CS.qqi 1 1 0 2 (by aesop)))) (OP (CS.qi 0 1) (CS.qi 0 1))) =
       (OP CS.s101 CS.s101) := by
