@@ -9,7 +9,6 @@ import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 import QuantumComputer3Qubits.Formalization.OuterProduct
 import QuantumComputer3Qubits.Formalization.OrthonormalBasis
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
-import QuantumComputer3Qubits.Formalization.Language
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
@@ -17,7 +16,6 @@ import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
 
 namespace DeutschJozsaOracle
-open QWhile
 
 structure F where
 v00: Fin 2
