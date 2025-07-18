@@ -19,7 +19,7 @@ import QuantumComputer3Qubits.Formalization.OperatorUtils
 namespace HoareTriples1
 open Hoare
 
-set_option maxHeartbeats 1000000
+set_option maxHeartbeats 10000
 
 macro "solve": tactic =>
 `(tactic |

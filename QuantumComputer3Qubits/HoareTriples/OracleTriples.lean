@@ -77,7 +77,7 @@ TensorProduct.tmul ℂ (((inv f.v00) • (tmp 0 0)) +
 noncomputable
 def stateAfter(f: F): StateReg3 := (1/(2*sqrt2)) • (stateAfterUnnorm f)
 
-set_option maxHeartbeats 1000000
+set_option maxHeartbeats 2000000
 
 theorem oracleTriple(f: F):
 transforms (State.s3 stateBefore)
