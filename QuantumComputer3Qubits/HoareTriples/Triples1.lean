@@ -15,6 +15,9 @@ import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
+-- In this file we prove some "classical" Hoare triples
+-- in order to check that Hoare inference rules are formalized
+-- correctly.
 
 namespace HoareTriples1
 open QWhile
@@ -52,6 +55,8 @@ macro "solve": tactic =>
 )
 )
 
+-- tactic to prove that a state (s) is normal; in other
+-- words to prove that ⟨s|s⟩ = 1
 macro "prove_norm": tactic =>
 `(tactic|
 (
@@ -60,6 +65,15 @@ macro "prove_norm": tactic =>
 )
 )
 
+-- This triple means:
+-- If:
+-- 1. We have a registry where system of 0th and 1st qubtis
+--    is in state |00⟩
+-- 2. We assign |1⟩ to the second qubit.
+-- Then:
+--    The registry is in state |001⟩
+-- This is obviously true from physical sense of the operation
+-- and confirms correctness of our Hoare rules formalization.
 theorem triple1:
 classicalHoare (CondRegistry.c2 (CS.qqi 0 0 0 1 (by aesop)))
                (Prog.ass1 (CS.qi 1 2) (by prove_norm))
@@ -100,6 +114,15 @@ classicalHoare (CondRegistry.c2 (CS.qqi 0 0 0 1 (by aesop)))
     apply pr
   }
 
+-- This triple means:
+-- If:
+-- 1. We have a registry where system of 0th and 2nd qubtis
+--    is in state |00⟩
+-- 2. We assign |1⟩ to the 1st qubit.
+-- Then:
+--    The registry is in state |010⟩
+-- This is obviously true from physical sense of the operation
+-- and confirms correctness of our Hoare rules formalization.
 theorem triple2:
 classicalHoare (CondRegistry.c2 (CS.qqi 0 0 0 2 (by aesop)))
                (Prog.ass1 (CS.qi 1 1) (by prove_norm))
@@ -140,6 +163,15 @@ classicalHoare (CondRegistry.c2 (CS.qqi 0 0 0 2 (by aesop)))
     apply pr
   }
 
+-- This triple means:
+-- If:
+-- 1. We have a registry where system of 1st and 2nd qubtis
+--    is in state |00⟩
+-- 2. We assign |1⟩ to the oth qubit.
+-- Then:
+--    The registry is in state |100⟩
+-- This is obviously true from physical sense of the operation
+-- and confirms correctness of our Hoare rules formalization.
 theorem triple3:
 classicalHoare (CondRegistry.c2 (CS.qqi 0 0 1 2 (by aesop)))
                (Prog.ass1 (CS.qi 1 0) (by prove_norm))
@@ -180,6 +212,14 @@ classicalHoare (CondRegistry.c2 (CS.qqi 0 0 1 2 (by aesop)))
     apply pr
   }
 
+-- This triple means:
+-- If:
+-- 1. We have a registry where 0th qubit is in state |0⟩
+-- 2. We assign |11⟩ to the system of 1st and 2nd qubits.
+-- Then:
+--    The registry is in state |011⟩
+-- This is obviously true from physical sense of the operation
+-- and confirms correctness of our Hoare rules formalization.
 theorem triple4:
 classicalHoare (CondRegistry.c1 (CS.qi 0 0))
                (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)) (by prove_norm))
@@ -220,6 +260,14 @@ classicalHoare (CondRegistry.c1 (CS.qi 0 0))
     apply pr
   }
 
+-- This triple means:
+-- If:
+-- 1. We have a registry where 1st qubit is in state |0⟩
+-- 2. We assign |11⟩ to the system of 0th and 2nd qubits.
+-- Then:
+--    The registry is in state |101⟩
+-- This is obviously true from physical sense of the operation
+-- and confirms correctness of our Hoare rules formalization.
 theorem triple5:
 classicalHoare (CondRegistry.c1 (CS.qi 0 1))
                (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)) (by prove_norm))
@@ -260,8 +308,61 @@ classicalHoare (CondRegistry.c1 (CS.qi 0 1))
     apply pr
   }
 
+-- This triple means:
+-- If:
+-- 1. We have a registry where 0th qubit is in state |0⟩
+-- 2. We assign |1⟩ to the system of 2nd qubits.
+-- Then:
+--    The system of 0th and second qubit is in state |01⟩
+-- This is obviously true from physical sense of the operation
+-- and confirms correctness of our Hoare rules formalization.
+theorem triple6:
+classicalHoare (CondRegistry.c1 (CS.qi 0 0))
+               (Prog.ass1 (CS.qi 1 2) (by prove_norm))
+               (CondRegistry.c2 (CS.qqi 0 1 0 2 (by aesop))) := by
+  simp [classicalHoare, CondSt]
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  apply And.intro
+  {
+    simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
+    solve
+  }
+  {
+    let pr := InfRules.Ax.Inf_1_1 0
+                                  2
+                                  (by aesop)
+                                  (OP (CS.qi 0 0) (CS.qi 0 0))
+                                  (CS.qi 1 2)
+                                  (by prove_norm)
+    simp at pr
+    have repr:
+      (((TO.tpo1o1i 0 2 (by aesop)) (OP (CS.qi 0 0) (CS.qi 0 0))) (OP (CS.qi 1 2) (CS.qi 1 2))) =
+      (OP (CS.qi 0 0 ⊗ₜ[ℂ] CS.qi 1 2) (CS.qi 0 0 ⊗ₜ[ℂ] CS.qi 1 2)) := by
+      clear pr
+      rw [TO.tpo1o1i]
+      ext q1 q2
+      simp
+      simp [OP]
+      simp [IP.tensorProductIP, IP.IPLeft, IP.IPRight]
+      generalize r1: IP.f (CS.qi 0 0) q1 = c1
+      generalize r2: IP.f (CS.qi 1 2) q2 = c2
+      generalize r3: CS.qi 0 0 = v3
+      generalize r4: CS.qi 1 2 = v4
+      clear r1 r2 r3 r4 q1 q2
+      rw [TensorProduct.smul_tmul]
+      rw [TensorProduct.tmul_smul]
+      module
+    rw [repr] at pr
+    apply pr
+  }
+
 #print axioms triple1
 #print axioms triple2
 #print axioms triple3
 #print axioms triple4
 #print axioms triple5
+#print axioms triple6
