@@ -61,10 +61,10 @@ macro "prove_norm": tactic =>
 )
 
 theorem triple1:
-transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
-           (Prog.ass1 (CS.qi 1 2) (by prove_norm))
-           (State.s3 CS.s001) := by
-  simp [transforms, CondSt]
+classicalHoare (CondRegistry.c2 (CS.qqi 0 0 0 1 (by aesop)))
+               (Prog.ass1 (CS.qi 1 2) (by prove_norm))
+               (CondRegistry.c3 CS.s001) := by
+  simp [classicalHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -101,10 +101,10 @@ transforms (State.s2 (CS.qqi 0 0 0 1 (by aesop)))
   }
 
 theorem triple2:
-transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
-           (Prog.ass1 (CS.qi 1 1) (by prove_norm))
-           (State.s3 CS.s010) := by
-  simp [transforms, CondSt]
+classicalHoare (CondRegistry.c2 (CS.qqi 0 0 0 2 (by aesop)))
+               (Prog.ass1 (CS.qi 1 1) (by prove_norm))
+               (CondRegistry.c3 CS.s010) := by
+  simp [classicalHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -141,10 +141,10 @@ transforms (State.s2 (CS.qqi 0 0 0 2 (by aesop)))
   }
 
 theorem triple3:
-transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
-           (Prog.ass1 (CS.qi 1 0) (by prove_norm))
-           (State.s3 CS.s100) := by
-  simp [transforms, CondSt]
+classicalHoare (CondRegistry.c2 (CS.qqi 0 0 1 2 (by aesop)))
+               (Prog.ass1 (CS.qi 1 0) (by prove_norm))
+               (CondRegistry.c3 CS.s100) := by
+  simp [classicalHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -181,10 +181,10 @@ transforms (State.s2 (CS.qqi 0 0 1 2 (by aesop)))
   }
 
 theorem triple4:
-transforms (State.s1 (CS.qi 0 0))
-           (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)) (by prove_norm))
-           (State.s3 CS.s011) := by
-  simp [transforms, CondSt]
+classicalHoare (CondRegistry.c1 (CS.qi 0 0))
+               (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)) (by prove_norm))
+               (CondRegistry.c3 CS.s011) := by
+  simp [classicalHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -221,10 +221,10 @@ transforms (State.s1 (CS.qi 0 0))
   }
 
 theorem triple5:
-transforms (State.s1 (CS.qi 0 1))
-           (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)) (by prove_norm))
-           (State.s3 CS.s101) := by
-  simp [transforms, CondSt]
+classicalHoare (CondRegistry.c1 (CS.qi 0 1))
+               (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)) (by prove_norm))
+               (CondRegistry.c3 CS.s101) := by
+  simp [classicalHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]

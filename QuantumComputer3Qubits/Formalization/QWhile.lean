@@ -190,6 +190,8 @@ A := by
   fin_cases i
   all_goals aesop
 
+-- Utility tactic. Its goals is to prove trivial propositions
+-- about two Fin 3 terms and take minimal space for it.
 macro "f2" a:ident b:ident : tactic =>
 `(tactic|(
   all_goals apply fin3 $a
@@ -642,34 +644,73 @@ InfRules (Cond.c3 (TO.tpo2o1i S_1
          C
          B
 
+-- Term of this type is a condition on 3-qubit registry state
+-- Condition can be conceptually thought of as a boolean
+-- function taking registry state as an argument and returning:
+-- true if the state satisfies the condition and
+-- false if the state does not satisfy the condition
+inductive CondRegistry where
+-- Condition that i-th qubit is in state s.
+-- More formally condition that registry state can be
+-- represented as s ⊗ (state of other two qubits)
+| c1{i: Fin 3}(s: StateReg1Ind i):
+    CondRegistry
+-- Condition that system of i1-th and i2-th qubits is in
+-- state s.
+-- More formally condition that registry state can be
+-- represented as s ⊗ (state of the remaining qubit)
+| c2{i1 i2: Fin 3}{ord: i1 < i2}(s: StateReg2Ind i1 i2 ord):
+    CondRegistry
+-- Condition that the registry is in state s. Only one
+-- registry state satisfies this condition.
+| c3(s: StateReg3):
+    CondRegistry
+-- Also all types of CondRegistry imply that the registry
+-- is in pure state (which can still be entangled). No
+-- states where there are several possible quantum states
+-- with assigned probabilities.
 
-inductive State where
-| s1{i:Fin 3}(s: StateReg1Ind i):
-      State
-| s2{i1 i2: Fin 3}{ord: i1 < i2}(s: StateReg2Ind i1 i2 ord):
-      State
-| s3(s: StateReg3):
-      State
-
+-- util
 noncomputable
-def CondSt(s: State): Cond := match s with
-| State.s1 s => Cond.c1 (OP s s)
-| State.s2 s => Cond.c2 (OP s s)
-| State.s3 s => Cond.c3 (OP s s)
+def CondSt(c:CondRegistry): Cond := match c with
+| CondRegistry.c1 s => Cond.c1 (OP s s)
+| CondRegistry.c2 s => Cond.c2 (OP s s)
+| CondRegistry.c3 s => Cond.c3 (OP s s)
 
-def transforms(sBeg: State)(prog: Prog)(sFin: State): Prop :=
+-- This proposition means that is we take registry in any
+-- state satisfying cBeg and execute program prog, the resulting
+-- state satisfies cFin
+--
+-- Ground for this particular formulation of the proposition:
+-- In fact this proposition says that if
+-- {|S(P)⟩⟨S(P)|} prog {|S(Q)⟩⟨S(Q)|} than prog transforms
+-- registry state satisfying P into registry state satisfying Q.
+-- Let's prove it:
+-- 1) We have registry state is state |sb⟩. Density operator
+--    is |sb⟩⟨sb|.
+-- 2) Since registry is in pure state before the program, it
+--    is in pure state |sf⟩ after the program. Density state
+--    after the program is |sf⟩⟨sf|.
+-- 3) So tr(CYL(|S(P)⟩⟨S(P)|)|sb⟩⟨sb|) ≤ tr(CYL(|S(Q)⟩⟨S(Q)|)|sf⟩⟨sf|).
+-- 4) tr(CYL(|S(P)⟩⟨S(P)|)|sb⟩⟨sb|) = tr((|S(P)⟩⟨S(P)|⊗I(¬P))(|S(P)⟩⟨S(P)|⊗...))=1
+--    where ¬P are qubits not involved in condition P.
+-- 5) So tr(CYL(|S(Q)⟩⟨S(Q)|)|sf⟩⟨sf|) ≥ 1.
+-- 6) tr(CYL(|S(Q)⟩⟨S(Q)|)|sf⟩⟨sf|) ≥ 1 may be only if |sf⟩
+--    satisfies Q.
+-- Also this fact is presented in the main article.
+def classicalHoare(P: CondRegistry)(prog: Prog)(Q: CondRegistry): Prop :=
 (
-    match sBeg with
-    | State.s1 s => (IP.f s s) = 1
-    | State.s2 s => (IP.f s s) = 1
-    | State.s3 s => (IP.f s s) = 1
+  match P with
+  | CondRegistry.c1 s => (IP.f s s) = 1
+  | CondRegistry.c2 s => (IP.f s s) = 1
+  | CondRegistry.c3 s => (IP.f s s) = 1
 )
 ∧
 (
-    match sFin with
-    | State.s1 s => (IP.f s s) = 1
-    | State.s2 s => (IP.f s s) = 1
-    | State.s3 s => (IP.f s s) = 1
+  match Q with
+  | CondRegistry.c1 s => (IP.f s s) = 1
+  | CondRegistry.c2 s => (IP.f s s) = 1
+  | CondRegistry.c3 s => (IP.f s s) = 1
 )
 ∧
-InfRules (CondSt sBeg) prog (CondSt sFin)
+InfRules (CondSt P) prog (CondSt Q)
