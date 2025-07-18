@@ -12,8 +12,6 @@ import QuantumComputer3Qubits.Formalization.Decompose
 -- OU means "operator utils"
 namespace OU
 
-set_option maxHeartbeats 100000000
-
 theorem EqStatesByIP:
   ∀cv1 cv1_ cv2 cv2_ cv3 cv3_: CS.CV,
       IP.f (CS.qqq cv1 cv2 cv3)
@@ -22,37 +20,92 @@ theorem EqStatesByIP:
           then 1
           else 0 := by
   intro cv1 cv1_ cv2 cv2_ cv3 cv3_
+  simp [IP.f, IP.IPLeft, IP.IPRight, IP.Transfer.lE]
+
+  generalize r0:(isoQubitIndQubitBase 0) (CS.qi cv1 0) 0 = co0
+  generalize r1:(isoQubitIndQubitBase 0) (CS.qi cv1_ 0) 0 = co1
+  generalize r2:(isoQubitIndQubitBase 0) (CS.qi cv1 0) 1 = co2
+  generalize r3:(isoQubitIndQubitBase 0) (CS.qi cv1_ 0) 1 = co3
+  generalize r4:(isoQubitIndQubitBase 1) (CS.qi cv2 1) 0 = co4
+  generalize r5:(isoQubitIndQubitBase 1) (CS.qi cv2_ 1) 0 = co5
+  generalize r6:(isoQubitIndQubitBase 1) (CS.qi cv2 1) 1 = co6
+  generalize r7:(isoQubitIndQubitBase 1) (CS.qi cv2_ 1) 1 = co7
+  generalize r8:(isoQubitIndQubitBase 2) (CS.qi cv3 2) 0 = co8
+  generalize r9:(isoQubitIndQubitBase 2) (CS.qi cv3_ 2) 0 = co9
+  generalize r10:(isoQubitIndQubitBase 2) (CS.qi cv3 2) 1 = co10
+  generalize r11:(isoQubitIndQubitBase 2) (CS.qi cv3_ 2) 1 = co11
+
+  have l0: co0 = if cv1 = 0 then 1 else 0 := by
+    rw [Eq.symm r0]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv1
+    all_goals simp
+  have l1: co1 = if cv1_ = 0 then 1 else 0 := by
+    rw [Eq.symm r1]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv1_
+    all_goals simp
+  have l2: co2 = if cv1 = 0 then 0 else 1 := by
+    rw [Eq.symm r2]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv1
+    all_goals simp
+  have l3: co3 = if cv1_ = 0 then 0 else 1 := by
+    rw [Eq.symm r3]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv1_
+    all_goals simp
+  have l4: co4 = if cv2 = 0 then 1 else 0 := by
+    rw [Eq.symm r4]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv2
+    all_goals simp
+  have l5: co5 = if cv2_ = 0 then 1 else 0 := by
+    rw [Eq.symm r5]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv2_
+    all_goals simp
+  have l6: co6 = if cv2 = 0 then 0 else 1 := by
+    rw [Eq.symm r6]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv2
+    all_goals simp
+  have l7: co7 = if cv2_ = 0 then 0 else 1 := by
+    rw [Eq.symm r7]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv2_
+    all_goals simp
+  have l8: co8 = if cv3 = 0 then 1 else 0 := by
+    rw [Eq.symm r8]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv3
+    all_goals simp
+  have l9: co9 = if cv3_ = 0 then 1 else 0 := by
+    rw [Eq.symm r9]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv3_
+    all_goals simp
+  have l10: co10 = if cv3 = 0 then 0 else 1 := by
+    rw [Eq.symm r10]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv3
+    all_goals simp
+  have l11: co11 = if cv3_ = 0 then 0 else 1 := by
+    rw [Eq.symm r11]
+    simp [isoQubitIndQubitBase, CS.qi]
+    fin_cases cv3_
+    all_goals simp
+  simp [l0, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11]
+  clear l0 l1 l2 l3 l4 l5 l6 l7 l8 l9 l10 l11
+  clear r0 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 r11
+  clear co0 co1 co2 co3 co4 co5 co6 co7 co8 co9 co10 co11
+
   all_goals fin_cases cv1
-  all_goals fin_cases cv2
-  all_goals fin_cases cv3
   all_goals fin_cases cv1_
+  all_goals simp
+  all_goals fin_cases cv2
   all_goals fin_cases cv2_
+  all_goals simp
+  all_goals fin_cases cv3
   all_goals fin_cases cv3_
-  all_goals simp [IP.f, IP.IPLeft, IP.IPRight, IP.Transfer.lE]
-  all_goals {
-    generalize r000:((isoQubitIndQubitBase 0) (CS.qi 0 0) 0) = co000
-    generalize r100:((isoQubitIndQubitBase 1) (CS.qi 0 1) 0) = co100
-    generalize r200:((isoQubitIndQubitBase 2) (CS.qi 0 2) 0) = co200
-    generalize r010:((isoQubitIndQubitBase 0) (CS.qi 1 0) 0) = co010
-    generalize r110:((isoQubitIndQubitBase 1) (CS.qi 1 1) 0) = co110
-    generalize r210:((isoQubitIndQubitBase 2) (CS.qi 1 2) 0) = co210
-    generalize r001:((isoQubitIndQubitBase 0) (CS.qi 0 0) 1) = co001
-    generalize r101:((isoQubitIndQubitBase 1) (CS.qi 0 1) 1) = co101
-    generalize r201:((isoQubitIndQubitBase 2) (CS.qi 0 2) 1) = co201
-    generalize r011:((isoQubitIndQubitBase 0) (CS.qi 1 0) 1) = co011
-    generalize r111:((isoQubitIndQubitBase 1) (CS.qi 1 1) 1) = co111
-    generalize r211:((isoQubitIndQubitBase 2) (CS.qi 1 2) 1) = co211
-    have s000: co000 = 1 := by simp [Eq.symm r000, CS.qi, isoQubitIndQubitBase]
-    have s100: co100 = 1 := by simp [Eq.symm r100, CS.qi, isoQubitIndQubitBase]
-    have s200: co200 = 1 := by simp [Eq.symm r200, CS.qi, isoQubitIndQubitBase]
-    have s010: co010 = 0 := by simp [Eq.symm r010, CS.qi, isoQubitIndQubitBase]
-    have s110: co110 = 0 := by simp [Eq.symm r110, CS.qi, isoQubitIndQubitBase]
-    have s210: co210 = 0 := by simp [Eq.symm r210, CS.qi, isoQubitIndQubitBase]
-    have s001: co001 = 0 := by simp [Eq.symm r001, CS.qi, isoQubitIndQubitBase]
-    have s101: co101 = 0 := by simp [Eq.symm r101, CS.qi, isoQubitIndQubitBase]
-    have s201: co201 = 0 := by simp [Eq.symm r201, CS.qi, isoQubitIndQubitBase]
-    have s011: co011 = 1 := by simp [Eq.symm r011, CS.qi, isoQubitIndQubitBase]
-    have s111: co111 = 1 := by simp [Eq.symm r111, CS.qi, isoQubitIndQubitBase]
-    have s211: co211 = 1 := by simp [Eq.symm r211, CS.qi, isoQubitIndQubitBase]
-    simp [s000, s100, s200, s010, s110, s210, s001, s101, s201, s011, s111, s211]
-  }
+  all_goals simp
