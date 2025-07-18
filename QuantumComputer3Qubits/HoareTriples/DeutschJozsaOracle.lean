@@ -23,13 +23,6 @@ v01: Fin 2
 v10: Fin 2
 v11: Fin 2
 
-def constant(f: F): Prop := f.v00=0 ∧ f.v01=0 ∧ f.v10=0 ∧ f.v11=0
-
-def balanced(f: F): Prop := ((f.v00:ℕ) +
-                             (f.v01:ℕ) +
-                             (f.v10:ℕ) +
-                             (f.v11:ℕ)) = 2
-
 noncomputable
 def oracleCore(f: F): OU.Core := by
   simp [OU.Core]
