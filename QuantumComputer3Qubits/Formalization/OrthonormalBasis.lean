@@ -217,7 +217,7 @@ OrthonormalBasisImpl (T1 ⊗[ℂ] T2) 4 :=
     all_goals simp [ob1.prop, ob2.prop]
 }
 
-set_option maxHeartbeats 100000
+set_option maxHeartbeats 500000
 
 noncomputable
 instance tp_4_2(T1 T2: Type)
