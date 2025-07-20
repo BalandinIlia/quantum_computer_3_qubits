@@ -14,7 +14,6 @@ import QuantumComputer3Qubits.Formalization.QWhile
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
-import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
 import QuantumComputer3Qubits.HoareTriples.DeutschJozsaOracle
 

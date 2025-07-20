@@ -13,7 +13,6 @@ import QuantumComputer3Qubits.Formalization.QWhile
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
-import QuantumComputer3Qubits.Formalization.OperatorUtilsHard
 import QuantumComputer3Qubits.Formalization.OperatorUtils
 -- In this file we prove some "classical" Hoare triples
 -- in order to check that Hoare inference rules are formalized
