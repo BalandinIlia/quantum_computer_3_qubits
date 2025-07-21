@@ -1,7 +1,6 @@
 import Mathlib.Data.Complex.Basic
 import Mathlib.Algebra.Module.Defs
 import Mathlib.Algebra.Module.Basic
-import Mathlib.LinearAlgebra.TensorProduct.Basis
 import QuantumComputer3Qubits.Formalization.ComplexUtil
 import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.RegistryState
