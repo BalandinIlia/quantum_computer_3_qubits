@@ -1,7 +1,7 @@
 import QuantumComputer3Qubits.Formalization.Operators
 import QuantumComputer3Qubits.Formalization.LinearEquivRegistryState
 -- This file formalizes transformations between operators
--- acting on different linear spaces types representing the
+-- acting on different vector spaces types representing the
 -- same physical system.
 --
 -- More formally all transformations follow the pattern:

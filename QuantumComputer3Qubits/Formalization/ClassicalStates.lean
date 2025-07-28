@@ -4,7 +4,7 @@ import QuantumComputer3Qubits.Formalization.RegistryState
 --
 -- The key idea is the following: classical bit has two
 -- possible states: 0 and 1. Quantum bit state can be
--- represented as a vector in linear space with two basic
+-- represented as a vector in vector space with two basic
 -- vectors: |0⟩ and |1⟩. So arbitrary quantum state is
 -- α•|0⟩ + β•|1⟩, α,β ∈ ℂ. |0⟩ and |1⟩ can be seen as analogs
 -- of classical bit states 0 and 1.

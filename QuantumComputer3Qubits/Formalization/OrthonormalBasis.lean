@@ -4,16 +4,16 @@ import QuantumComputer3Qubits.Formalization.InnerProduct
 
 open scoped TensorProduct
 
--- This class represents orthonormal basis for given linear
+-- This class represents orthonormal basis for given vector
 -- space over ℂ with inner product. However, there are many
--- orthonormal basises for one and the same linear space,
--- this class defines one "standard" linear space.
+-- orthonormal basises for one and the same vector space,
+-- this class defines one "standard" orthonormal basis.
 -- This is the main class of this file. It is intended as the
 -- main interface of this file for the user.
 class OrthonormalBasis(T: Type)[AddCommMonoid T]
                                [Module ℂ T]
                                [IP T] where
-  -- linear space dimensionality
+  -- vector space dimensionality
   -- (number of vectors in the basis)
   N: ℕ
   posN: N > 0
@@ -32,7 +32,7 @@ namespace OB
 -- explicit parameter:
 --
 -- OrthonormalBasis does not use N as a parameter
--- since it is more logical: all basises in a linear space
+-- since it is more logical: all basises in a vector space
 -- have one and the same number of elements, so it makes no
 -- sense setting N as class argument.
 --
@@ -189,10 +189,10 @@ def rebase_2_4: Fin 2 × Fin 4 ≃ Fin 8 :=
 }
 
 -- This instance defines orthonormal basis for tensor product
--- of 2 2-dimensional linear spaces with orthonormal basises.
+-- of 2 2-dimensional vector spaces with orthonormal basises.
 --
 -- Further tp_a_b defines orthonormal basis for tensor product
--- of a-dimensional linear space and b-dimensional linear space.
+-- of a-dimensional vector space and b-dimensional vector space.
 noncomputable
 -- tp means "tensor product"
 instance tp_2_2(T1 T2: Type)

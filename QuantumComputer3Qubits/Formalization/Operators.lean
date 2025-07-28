@@ -4,7 +4,7 @@ import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.HermitianConjugation
 import QuantumComputer3Qubits.Formalization.Decompose
 -- This file defines types of linear operators in different
--- (sub)registry linear spaces.
+-- (sub)registry vector spaces.
 
 -- OP means "operator"
 namespace OP

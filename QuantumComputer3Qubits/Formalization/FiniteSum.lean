@@ -38,9 +38,9 @@ match N with
 
 -- this is property that any vector is equal to its
 -- decomposition into basis vectors
-def basisRepr (N: ℕ) -- linear space dimension
+def basisRepr (N: ℕ) -- vector space dimension
               (_: N > 0)
-              (T: Type) -- linear space vector type
+              (T: Type) -- vector type
               [AddCommMonoid T]
               [Module ℂ T]
               (bas: Basis (Fin N) ℂ T) -- basis

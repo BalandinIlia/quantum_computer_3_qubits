@@ -2,7 +2,7 @@ import QuantumComputer3Qubits.Formalization.QubitBasic
 import QuantumComputer3Qubits.Formalization.QubitIndexed
 import QuantumComputer3Qubits.Formalization.RegistryState
 -- This file defines isomorphisms between different
--- linear space types representing the same physical system.
+-- vector space types representing the same physical system.
 --
 -- More formally every isomorphism in this file follows the
 -- schema:

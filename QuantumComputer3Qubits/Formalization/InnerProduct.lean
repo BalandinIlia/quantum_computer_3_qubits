@@ -4,7 +4,7 @@ import Mathlib.Algebra.Module.Basic
 import Mathlib.LinearAlgebra.TensorProduct.Basis
 import QuantumComputer3Qubits.Formalization.ComplexUtil
 -- This file formalizes inner product for arbitrary
--- linear space over the field of complex numbers.
+-- vector space over the field of complex numbers.
 
 -- IP is an abbreviation of "Inner Product"
 class IP(M: Type)[AddCommMonoid M][mod: Module ℂ M] where
@@ -319,7 +319,7 @@ star ((TensorProduct.lift (IPLeft w)) v) = star (star ((TensorProduct.lift (IPLe
   }
 
 -- This instance is inner product of tensor product of 2
--- linear spaces with inner product.
+-- vector spaces with inner product.
 -- The idea behind this instance is the following:
 -- With this instance we have only to define inner product
 -- for basic types. Inner product for their tensor product
