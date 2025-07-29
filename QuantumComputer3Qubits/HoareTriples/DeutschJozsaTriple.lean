@@ -80,13 +80,13 @@ def stateAfter(f: F): StateReg3 := (1/(2*sqrt2)) • (stateAfterUnnorm f)
 set_option maxHeartbeats 2000000
 
 theorem oracleTriple(f: F):
-classicHoare (CondRegistry.c3 stateBefore)
+classicalHoare (CondRegistry.c3 stateBefore)
                (Prog.gate3 (oracle f) (unitar f))
                (CondRegistry.c3 (stateAfter f)) := by
 let eq := OU.EqStatesByIP
 simp [CS.qqq] at eq
 
-simp [classicHoare, CondSt]
+simp [classicalHoare, CondSt]
 apply And.intro
 {
   simp [stateBefore]
