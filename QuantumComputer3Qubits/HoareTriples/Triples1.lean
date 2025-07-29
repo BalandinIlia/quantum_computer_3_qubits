@@ -14,7 +14,7 @@ import QuantumComputer3Qubits.Formalization.FiniteSum
 import QuantumComputer3Qubits.Formalization.Decompose
 import QuantumComputer3Qubits.Formalization.ClassicalStates
 import QuantumComputer3Qubits.Formalization.OperatorUtils
--- In this file we prove some "classical" Hoare triples
+-- In this file we prove some "classic" Hoare triples
 -- in order to check that Hoare inference rules are formalized
 -- correctly.
 
@@ -77,7 +77,7 @@ theorem triple1:
 classicHoare (CondRegistry.c2 (CS.qqi 0 0 0 1 (by aesop)))
                (Prog.ass1 (CS.qi 1 2) (by prove_norm))
                (CondRegistry.c3 CS.s001) := by
-  simp [classicalHoare, CondSt]
+  simp [classicHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -126,7 +126,7 @@ theorem triple2:
 classicHoare (CondRegistry.c2 (CS.qqi 0 0 0 2 (by aesop)))
                (Prog.ass1 (CS.qi 1 1) (by prove_norm))
                (CondRegistry.c3 CS.s010) := by
-  simp [classicalHoare, CondSt]
+  simp [classicHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -175,7 +175,7 @@ theorem triple3:
 classicHoare (CondRegistry.c2 (CS.qqi 0 0 1 2 (by aesop)))
                (Prog.ass1 (CS.qi 1 0) (by prove_norm))
                (CondRegistry.c3 CS.s100) := by
-  simp [classicalHoare, CondSt]
+  simp [classicHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -223,7 +223,7 @@ theorem triple4:
 classicHoare (CondRegistry.c1 (CS.qi 0 0))
                (Prog.ass2 (CS.qqi 1 1 1 2 (by aesop)) (by prove_norm))
                (CondRegistry.c3 CS.s011) := by
-  simp [classicalHoare, CondSt]
+  simp [classicHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -271,7 +271,7 @@ theorem triple5:
 classicHoare (CondRegistry.c1 (CS.qi 0 1))
                (Prog.ass2 (CS.qqi 1 1 0 2 (by aesop)) (by prove_norm))
                (CondRegistry.c3 CS.s101) := by
-  simp [classicalHoare, CondSt]
+  simp [classicHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
@@ -319,7 +319,7 @@ theorem triple6:
 classicHoare (CondRegistry.c1 (CS.qi 0 0))
                (Prog.ass1 (CS.qi 1 2) (by prove_norm))
                (CondRegistry.c2 (CS.qqi 0 1 0 2 (by aesop))) := by
-  simp [classicalHoare, CondSt]
+  simp [classicHoare, CondSt]
   apply And.intro
   {
     simp [IP.f, IP.IPLeft, IP.IPRight, LER.reg2ireg1i_reg3, IP.Transfer.lE]
