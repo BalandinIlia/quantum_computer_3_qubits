@@ -698,7 +698,7 @@ def CondSt(c:CondRegistry): Cond := match c with
 -- 6) tr(CYL(|S(Q)⟩⟨S(Q)|)|sf⟩⟨sf|) ≥ 1 may be only if |sf⟩
 --    satisfies Q.
 -- Also this fact is presented in the main article.
-def classicalHoare(P: CondRegistry)(prog: Prog)(Q: CondRegistry): Prop :=
+def classicHoare(P: CondRegistry)(prog: Prog)(Q: CondRegistry): Prop :=
 (
   match P with
   | CondRegistry.c1 s => (IP.f s s) = 1
