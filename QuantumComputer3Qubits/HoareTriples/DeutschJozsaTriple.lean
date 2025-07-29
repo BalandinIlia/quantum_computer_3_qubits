@@ -86,7 +86,7 @@ classicHoare (CondRegistry.c3 stateBefore)
 let eq := OU.EqStatesByIP
 simp [CS.qqq] at eq
 
-simp [classicalHoare, CondSt]
+simp [classicHoare, CondSt]
 apply And.intro
 {
   simp [stateBefore]
